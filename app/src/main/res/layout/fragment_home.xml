@@ -26,22 +26,26 @@
                 android:id="@+id/imgView1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:adjustViewBounds="true"
                 android:src="@drawable/mainpage_image" />
 
             <ImageView
                 android:id="@+id/imgView2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:adjustViewBounds="true"
                 android:src="@drawable/mainpage_image" />
 
             <ImageView
                 android:id="@+id/imgView3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:adjustViewBounds="true"
                 android:src="@drawable/mainpage_image" />
         </ViewFlipper>
 
         <LinearLayout
+            android:id="@+id/ll_home"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             app:layout_constraintBottom_toBottomOf="parent"
