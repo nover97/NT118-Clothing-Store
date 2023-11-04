@@ -1,9 +1,14 @@
 <resources>
     <string name="app_name">Clothing Store</string>
     <string name="welcome">Welcome!</string>
-    <string name="username">Username</string>
+    <string name="sign_in">Sign In</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="full_name">Full name</string>
     <string name="password">Password</string>
-    <string name="confirmPassword">Confirm Password</string>
+    <string name="email">Email</string>
+    <string name="confirmPassword">Re-enter Password</string>
+    <string name="toSignInPage">Already an user? Sign In</string>
+    <string name="toSignUpPage">Dont have account? Sign Up</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

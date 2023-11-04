@@ -1,4 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="base">8dp</dimen>
+    <dimen name="basex2">16dp</dimen>
+    <dimen name="basex3">24dp</dimen>
+    <dimen name="basex4">32dp</dimen>
+    <dimen name="basex5">40dp</dimen>
+
+    <dimen name="size">10dp</dimen>
+    <dimen name="sizex2">20dp</dimen>
+    <dimen name="sizex3">30dp</dimen>
+    <dimen name="sizex4">40dp</dimen>
+    <dimen name="sizex5">50dp</dimen>
+    <dimen name="sizex6">60dp</dimen>
+
+    <dimen name="largeFont">30sp</dimen>
+    <dimen name="mediumFont">24sp</dimen>
+    <dimen name="normalFont">18sp</dimen>
+    <dimen name="smallFont">12sp</dimen>
+
 </resources>

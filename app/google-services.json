@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "608384684286",
+    "project_id": "clothing-store-c9cdd",
+    "storage_bucket": "clothing-store-c9cdd.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:608384684286:android:943315ebb575a259ef55af",
+        "android_client_info": {
+          "package_name": "app.nover.clothingstore"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBhbssBUfaDkc91ln8MTYgCZB0AaglByS4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
