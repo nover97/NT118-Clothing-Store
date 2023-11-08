@@ -39,10 +39,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/sizex5"
                 android:layout_marginTop="@dimen/basex4"
+                android:autofillHints="name"
                 android:background="@drawable/pink_border"
                 android:drawableStart="@drawable/ic_person_24"
                 android:drawablePadding="@dimen/base"
                 android:hint="@string/full_name"
+                android:inputType="textPersonName"
                 android:padding="@dimen/base" />
 
             <EditText
@@ -50,6 +52,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/sizex5"
                 android:layout_marginTop="@dimen/base"
+                android:autofillHints="emailAddress"
                 android:background="@drawable/pink_border"
                 android:drawableStart="@drawable/ic_email_24"
                 android:drawablePadding="@dimen/base"

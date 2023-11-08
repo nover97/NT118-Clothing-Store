@@ -5,12 +5,18 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import app.nover.clothingstore.models.UserModel;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -24,9 +30,11 @@ public class ProfileFragment extends Fragment {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
     Button logoutBtn;
+    FirebaseFirestore database;
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+    private TextView textView;
 
     public ProfileFragment() {
         // Required empty public constructor
@@ -57,6 +65,7 @@ public class ProfileFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+
     }
 
     @Override
@@ -66,6 +75,27 @@ public class ProfileFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
 
         logoutBtn = view.findViewById(R.id.logout_btn);
+        textView = view.findViewById(R.id.textview);
+        database = FirebaseFirestore.getInstance();
+
+        try {
+            database.collection("Users").document(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                    .get().addOnCompleteListener(task -> {
+                        if (task.isSuccessful() && task.getResult() != null) {
+                            String fullName = task.getResult().getString("fullName");
+//                        String email = task.getResult().getString("Email");
+//                        String phone = task.getResult().getString("Phone");
+                            //other stuff
+
+                            textView.setText(fullName);
+                        } else {
+
+                        }
+                    });
+        } catch (Exception e) {
+            Log.d("debug", e.getMessage());
+        }
+
 
         logoutBtn.setOnClickListener(v -> {
             FirebaseAuth.getInstance().signOut();

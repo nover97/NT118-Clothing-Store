@@ -19,12 +19,17 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import app.nover.clothingstore.models.UserModel;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -46,8 +51,8 @@ public class SignUpFragment extends Fragment {
     private EditText fullNameET, emailET, passwordET, password2ET;
     private Button signUpBtn;
     private TextView signInRedirectText;
-
     private FirebaseAuth mAuth;
+    private FirebaseFirestore fireStoreDB;
 
     // ...
 // Initialize Firebase Auth
@@ -89,6 +94,7 @@ public class SignUpFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_sign_up, container, false);
 
         mAuth = FirebaseAuth.getInstance();
+        fireStoreDB = FirebaseFirestore.getInstance();
 
         fullNameET = view.findViewById(R.id.name_signup);
         emailET = view.findViewById(R.id.email_signup);
@@ -104,31 +110,10 @@ public class SignUpFragment extends Fragment {
                     String email = emailET.getText().toString().trim();
                     String password = passwordET.getText().toString().trim();
                     String password2 = password2ET.getText().toString().trim();
-                    if (!isEmailValid() | !isPasswordValid()) {
+                    if (!isNameValid() | !isEmailValid() | !isPasswordValid()) {
 
                     } else {
-                        mAuth.createUserWithEmailAndPassword(email, password)
-                                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                                    @Override
-                                    public void onComplete(@NonNull Task<AuthResult> task) {
-                                        if (task.isSuccessful()) {
-                                            // Sign in success, update UI with the signed-in user's information
-                                            Log.d("Authen debug", "createUserWithEmail:success");
-                                            FirebaseUser user = mAuth.getCurrentUser();
-                                            Toast.makeText(getActivity(), "Account successfully created.",
-                                                    Toast.LENGTH_SHORT).show();
-
-                                            if (callbackLoginFragment != null)
-                                                callbackLoginFragment.setSignInFragment();
-
-                                        } else {
-                                            // If sign in fails, display a message to the user.
-                                            Log.w("Authen debug", "createUserWithEmail:failure", task.getException());
-                                            Toast.makeText(getActivity(), "Authentication failed.",
-                                                    Toast.LENGTH_SHORT).show();
-                                        }
-                                    }
-                                });
+                        registerUser(fullName, email, password);
                     }
                 }
         );
@@ -138,6 +123,43 @@ public class SignUpFragment extends Fragment {
             }
         });
         return view;
+    }
+
+    public void registerUser(String name, String email, String password) {
+        mAuth.createUserWithEmailAndPassword(email, password)
+                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            UserModel userModel = new UserModel(name, email, password);
+                            String uid = task.getResult().getUser().getUid();
+                            fireStoreDB.collection("Users").document(uid)
+                                    .set(userModel)
+                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        @Override
+                                        public void onSuccess(Void aVoid) {
+                                            Log.d(TAG, "DocumentSnapshot successfully written!");
+                                            Toast.makeText(getActivity(), "UserDate successfully written.", Toast.LENGTH_SHORT).show();
+                                        }
+                                    })
+                                    .addOnFailureListener(new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@NonNull Exception e) {
+                                            Log.w(TAG, "Error writing document", e);
+                                            Toast.makeText(getActivity(), "UserData failed to write.", Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
+
+                            Toast.makeText(getActivity(), "Account successfully created.", Toast.LENGTH_SHORT).show();
+                            if (callbackLoginFragment != null)
+                                callbackLoginFragment.setSignInFragment();
+
+                        } else {
+                            Log.w("Authen debug", "createUserWithEmail:failure", task.getException());
+                            Toast.makeText(getActivity(), "Authentication failed.", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
     }
 
     public boolean isPasswordValid() {
@@ -161,8 +183,20 @@ public class SignUpFragment extends Fragment {
         }
     }
 
+    public boolean isNameValid() {
+        String name = fullNameET.getText().toString().trim();
+        if (name.isEmpty()) {
+            fullNameET.setError("Name cannot be empty.");
+            fullNameET.requestFocus();
+            return false;
+        } else {
+            fullNameET.setError(null);
+            return true;
+        }
+    }
+
     public boolean isEmailValid() {
-        String value = emailET.getText().toString();
+        String value = emailET.getText().toString().trim();
         if (value.isEmpty()) {
             emailET.setError("Email cannot be empty.");
             emailET.requestFocus();

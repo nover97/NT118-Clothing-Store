@@ -18,6 +18,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -105,29 +106,8 @@ public class SignInFragment extends Fragment {
             if (!isUserValid() | !isPasswordValid()) {
 
             } else {
-//                authorizeUser();
-                mAuth.signInWithEmailAndPassword(email, password)
-                        .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                            @Override
-                            public void onComplete(@NonNull Task<AuthResult> task) {
-                                if (task.isSuccessful()) {
-                                    // Sign in success, update UI with the signed-in user's information
-                                    Log.d("Authen debug", "signInWithEmail:success");
-                                    Toast.makeText(getActivity(), "Logged in successfully",
-                                            Toast.LENGTH_SHORT).show();
-                                    FirebaseUser user = mAuth.getCurrentUser();
+                authorizeUser(email, password);
 
-                                    Intent intent = new Intent(getActivity(), MainActivity.class);
-                                    startActivity(intent);
-
-                                } else {
-                                    // If sign in fails, display a message to the user.
-                                    Log.w("Authen debug", "signInWithEmail:failure", task.getException());
-                                    Toast.makeText(getActivity(), "Authentication failed.",
-                                            Toast.LENGTH_SHORT).show();
-                                }
-                            }
-                        });
             }
         });
 
@@ -140,38 +120,24 @@ public class SignInFragment extends Fragment {
         return view;
     }
 
-    public void authorizeUser() {
-        String Email = emailET.getText().toString().trim();
-        String Password = passwordET.getText().toString().trim();
+    public void authorizeUser(String email, String password) {
+        mAuth.signInWithEmailAndPassword(email, password)
+                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            Toast.makeText(getActivity(), "Logged in successfully", Toast.LENGTH_SHORT).show();
 
-        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("users");
-        Query checkUserDatabase = reference.orderByChild("email").equalTo(Email);
-        checkUserDatabase.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (snapshot.exists()) {
-                    emailET.setError(null);
-                    String passwordFromDB = snapshot.child(Email).child("password").getValue(String.class);
+                            Intent intent = new Intent(getActivity(), MainActivity.class);
+                            startActivity(intent);
 
-                    if (passwordFromDB.equals(Password)) {
-                        emailET.setError(null);
-                        Intent intent = new Intent(getActivity(), MainActivity.class);
-                        startActivity(intent);
-                    } else {
-                        passwordET.setError("Invalid password, please try again.");
-                        passwordET.requestFocus();
+                        } else {
+                            // If sign in fails, display a message to the user.
+                            Log.w("Authen debug", "signInWithEmail:failure", task.getException());
+                            Toast.makeText(getActivity(), "Authentication failed.", Toast.LENGTH_SHORT).show();
+                        }
                     }
-                } else {
-                    emailET.setError("Email does not exist, please sign up.");
-                    emailET.requestFocus();
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
+                });
     }
 
     //
