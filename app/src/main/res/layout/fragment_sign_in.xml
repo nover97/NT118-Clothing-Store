@@ -34,7 +34,6 @@
                 android:textSize="@dimen/largeFont"
                 android:textStyle="bold" />
 
-
             <EditText
                 android:id="@+id/email_signin"
                 android:layout_width="match_parent"
@@ -48,18 +47,39 @@
                 android:inputType="textEmailAddress"
                 android:padding="@dimen/base" />
 
-            <EditText
-                android:id="@+id/password_signin"
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/sizex5"
-                android:layout_marginTop="@dimen/base"
-                android:autofillHints="password"
-                android:background="@drawable/pink_border"
-                android:drawableStart="@drawable/ic_password_24"
-                android:drawablePadding="@dimen/base"
-                android:hint="@string/password"
-                android:inputType="textPassword"
-                android:padding="@dimen/base" />
+                android:layout_height="wrap_content">
+
+                <EditText
+                    android:id="@+id/password_signin"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/sizex5"
+                    android:layout_marginTop="@dimen/base"
+                    android:autofillHints="password"
+                    android:background="@drawable/pink_border"
+                    android:drawableStart="@drawable/ic_password_24"
+                    android:drawablePadding="@dimen/base"
+                    android:hint="@string/password"
+                    android:inputType="textPassword"
+                    android:padding="@dimen/base"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageView
+                    android:id="@+id/showHidePw_signin"
+                    android:layout_width="50dp"
+                    android:layout_height="0dp"
+                    android:layout_marginRight="@dimen/base"
+                    android:scaleX="0.5"
+                    android:scaleY="0.5"
+                    android:src="@drawable/ic_eye_24"
+                    app:layout_constraintBottom_toBottomOf="@id/password_signin"
+                    app:layout_constraintEnd_toEndOf="@id/password_signin"
+                    app:layout_constraintTop_toTopOf="@id/password_signin" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
 
             <Button
                 android:id="@+id/button_signin"

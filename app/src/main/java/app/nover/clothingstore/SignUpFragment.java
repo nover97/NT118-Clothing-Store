@@ -9,12 +9,15 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
+import android.text.method.HideReturnsTransformationMethod;
+import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,10 +27,16 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
+import com.google.firebase.auth.FirebaseAuthUserCollisionException;
+import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import app.nover.clothingstore.models.UserModel;
 
@@ -42,13 +51,17 @@ public class SignUpFragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-    FirebaseDatabase database;
-    DatabaseReference reference;
-    CallbackLoginFragment callbackLoginFragment;
+    private static final String EMAIL_PATTERN =
+            "^[_A-Za-z0-9-]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
+    private static final Pattern pattern = Pattern.compile(EMAIL_PATTERN);
+    private FirebaseDatabase database;
+    private DatabaseReference reference;
+    private CallbackLoginFragment callbackLoginFragment;
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
     private EditText fullNameET, emailET, passwordET, password2ET;
+    private ImageView showHidePwIV, showHidePw2IV;
     private Button signUpBtn;
     private TextView signInRedirectText;
     private FirebaseAuth mAuth;
@@ -78,6 +91,11 @@ public class SignUpFragment extends Fragment {
         return fragment;
     }
 
+    public static boolean isValidEmail(String email) {
+        Matcher matcher = pattern.matcher(email);
+        return matcher.matches();
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -100,6 +118,8 @@ public class SignUpFragment extends Fragment {
         emailET = view.findViewById(R.id.email_signup);
         passwordET = view.findViewById(R.id.password_signup);
         password2ET = view.findViewById(R.id.password2_signup);
+        showHidePwIV = view.findViewById(R.id.showHidePw_signup);
+        showHidePw2IV = view.findViewById(R.id.showHidePw2_signup);
         signInRedirectText = view.findViewById(R.id.signInRedirectText);
         signUpBtn = view.findViewById(R.id.button_signup);
 
@@ -117,11 +137,37 @@ public class SignUpFragment extends Fragment {
                     }
                 }
         );
+
         signInRedirectText.setOnClickListener(v -> {
             if (callbackLoginFragment != null) {
                 callbackLoginFragment.setSignInFragment();
             }
         });
+
+        showHidePwIV.setOnClickListener(v -> {
+            if (passwordET.getTransformationMethod().equals(HideReturnsTransformationMethod.getInstance())) {
+                // If visible -> Hide it
+                passwordET.setTransformationMethod(PasswordTransformationMethod.getInstance());
+                // Change icon
+                showHidePwIV.setImageResource(R.drawable.ic_eye_24);
+            } else {
+                passwordET.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
+                showHidePwIV.setImageResource(R.drawable.ic_non_eye_24);
+            }
+        });
+
+        showHidePw2IV.setOnClickListener(v -> {
+            if (password2ET.getTransformationMethod().equals(HideReturnsTransformationMethod.getInstance())) {
+                // If visible -> Hide it
+                password2ET.setTransformationMethod(PasswordTransformationMethod.getInstance());
+                // Change icon
+                showHidePw2IV.setImageResource(R.drawable.ic_eye_24);
+            } else {
+                password2ET.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
+                showHidePw2IV.setImageResource(R.drawable.ic_non_eye_24);
+            }
+        });
+
         return view;
     }
 
@@ -155,8 +201,18 @@ public class SignUpFragment extends Fragment {
                                 callbackLoginFragment.setSignInFragment();
 
                         } else {
-                            Log.w("Authen debug", "createUserWithEmail:failure", task.getException());
-                            Toast.makeText(getActivity(), "Authentication failed.", Toast.LENGTH_SHORT).show();
+                            try {
+                                throw task.getException();
+                            } catch (FirebaseAuthUserCollisionException e) {
+                                emailET.setError("Email is already in use.");
+                                emailET.requestFocus();
+                            } catch (FirebaseAuthInvalidCredentialsException e) {
+                                emailET.setError("Email is invalid.");
+                                emailET.requestFocus();
+                            } catch (Exception e) {
+                                Log.e("SignUp", e.getMessage());
+                                Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                            }
                         }
                     }
                 });
@@ -196,9 +252,13 @@ public class SignUpFragment extends Fragment {
     }
 
     public boolean isEmailValid() {
-        String value = emailET.getText().toString().trim();
-        if (value.isEmpty()) {
+        String email = emailET.getText().toString().trim();
+        if (email.isEmpty()) {
             emailET.setError("Email cannot be empty.");
+            emailET.requestFocus();
+            return false;
+        } else if (!isValidEmail(email)) {
+            emailET.setError("Not a valid email.");
             emailET.requestFocus();
             return false;
         } else {
