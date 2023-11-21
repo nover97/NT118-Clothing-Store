@@ -4,4 +4,5 @@
     <color name="white">#FFFFFFFF</color>
     <color name="light_pink">#F0D0D0</color>
     <color name="lavender">#E6E6FA</color>
+    <color name="transparent_white">#99FFFFFF</color>
 </resources>

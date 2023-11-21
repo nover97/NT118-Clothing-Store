@@ -12,48 +12,66 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <EditText
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/base"
-            android:background="@drawable/pink_border" />
+            android:layout_height="wrap_content">
 
-        <ViewFlipper
-            android:id="@+id/viewFlipper"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:autoStart="true"
-            android:flipInterval="2000"
-            android:inAnimation="@android:anim/slide_in_left"
-            android:outAnimation="@android:anim/slide_out_right">
+            <EditText
+                android:id="@+id/searchBox_home"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_margin="@dimen/base"
+                android:background="@drawable/pink_border"
+                android:backgroundTint="@color/transparent_white"
+                android:drawableStart="@drawable/ic_search_24"
+                android:drawablePadding="@dimen/base"
+                android:elevation="@dimen/base"
+                android:hint="@string/searchHintHomePage"
+                android:padding="13dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-            <ImageView
-                android:id="@+id/imgView1"
-                android:layout_width="wrap_content"
+            <ViewFlipper
+                android:id="@+id/viewFlipper_home"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:adjustViewBounds="true"
-                android:src="@drawable/mainpage_image" />
+                android:autoStart="true"
+                android:flipInterval="2000"
+                android:inAnimation="@android:anim/slide_in_left"
+                android:outAnimation="@android:anim/slide_out_right"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
 
-            <ImageView
-                android:id="@+id/imgView2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:adjustViewBounds="true"
-                android:src="@drawable/mainpage_image" />
+                <ImageView
+                    android:id="@+id/imgView1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:adjustViewBounds="true"
+                    android:src="@drawable/mainpage_image" />
 
-            <ImageView
-                android:id="@+id/imgView3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:adjustViewBounds="true"
-                android:src="@drawable/mainpage_image" />
-        </ViewFlipper>
+                <ImageView
+                    android:id="@+id/imgView2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:adjustViewBounds="true"
+                    android:src="@drawable/mainpage_image" />
+
+                <ImageView
+                    android:id="@+id/imgView3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:adjustViewBounds="true"
+                    android:src="@drawable/mainpage_image" />
+            </ViewFlipper>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <LinearLayout
             android:id="@+id/ll_home"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="horizontal">
 
 
         </LinearLayout>
