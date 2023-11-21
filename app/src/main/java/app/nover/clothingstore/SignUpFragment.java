@@ -2,11 +2,9 @@ package app.nover.clothingstore;
 
 import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
 
-import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import android.text.method.HideReturnsTransformationMethod;
@@ -29,8 +27,6 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseAuthUserCollisionException;
-import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -149,10 +145,10 @@ public class SignUpFragment extends Fragment {
                 // If visible -> Hide it
                 passwordET.setTransformationMethod(PasswordTransformationMethod.getInstance());
                 // Change icon
-                showHidePwIV.setImageResource(R.drawable.ic_eye_24);
+                showHidePwIV.setImageResource(R.drawable.ic_visible_24);
             } else {
                 passwordET.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
-                showHidePwIV.setImageResource(R.drawable.ic_non_eye_24);
+                showHidePwIV.setImageResource(R.drawable.ic_not_visibile_24);
             }
         });
 
@@ -161,10 +157,10 @@ public class SignUpFragment extends Fragment {
                 // If visible -> Hide it
                 password2ET.setTransformationMethod(PasswordTransformationMethod.getInstance());
                 // Change icon
-                showHidePw2IV.setImageResource(R.drawable.ic_eye_24);
+                showHidePw2IV.setImageResource(R.drawable.ic_visible_24);
             } else {
                 password2ET.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
-                showHidePw2IV.setImageResource(R.drawable.ic_non_eye_24);
+                showHidePw2IV.setImageResource(R.drawable.ic_not_visibile_24);
             }
         });
 

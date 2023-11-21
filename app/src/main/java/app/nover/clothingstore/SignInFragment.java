@@ -1,17 +1,11 @@
 package app.nover.clothingstore;
 
-import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
-
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
-import android.telecom.Call;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
@@ -21,7 +15,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -31,13 +24,9 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseAuthInvalidUserException;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
-import com.google.firebase.database.ValueEventListener;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -50,6 +39,9 @@ public class SignInFragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+    private static final String EMAIL_PATTERN =
+            "^[_A-Za-z0-9-]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
+    private static final Pattern pattern = Pattern.compile(EMAIL_PATTERN);
     private EditText emailET, passwordET;
     private ImageView showHidePwIV;
     private Button signInBtn;
@@ -82,6 +74,11 @@ public class SignInFragment extends Fragment {
         return fragment;
     }
 
+    public static boolean isValidEmail(String email) {
+        Matcher matcher = pattern.matcher(email);
+        return matcher.matches();
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -110,7 +107,7 @@ public class SignInFragment extends Fragment {
             String email = emailET.getText().toString().trim();
             String password = passwordET.getText().toString().trim();
 
-            if (!isUserValid() | !isPasswordValid()) {
+            if (!isEmailValid() | !isPasswordValid()) {
 
             } else {
                 authorizeUser(email, password);
@@ -129,10 +126,10 @@ public class SignInFragment extends Fragment {
                 // If visible -> Hide it
                 passwordET.setTransformationMethod(PasswordTransformationMethod.getInstance());
                 // Change icon
-                showHidePwIV.setImageResource(R.drawable.ic_eye_24);
+                showHidePwIV.setImageResource(R.drawable.ic_visible_24);
             } else {
                 passwordET.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
-                showHidePwIV.setImageResource(R.drawable.ic_non_eye_24);
+                showHidePwIV.setImageResource(R.drawable.ic_not_visibile_24);
             }
         });
 
@@ -171,10 +168,14 @@ public class SignInFragment extends Fragment {
     }
 
     //
-    public boolean isUserValid() {
-        String value = emailET.getText().toString();
-        if (value.isEmpty()) {
+    public boolean isEmailValid() {
+        String email = emailET.getText().toString();
+        if (email.isEmpty()) {
             emailET.setError("Email cannot be empty.");
+            emailET.requestFocus();
+            return false;
+        } else if (!isValidEmail(email)) {
+            emailET.setError("Not a valid email.");
             emailET.requestFocus();
             return false;
         } else {
@@ -198,6 +199,7 @@ public class SignInFragment extends Fragment {
             return true;
         }
     }
+
 
     public void setCallbackLoginFragment(CallbackLoginFragment clFragment) {
         this.callbackLoginFragment = clFragment;

@@ -87,7 +87,7 @@
                     android:layout_marginRight="@dimen/base"
                     android:scaleX="0.5"
                     android:scaleY="0.5"
-                    android:src="@drawable/ic_eye_24"
+                    android:src="@drawable/ic_visible_24"
                     app:layout_constraintBottom_toBottomOf="@id/password_signup"
                     app:layout_constraintEnd_toEndOf="@id/password_signup"
                     app:layout_constraintTop_toTopOf="@id/password_signup" />
@@ -119,7 +119,7 @@
                     android:layout_marginRight="@dimen/base"
                     android:scaleX="0.5"
                     android:scaleY="0.5"
-                    android:src="@drawable/ic_eye_24"
+                    android:src="@drawable/ic_visible_24"
                     app:layout_constraintBottom_toBottomOf="@id/password2_signup"
                     app:layout_constraintEnd_toEndOf="@id/password2_signup"
                     app:layout_constraintTop_toTopOf="@id/password2_signup" />
