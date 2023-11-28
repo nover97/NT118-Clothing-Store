@@ -1,4 +1,4 @@
-package app.nover.clothingstore;
+package app.nover.clothingstore.login;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -28,6 +28,10 @@ import com.google.firebase.auth.FirebaseAuthInvalidUserException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import app.nover.clothingstore.CallbackLoginFragment;
+import app.nover.clothingstore.MainActivity;
+import app.nover.clothingstore.R;
+
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link SignInFragment#newInstance} factory method to
@@ -42,6 +46,7 @@ public class SignInFragment extends Fragment {
     private static final String EMAIL_PATTERN =
             "^[_A-Za-z0-9-]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
     private static final Pattern pattern = Pattern.compile(EMAIL_PATTERN);
+    private static final String TAG = "Sign In Fragment";
     private EditText emailET, passwordET;
     private ImageView showHidePwIV;
     private Button signInBtn;
@@ -158,7 +163,7 @@ public class SignInFragment extends Fragment {
                                 passwordET.setError("Invalid credentials, please check.");
                                 passwordET.requestFocus();
                             } catch (Exception e) {
-                                Log.e("SignIn", e.getMessage());
+                                Log.e(TAG, e.getMessage());
                                 Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
                             }
 

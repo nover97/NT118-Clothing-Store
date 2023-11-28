@@ -1,21 +1,19 @@
-package app.nover.clothingstore;
+package app.nover.clothingstore.login;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-import org.w3c.dom.Text;
-
+import app.nover.clothingstore.CallbackLoginFragment;
+import app.nover.clothingstore.MainActivity;
+import app.nover.clothingstore.R;
 import app.nover.clothingstore.databinding.ActivityLoginBinding;
-import app.nover.clothingstore.databinding.ActivityMainBinding;
 
 public class LoginActivity extends AppCompatActivity implements CallbackLoginFragment {
 
