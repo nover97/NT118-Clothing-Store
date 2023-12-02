@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="@dimen/base"
+    app:cardCornerRadius="@dimen/basex2">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/base">
+
+            <com.makeramen.roundedimageview.RoundedImageView
+                android:id="@+id/item_cardview_image"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:padding="@dimen/base"
+                android:scaleType="fitCenter"
+                android:src="@drawable/tshirt"
+                app:flow_verticalAlign="center"
+                app:layout_constraintDimensionRatio="H,1:1"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:riv_corner_radius="30dp" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:weightSum="2">
+
+            <TextView
+                android:id="@+id/item_cardview_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:ellipsize="end"
+                android:lines="2"
+                android:padding="@dimen/base"
+                android:text="PRODUCT NAME / PRODUCT NAME / PRODUCT NAME / PRODUCT NAME /"
+                android:textAlignment="textStart"
+                android:textSize="@dimen/largeFont"
+                android:textStyle="bold" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="horizontal"
+                android:weightSum="2">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/item_cardview_price"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="2"
+                        android:ellipsize="end"
+                        android:lines="1"
+                        android:padding="@dimen/base"
+                        android:text="CURRENT PRICE"
+                        android:textAlignment="textStart"
+                        android:textColor="@color/red"
+                        android:textSize="@dimen/largeFont"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/item_cardview_original_price"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="2"
+                        android:ellipsize="end"
+                        android:foreground="@drawable/strike_through"
+                        android:lines="1"
+                        android:padding="@dimen/base"
+                        android:text="ORIGINAL PRICE"
+                        android:textAlignment="textStart"
+                        android:textSize="@dimen/largeFont"
+                        android:textStyle="" />
+                </LinearLayout>
+
+                <ImageView
+                    android:id="@+id/item_cardview_cart_iv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:scaleX="0.7"
+                    android:scaleY="0.7"
+                    android:src="@drawable/ic_shopping_cart_24" />
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+</androidx.cardview.widget.CardView>

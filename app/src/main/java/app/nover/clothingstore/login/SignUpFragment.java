@@ -1,6 +1,4 @@
-package app.nover.clothingstore;
-
-import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
+package app.nover.clothingstore.login;
 
 import android.os.Bundle;
 
@@ -34,6 +32,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import app.nover.clothingstore.CallbackLoginFragment;
+import app.nover.clothingstore.R;
 import app.nover.clothingstore.models.UserModel;
 
 /**
@@ -50,6 +50,7 @@ public class SignUpFragment extends Fragment {
     private static final String EMAIL_PATTERN =
             "^[_A-Za-z0-9-]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
     private static final Pattern pattern = Pattern.compile(EMAIL_PATTERN);
+    private static final String TAG = "Sign Up Fragment";
     private FirebaseDatabase database;
     private DatabaseReference reference;
     private CallbackLoginFragment callbackLoginFragment;
@@ -206,7 +207,7 @@ public class SignUpFragment extends Fragment {
                                 emailET.setError("Email is invalid.");
                                 emailET.requestFocus();
                             } catch (Exception e) {
-                                Log.e("SignUp", e.getMessage());
+                                Log.e(TAG, e.getMessage());
                                 Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
                             }
                         }
