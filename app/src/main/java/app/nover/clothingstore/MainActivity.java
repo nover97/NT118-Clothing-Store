@@ -8,8 +8,11 @@ import androidx.fragment.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+
+import java.util.Locale;
 
 import app.nover.clothingstore.databinding.ActivityMainBinding;
 
@@ -20,6 +23,9 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        int no = 124750;
+
+
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         //setContentView(R.layout.activity_main);
@@ -51,4 +57,6 @@ public class MainActivity extends AppCompatActivity {
         fragmentTransaction.replace(R.id.flFragment, fragment);
         fragmentTransaction.commit();
     }
+
+
 }
