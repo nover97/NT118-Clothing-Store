@@ -17,21 +17,19 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <EditText
-                android:id="@+id/searchBox_home"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_margin="@dimen/base"
-                android:background="@drawable/pink_border"
-                android:backgroundTint="@color/transparent_white"
-                android:drawableStart="@drawable/ic_search_24"
-                android:drawablePadding="@dimen/base"
-                android:elevation="@dimen/base"
-                android:hint="@string/searchHintHomePage"
-                android:padding="13dp"
+            <androidx.appcompat.widget.SearchView
+                android:id="@+id/searchView"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:background="@drawable/search_view_bg"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                app:queryHint="Search your item here..."
+                app:iconifiedByDefault="false"
+                android:elevation="2dp"/>
 
             <ViewFlipper
                 android:id="@+id/viewFlipper_home"
@@ -43,7 +41,8 @@
                 android:outAnimation="@android:anim/slide_out_right"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
+                app:layout_constraintTop_toTopOf="parent"
+                android:elevation="1dp">
 
                 <ImageView
                     android:id="@+id/imgView1"

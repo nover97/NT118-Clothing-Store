@@ -10,7 +10,6 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 
-import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +24,6 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -60,7 +58,7 @@ public class HomeItemAdapter extends ArrayAdapter<ItemModel> {
         ItemModel item = getItem(position);
 
         if (item != null) {
-            Picasso.get().load(item.getImageUrl()).into(holder.itemImageIV);
+            //Picasso.get().load(item.getImageUrl()).into(holder.itemImageIV);
             holder.nameTV.setText(item.getName());
             holder.priceTV.setText(String.valueOf(item.getPrice()));
             holder.originalPriceTV.setText(String.valueOf(item.getOriginalPrice()));
