@@ -1,13 +1,18 @@
 package app.nover.clothingstore.adapter;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.graphics.Color;
+import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -18,13 +23,16 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.protobuf.Any;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
@@ -39,7 +47,9 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
     static int totalAmount=0;
     String[] size;
     String[] color;
+    String chooseColor, chooseSize;
 
+    int total = 0;
     FirebaseFirestore firestore = FirebaseFirestore.getInstance();
     FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
 
@@ -55,10 +65,15 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
         this.items = items;
     }
 
+
+
     public class ViewHolder extends RecyclerView.ViewHolder {
         ImageView imageView;
-        TextView tvName, tvPrice, tvTotal,tvDe,tvIn,tvCount, tvDelete;
+        TextView tvName, tvPrice,tvDe,tvIn,tvCount, tvDelete;
         Spinner spinnerColor,spinnerSize;
+        CheckBox cbItem;
+
+
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
@@ -72,6 +87,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
             imageView = itemView.findViewById(R.id.iv_cart);
             spinnerColor = itemView.findViewById(R.id.spinner_color_cart);
             spinnerSize = itemView.findViewById(R.id.spinner_size_cart);
+            cbItem = itemView.findViewById(R.id.cb_item_cart);
         }
     }
 
@@ -95,15 +111,20 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
         String sizeChose = items.get(position).getSize();
         String arraySize = items.get(position).getArraySize();
         String id = items.get(position).getId();
+        Boolean check =  items.get(position).getIsCheck();
+        String totalItem = items.get(position).getTotalItem();
 
         size = convertStringArray(arraySize,sizeChose);
         color = convertStringArray(arrayColor,colorChose);
 
+
         //set data
         holder.tvName.setText(name);
-        holder.tvPrice.setText(convertDot(price));
         holder.tvCount.setText(String.valueOf(count));
+        holder.tvPrice.setText(convertDot(totalItem));
         Glide.with(holder.imageView).load(url).into(holder.imageView);
+        holder.cbItem.setChecked(check);
+
 
         int priceInt = Integer.parseInt(price);
         int countInt =Integer.parseInt(count);
@@ -116,11 +137,13 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
             public void onClick(View view) {
              if(Integer.parseInt(itemCart.getCount()) > 1) {
                  itemCart.setCount(String.valueOf(Integer.parseInt(itemCart.getCount())-1));
-                 holder.tvCount.setText(itemCart.getCount());
+                 holder.tvCount.setText((itemCart.getCount()));
 
-                 String temp = convertDot(String.valueOf(Integer.parseInt(itemCart.getPrice())-Integer.parseInt(price)));
-                 itemCart.setPrice(String.valueOf(Integer.parseInt(itemCart.getPrice())-Integer.parseInt(price)));
-                 holder.tvPrice.setText(temp);
+                 itemCart.setTotalItem(String.valueOf(Integer.parseInt(itemCart.getTotalItem())-Integer.parseInt(price)));
+                 holder.tvPrice.setText(convertDot(itemCart.getTotalItem()));
+
+                 updateItemCart("count", itemCart.getCount(), id);
+                 updateItemCart("totalItem", itemCart.getTotalItem(), id);
              }
 
             }
@@ -133,30 +156,40 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
                 itemCart.setCount(String.valueOf(Integer.parseInt(itemCart.getCount())+1));
                 holder.tvCount.setText(itemCart.getCount());
 
-                String temp = convertDot(String.valueOf(Integer.parseInt(itemCart.getPrice())+Integer.parseInt(price)));
-                itemCart.setPrice(String.valueOf(Integer.parseInt(itemCart.getPrice())+Integer.parseInt(price)));
-                holder.tvPrice.setText(temp);
+                itemCart.setTotalItem(String.valueOf(Integer.parseInt(itemCart.getTotalItem())+Integer.parseInt(price)));
+
+                holder.tvPrice.setText(convertDot(itemCart.getTotalItem()));
+                updateItemCart("count", itemCart.getCount(), id);
+                updateItemCart("totalItem", itemCart.getTotalItem(), id);
+
             }
         });
 
-
-
+        //handle delete item
         holder.tvDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if(items.get(position).getIsCheck()) {
+                    Log.e("check", "check");
+                    Toast.makeText(holder.imageView.getContext(), "You should uncheck to delete items", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+
+                // This method will be executed once the timer is over
                 firestore.collection("AddToCart")
                         .document(firebaseAuth.getCurrentUser().getUid())
                         .collection("Users").document(id)
                         .delete().addOnCompleteListener(new OnCompleteListener<Void>() {
                             @Override
                             public void onComplete(@NonNull Task<Void> task) {
-                                Toast.makeText(holder.imageView.getContext(), "You successfully deleted this property", Toast.LENGTH_SHORT).show();
                                 items.remove(position);
                                 notifyItemRemoved(position);
                                 notifyItemRangeChanged(position, items.size());
                                 notifyDataSetChanged();
                             }
                         });
+
             }
 
         });
@@ -173,7 +206,10 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
                         Object item = parent.getItemAtPosition(pos);
                         String colorHex = checkColor(item.toString());
                         holder.spinnerColor.setBackgroundColor(Color.parseColor(colorHex));
-//                        saveColor = item.toString();
+                        chooseColor = item.toString();
+                        itemCart.setColor(chooseColor);
+                        updateItemCart("color", chooseColor, itemCart.getId());
+
 
                         //prints the text in spinner item.
                     }
@@ -193,13 +229,26 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
                         Object item = parent.getItemAtPosition(pos);
 //                        String colorHex = checkColor(item.toString());
 //                        spinnerColor.setBackgroundColor(Color.parseColor(colorHex));
-//                        saveColor = item.toString();
+                        chooseSize = item.toString();
+                        itemCart.setSize(chooseSize);
+                        updateItemCart("size", chooseSize, itemCart.getId());
 
                         //prints the text in spinner item.
                     }
                     public void onNothingSelected(AdapterView<?> parent) {
                     }
                 });
+
+        holder.cbItem.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                itemCart.setIsCheck(b);
+
+                updateItemCart("isCheck",b, itemCart.getId());
+
+            }
+        });
+
     }
 
     @Override
@@ -213,7 +262,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
             return "";
         }
         Integer no1 = Integer.parseInt(no);
-        return  String.format(Locale.US,"%,d", no1).replace(',','.')+ "D";
+        return  String.format(Locale.US,"%,d", no1).replace(',','.')+ "đ";
     }
 
     public String[] convertStringArray(String sizes, String choose) {
@@ -226,8 +275,6 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
         return sizeArray;
     }
 
-
-
     public String checkColor(String color) {
         String[] stringColor = {"Yellow","Red","White", "Black"};
         String[] hexColor = {"#ffe040", "#f44336", "#ffffff", "#000000"};
@@ -239,9 +286,37 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
         return "#ffffff";
     }
 
-    public void deleteItem(int index) {
+    public void updateItemCart(String key, String value,String id) {
+        final HashMap<String,Object> updateCartMap = new HashMap<>();
 
+        updateCartMap.put(key, value);
+
+        firestore.collection("AddToCart")
+                .document(firebaseAuth.getCurrentUser().getUid())
+                .collection("Users").document(id).update(updateCartMap).addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void unused){}
+                });
     }
+
+    public void updateItemCart(String key, Boolean value,String id) {
+        final HashMap<String,Object> updateCartMap = new HashMap<>();
+
+        updateCartMap.put(key, value);
+
+        firestore.collection("AddToCart")
+                .document(firebaseAuth.getCurrentUser().getUid())
+                .collection("Users").document(id).update(updateCartMap).addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void unused) {
+                        notifyDataSetChanged();
+                    }
+                });
+    }
+
+
+
+
 
 
 }

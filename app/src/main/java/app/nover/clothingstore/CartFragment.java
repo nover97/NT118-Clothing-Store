@@ -22,6 +22,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import app.nover.clothingstore.adapter.CartAdapter;
 import app.nover.clothingstore.models.ItemCart;
@@ -35,6 +36,7 @@ public class CartFragment extends Fragment {
     RecyclerView recyclerView;
     private FirebaseFirestore firestore;
     FirebaseAuth firebaseAuth;
+    TextView tvTotal;
 
 
     int totalAmount;
@@ -57,7 +59,7 @@ public class CartFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_cart, container, false);
         recyclerView = view.findViewById(R.id.lv_cart);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-
+        tvTotal = view.findViewById(R.id.tv_total_cart);
 
         items = new ArrayList<>();
 
@@ -67,12 +69,16 @@ public class CartFragment extends Fragment {
 
         recyclerView.setAdapter(cartAdapter);
 
+
+
         return view;
     }
 
 
 
+
     private void EventChangeListener() {
+
         firestore.collection("AddToCart").document(firebaseAuth.getCurrentUser().getUid()).collection("Users")
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override
@@ -85,12 +91,42 @@ public class CartFragment extends Fragment {
                         for(DocumentChange dc:value.getDocumentChanges()) {
                             if(dc.getType() == DocumentChange.Type.ADDED) {
                                 items.add(dc.getDocument().toObject(ItemCart.class));
-                                Log.e("TA", items.toString());
                             }
                         }
                         cartAdapter.notifyDataSetChanged();
+                        Log.e("Items", items.toString());
+                        Log.e("totalCart",  grandTotal(items)+"");
+                        tvTotal.setText(convertDot(grandTotal(items)+""));
+
                     }
 
                 });
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+    }
+
+    private int grandTotal(List<ItemCart> items){
+        if(items.size()==0) {
+            return 0;
+        }
+        int totalPrice = 0;
+        for(int i = 0 ; i < items.size(); i++) {
+            if(items.get(i).getIsCheck()) {
+                totalPrice += Integer.parseInt(items.get(i).getPrice()) *  Integer.parseInt(items.get(i).getCount());
+            }
+        }
+        return totalPrice;
+    }
+
+    public String convertDot(String no)
+    {
+        if(no.length()==0) {
+            return "";
+        }
+        Integer no1 = Integer.parseInt(no);
+        return  String.format(Locale.US,"%,d", no1).replace(',','.')+ "đ";
     }
 }

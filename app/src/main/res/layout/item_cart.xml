@@ -11,10 +11,11 @@
         android:gravity="center"
         android:orientation="horizontal"
         tools:ignore="MissingConstraints">
-        <ImageButton
-            android:id="@+id/ib_choose"
-            android:layout_width="wrap_content"
+        <CheckBox android:id="@+id/cb_item_cart"
+            android:layout_width="20dp"
             android:layout_height="wrap_content"
+            android:buttonTint="@color/pink"
+            android:checked="true"
             />
         <ImageView
             android:id="@+id/iv_cart"
