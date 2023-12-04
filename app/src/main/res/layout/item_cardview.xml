@@ -2,40 +2,38 @@
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_margin="@dimen/base"
-    app:cardCornerRadius="@dimen/basex2">
+    android:layout_height="wrap_content"
+    android:layout_margin="5dp"
+    android:padding="20dp"
+    app:cardCornerRadius="@dimen/basex2"
+    android:id="@+id/main_layout"
+    >
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="@dimen/base">
 
-            <com.makeramen.roundedimageview.RoundedImageView
+
+            <ImageView
+                android:layout_margin="@dimen/base"
+                android:scaleType="centerCrop"
+                android:adjustViewBounds="true"
                 android:id="@+id/item_cardview_image"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
                 android:padding="@dimen/base"
-                android:scaleType="fitCenter"
                 android:src="@drawable/tshirt"
                 app:flow_verticalAlign="center"
-                app:layout_constraintDimensionRatio="H,1:1"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
                 app:riv_corner_radius="30dp" />
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
+            android:padding="10dp"
             android:weightSum="2">
 
             <TextView
@@ -44,11 +42,11 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:ellipsize="end"
-                android:lines="2"
-                android:padding="@dimen/base"
+                android:lines="1"
+                android:textColor="@color/black"
                 android:text="PRODUCT NAME / PRODUCT NAME / PRODUCT NAME / PRODUCT NAME /"
                 android:textAlignment="textStart"
-                android:textSize="@dimen/largeFont"
+                android:textSize="25sp"
                 android:textStyle="bold" />
 
             <LinearLayout
@@ -71,12 +69,11 @@
                         android:layout_weight="2"
                         android:ellipsize="end"
                         android:lines="1"
-                        android:padding="@dimen/base"
                         android:text="CURRENT PRICE"
                         android:textAlignment="textStart"
                         android:textColor="@color/red"
-                        android:textSize="@dimen/largeFont"
-                        android:textStyle="bold" />
+                        android:textSize="20sp"
+                        />
 
                     <TextView
                         android:id="@+id/item_cardview_original_price"
@@ -86,21 +83,20 @@
                         android:ellipsize="end"
                         android:foreground="@drawable/strike_through"
                         android:lines="1"
-                        android:padding="@dimen/base"
-                        android:text="ORIGINAL PRICE"
+                        android:text=""
                         android:textAlignment="textStart"
-                        android:textSize="@dimen/largeFont"
-                        android:textStyle="" />
+                        android:textSize="20sp"
+                       />
                 </LinearLayout>
 
-                <ImageView
-                    android:id="@+id/item_cardview_cart_iv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:scaleX="0.7"
-                    android:scaleY="0.7"
-                    android:src="@drawable/ic_shopping_cart_24" />
+<!--                <ImageView-->
+<!--                    android:id="@+id/item_cardview_cart_iv"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="match_parent"-->
+<!--                    android:layout_weight="1"-->
+<!--                    android:scaleX="0.5"-->
+<!--                    android:scaleY="0.5"-->
+<!--                    android:src="@drawable/ic_shopping_cart_24" />-->
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>

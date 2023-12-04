@@ -1,15 +1,46 @@
 package app.nover.clothingstore.models;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class ItemModel {
     String imageUrl;
     String name;
-    int Price;
-    int originalPrice;
+    String Price;
+    String originalPrice;
+    String description;
+    List<String> arraySize;
+    List<String> arrayColor;
+
+    public List<String> getArrayColor() {
+        return arrayColor;
+    }
+
+    public void setArrayColor(List<String> arrayColor) {
+        this.arrayColor = arrayColor;
+    }
+
+    public List<String> getArraySize() {
+        return arraySize;
+    }
+
+    public void setArraySize(List<String> arraySize) {
+        this.arraySize = arraySize;
+    }
+
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
     public ItemModel() {
     }
 
-    public ItemModel(String imageUrl, String name, int price, int originalPrice) {
+    public ItemModel(String imageUrl, String name, String price, String originalPrice) {
         this.imageUrl = imageUrl;
         this.name = name;
         Price = price;
@@ -32,19 +63,19 @@ public class ItemModel {
         this.name = name;
     }
 
-    public int getPrice() {
+    public String getPrice() {
         return Price;
     }
 
-    public void setPrice(int price) {
+    public void setPrice(String price) {
         Price = price;
     }
 
-    public int getOriginalPrice() {
+    public String getOriginalPrice() {
         return originalPrice;
     }
 
-    public void setOriginalPrice(int originalPrice) {
+    public void setOriginalPrice(String originalPrice) {
         this.originalPrice = originalPrice;
     }
 }
