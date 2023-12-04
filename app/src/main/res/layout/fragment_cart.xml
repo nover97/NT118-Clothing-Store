@@ -3,14 +3,74 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".CartFragment">
+    tools:context=".CartFragment"
+
+   >
 
     <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:text="Cart Fragment"
-        android:textSize="28dp" />
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        >
+        <TextView
+            android:background="@color/pink"
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="CART"
+            android:textStyle="bold"
+            android:textSize="25sp"
+            android:textColor="@color/black"
+            android:padding="@dimen/base"
+           />
+        <androidx.recyclerview.widget.RecyclerView
+           android:id="@+id/lv_cart"
+            android:layout_width="match_parent"
+            android:layout_height="670dp" />
+       <LinearLayout
+           android:orientation="horizontal"
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:paddingHorizontal="@dimen/basex3"
+           android:layout_weight="1"
+           android:background="@color/white"
+         >
+
+           <TextView
+               android:layout_width="wrap_content"
+               android:layout_height="match_parent"
+               android:text="Total:"
+               android:textSize="25sp"
+               android:layout_weight="1"
+               android:gravity="center_vertical"
+               android:textColor="@color/black"
+               android:textStyle="bold"
+               />
+           <TextView
+               android:id="@+id/tv_total_cart"
+               android:layout_width="wrap_content"
+               android:layout_height="match_parent"
+               android:text="500.000"
+               android:gravity="center_vertical"
+               android:layout_weight="1"
+               android:textColor="@color/black"
+               android:textStyle="bold"
+               android:textSize="25sp"
+               />
+           <Button
+               android:layout_weight="1"
+               android:layout_width="wrap_content"
+               android:layout_height="match_parent"
+               android:layout_alignParentRight="true"
+               android:text="Checkout"
+               android:backgroundTint="@color/pink"
+               android:textColor="@color/black"/>
+       </LinearLayout>
+
+    </LinearLayout>
+
+
 
 </FrameLayout>
