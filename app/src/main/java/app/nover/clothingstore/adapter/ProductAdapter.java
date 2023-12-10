@@ -152,4 +152,9 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
             return  String.format(Locale.US,"%,d", no1).replace(',','.');
     }
 
+    public void searchDataList(ArrayList<ItemModel> searchList){
+        items = searchList;
+        notifyDataSetChanged();
+    }
+
 }
