@@ -114,6 +114,8 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
         Boolean check =  items.get(position).getIsCheck();
         String totalItem = items.get(position).getTotalItem();
 
+        Log.e("cart", id);
+
         size = convertStringArray(arraySize,sizeChose);
         color = convertStringArray(arrayColor,colorChose);
 
