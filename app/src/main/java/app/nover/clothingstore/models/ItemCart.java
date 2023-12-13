@@ -13,6 +13,25 @@ public class ItemCart {
     String arrayColor;
     String oriPrice;
     String id;
+    Boolean isCheck;
+    String totalItem;
+
+    public String getTotalItem() {
+        return totalItem;
+    }
+
+    public void setTotalItem(String totalItem) {
+        this.totalItem = totalItem;
+    }
+
+
+    public Boolean getIsCheck() {
+        return isCheck;
+    }
+
+    public void setIsCheck(Boolean check) {
+        this.isCheck = check;
+    }
 
     public String getId() {
         return id;
