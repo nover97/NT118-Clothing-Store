@@ -5,6 +5,7 @@
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:paddingHorizontal="@dimen/basex2">
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -20,27 +21,30 @@
         <ImageView
             android:id="@+id/iv_cart"
             android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:src="@drawable/vay"/>
+            android:layout_height="100dp" />
+        <!--            android:src="@drawable/vay"/>-->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="@dimen/base"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:padding="@dimen/base">
+
             <TextView
-                android:paddingVertical="5dp"
-                android:textColor="@color/black"
-                android:textSize="20sp"
-                android:layout_weight="1"
                 android:id="@+id/tv_name_item"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="T-shirt - Quality clothes for Men so alo alo aloalo"/>
-            <LinearLayout
+                android:layout_weight="1"
                 android:paddingVertical="5dp"
+                android:text="T-shirt - Quality clothes for Men so alo alo aloalo"
+                android:textColor="@color/black"
+                android:textSize="20sp" />
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:paddingVertical="5dp">
+
                 <RelativeLayout
                     android:layout_width="wrap_content"
                     android:padding="1dp"                    android:background="@drawable/border"
@@ -48,15 +52,15 @@
                 <Spinner
                     android:padding="5dp"                    android:background="@drawable/border"
 
-                    android:id="@+id/spinner_color_cart"
-                    android:layout_width="80dp"
-                    android:layout_height="wrap_content" />
+                    <Spinner
+                        android:id="@+id/spinner_color_cart"
+                        android:layout_width="80dp"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/border"
+                        android:padding="5dp" />
                 </RelativeLayout>
 
                 <Spinner
-                    android:layout_marginHorizontal="10dp"
-                    android:padding="6dp"
-                    android:background="@drawable/border"
                     android:id="@+id/spinner_size_cart"
                     android:layout_width="50dp"
                     android:layout_height="35dp"/>
@@ -64,100 +68,108 @@
                 <TextView
                     android:id="@+id/tv_delete"
                     android:layout_width="80dp"
-                    android:gravity="center"
                     android:layout_height="match_parent"
-                    android:textAlignment="center"
                     android:background="@color/red"
-                    android:textColor="@color/white"
-                    android:text="DELETE"/>
+                    android:gravity="center"
+                    android:text="DELETE"
+                    android:textAlignment="center"
+                    android:textColor="@color/white" />
 
             </LinearLayout>
-            <LinearLayout
-                android:paddingVertical="5dp"
 
+            <LinearLayout
                 android:layout_width="match_parent"
+
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:paddingVertical="5dp">
+
                 <TextView
                     android:id="@+id/ib_decrease"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:paddingHorizontal="10dp"
                     android:background="@color/pink"
+                    android:paddingHorizontal="10dp"
+                    android:text="–"
                     android:textColor="@color/black"
-                    android:textSize="20sp"
-                    android:text="–"/>
+                    android:textSize="20sp" />
+
                 <TextView
                     android:id="@+id/tv_count"
                     android:layout_width="50dp"
                     android:layout_height="wrap_content"
-                    android:textAlignment="center"
                     android:paddingHorizontal="10dp"
                     android:text="0"
-                    android:textSize="20sp"
-                    android:textColor="@color/black"/>
+                    android:textAlignment="center"
+                    android:textColor="@color/black"
+                    android:textSize="20sp" />
+
                 <TextView
                     android:id="@+id/ib_increase"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:paddingHorizontal="10dp"
                     android:background="@color/pink"
+                    android:paddingHorizontal="10dp"
+                    android:text="+"
                     android:textColor="@color/black"
-                    android:textSize="20sp"
-                    android:text="+"/>
+                    android:textSize="20sp" />
             </LinearLayout>
-            <LinearLayout
-                android:paddingVertical="5dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_weight="1">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_gravity="center_vertical"
-                android:layout_weight="1"
-                android:textColor="@color/black"
-                android:textSize="18sp"
-                android:text="Price:"/>
-            <TextView
-                android:layout_weight="1"
-                android:id="@+id/tv_price"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:text="80.000 VND"
-                android:layout_gravity="right"
-                android:textColor="@color/red"
-                android:textSize="20sp"/>
-            </LinearLayout>
-            <LinearLayout
-                android:paddingVertical="5dp"
 
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:orientation="horizontal"
-                android:layout_weight="1">
-<!--                <TextView-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="match_parent"-->
-<!--                    android:layout_gravity="center_vertical"-->
-<!--                    android:layout_weight="1"-->
-<!--                    android:textColor="@color/black"-->
-<!--                    android:textSize="15sp"-->
-<!--                    android:text="Origin price:"/>-->
-<!--               <RelativeLayout-->
-<!--                   android:layout_width="wrap_content"-->
-<!--                   android:layout_weight="4"-->
-<!--                   android:layout_height="wrap_content">-->
-<!--                   <TextView-->
-<!--                       android:id="@+id/tv_price_original_item"-->
-<!--                       android:layout_width="wrap_content"-->
-<!--                       android:layout_height="wrap_content"-->
-<!--                       android:text="7000VND"-->
-<!--                       android:foreground="@drawable/strike_through"-->
-<!--                       android:textColor="@color/gray"-->
-<!--                       android:textSize="18sp"/>-->
-<!--               </RelativeLayout>-->
+                android:paddingVertical="5dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1"
+                    android:text="Price:"
+                    android:textColor="@color/black"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:id="@+id/tv_price"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="right"
+                    android:layout_weight="1"
+                    android:text="80.000 VND"
+                    android:textColor="@color/red"
+                    android:textSize="20sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="horizontal"
+                android:paddingVertical="5dp">
+                <!--                <TextView-->
+                <!--                    android:layout_width="wrap_content"-->
+                <!--                    android:layout_height="match_parent"-->
+                <!--                    android:layout_gravity="center_vertical"-->
+                <!--                    android:layout_weight="1"-->
+                <!--                    android:textColor="@color/black"-->
+                <!--                    android:textSize="15sp"-->
+                <!--                    android:text="Origin price:"/>-->
+                <!--               <RelativeLayout-->
+                <!--                   android:layout_width="wrap_content"-->
+                <!--                   android:layout_weight="4"-->
+                <!--                   android:layout_height="wrap_content">-->
+                <!--                   <TextView-->
+                <!--                       android:id="@+id/tv_price_original_item"-->
+                <!--                       android:layout_width="wrap_content"-->
+                <!--                       android:layout_height="wrap_content"-->
+                <!--                       android:text="7000VND"-->
+                <!--                       android:foreground="@drawable/strike_through"-->
+                <!--                       android:textColor="@color/gray"-->
+                <!--                       android:textSize="18sp"/>-->
+                <!--               </RelativeLayout>-->
             </LinearLayout>
 
         </LinearLayout>
