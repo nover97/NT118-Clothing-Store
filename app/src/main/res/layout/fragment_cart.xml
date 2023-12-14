@@ -27,28 +27,8 @@
            />
         <androidx.recyclerview.widget.RecyclerView
            android:id="@+id/lv_cart"
-            android:visibility="gone"
             android:layout_width="match_parent"
             android:layout_height="670dp" />
-        <LinearLayout
-            android:orientation="vertical"
-            android:id="@+id/tv_empty"
-            android:layout_width="match_parent"
-            android:layout_height="670dp"
-            android:gravity="center">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Empty Cart"
-                android:textSize="30sp"/>
-            <Button
-                android:id="@+id/go_to_home"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Go to Homepage"
-                android:textColor="@color/white"
-                android:textSize="20sp"/>
-        </LinearLayout>
        <LinearLayout
            android:orientation="horizontal"
            android:layout_width="match_parent"
@@ -56,15 +36,13 @@
            android:paddingHorizontal="@dimen/basex3"
            android:layout_weight="1"
            android:background="@color/white"
-           android:id="@+id/go_to_checkout"
-
-           >
+         >
 
            <TextView
                android:layout_width="wrap_content"
                android:layout_height="match_parent"
                android:text="Total:"
-               android:textSize="20sp"
+               android:textSize="25sp"
                android:layout_weight="1"
                android:gravity="center_vertical"
                android:textColor="@color/black"
@@ -72,19 +50,18 @@
                />
            <TextView
                android:id="@+id/tv_total_cart"
-               android:layout_width="100dp"
+               android:layout_width="wrap_content"
                android:layout_height="match_parent"
-               android:text="0"
+               android:text="500.000"
                android:gravity="center_vertical"
                android:layout_weight="1"
                android:textColor="@color/black"
                android:textStyle="bold"
-               android:textSize="20sp"
+               android:textSize="25sp"
                />
            <Button
-               android:id="@+id/btn_checkout"
                android:layout_weight="1"
-               android:layout_width="80dp"
+               android:layout_width="wrap_content"
                android:layout_height="match_parent"
                android:layout_alignParentRight="true"
                android:text="Checkout"

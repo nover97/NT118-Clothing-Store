@@ -50,7 +50,7 @@
     <ImageView
         android:id="@+id/iv_detail_product"
         android:layout_margin="@dimen/base"
-        android:scaleType="fitCenter"
+        android:scaleType="centerCrop"
         android:adjustViewBounds="true"
         android:layout_width="match_parent"
         android:layout_height="200dp"
