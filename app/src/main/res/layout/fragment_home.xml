@@ -35,7 +35,7 @@
             <ViewFlipper
                 android:id="@+id/viewFlipper_home"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="200dp"
                 android:autoStart="true"
                 android:flipInterval="2000"
                 android:inAnimation="@android:anim/slide_in_left"
@@ -47,7 +47,7 @@
 
                 <ImageView
                     android:id="@+id/imgView1"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:adjustViewBounds="true"
                     android:scaleType="centerCrop"
@@ -55,7 +55,7 @@
 
                 <ImageView
                     android:id="@+id/imgView2"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:adjustViewBounds="true"
                     android:scaleType="centerCrop"
@@ -63,7 +63,7 @@
 
                 <ImageView
                     android:id="@+id/imgView3"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:adjustViewBounds="true"
                     android:scaleType="centerCrop"

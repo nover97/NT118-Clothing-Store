@@ -88,7 +88,6 @@ public class HomeFragment extends Fragment {
                         for(DocumentChange dc:value.getDocumentChanges()) {
                             if(dc.getType() == DocumentChange.Type.ADDED) {
                                 items.add(dc.getDocument().toObject(ItemModel.class));
-
                             }
                         }
                         productAdapter.notifyDataSetChanged();
