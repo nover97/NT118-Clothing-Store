@@ -11,13 +11,15 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:orientation="horizontal"
-        tools:ignore="MissingConstraints">
-        <CheckBox android:id="@+id/cb_item_cart"
-            android:layout_width="20dp"
-            android:layout_height="wrap_content"
-            android:buttonTint="@color/pink"
-            android:checked="true"
-            />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteX="16dp">
+
+        <ImageButton
+            android:id="@+id/ib_choose"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
         <ImageView
             android:id="@+id/iv_cart"
             android:layout_width="100dp"
@@ -47,10 +49,9 @@
 
                 <RelativeLayout
                     android:layout_width="wrap_content"
-                    android:padding="1dp"                    android:background="@drawable/border"
-                    android:layout_height="35dp">
-                <Spinner
-                    android:padding="5dp"                    android:background="@drawable/border"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/border"
+                    android:padding="1dp">
 
                     <Spinner
                         android:id="@+id/spinner_color_cart"
@@ -63,7 +64,10 @@
                 <Spinner
                     android:id="@+id/spinner_size_cart"
                     android:layout_width="50dp"
-                    android:layout_height="35dp"/>
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="10dp"
+                    android:background="@drawable/border"
+                    android:padding="6dp" />
 
                 <TextView
                     android:id="@+id/tv_delete"

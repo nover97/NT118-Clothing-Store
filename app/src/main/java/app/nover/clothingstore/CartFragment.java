@@ -1,9 +1,7 @@
 package app.nover.clothingstore;
 
-import android.content.Intent;
 import android.os.Bundle;
 
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -13,10 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentChange;
@@ -27,7 +22,6 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 import app.nover.clothingstore.adapter.CartAdapter;
 import app.nover.clothingstore.models.ItemCart;
@@ -41,11 +35,6 @@ public class CartFragment extends Fragment {
     RecyclerView recyclerView;
     private FirebaseFirestore firestore;
     FirebaseAuth firebaseAuth;
-    TextView tvTotal;
-    Button tvHome;
-    Button btnCheckout;
-    LinearLayout emptyLayout, checkout;
-    int totalCart = 0;
 
 
     int totalAmount;
@@ -68,19 +57,7 @@ public class CartFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_cart, container, false);
         recyclerView = view.findViewById(R.id.lv_cart);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        tvTotal = view.findViewById(R.id.tv_total_cart);
-        btnCheckout = view.findViewById(R.id.btn_checkout);
-        emptyLayout = view.findViewById(R.id.tv_empty);
-        tvHome = view.findViewById(R.id.go_to_home);
-        checkout = view.findViewById(R.id.go_to_checkout);
 
-        tvHome.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                startActivity(new Intent(getContext(), MainActivity.class));
-            }
-        });
 
         items = new ArrayList<>();
 
@@ -90,28 +67,12 @@ public class CartFragment extends Fragment {
 
         recyclerView.setAdapter(cartAdapter);
 
-        btnCheckout.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View view) {
-                if(totalCart == 0) {
-                    Toast.makeText(getContext(),"No have product in cart", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                Intent intent = new Intent(getContext(), Checkout.class);
-                startActivity(intent);
-            }
-        });
-
-
         return view;
     }
 
 
 
-
     private void EventChangeListener() {
-
         firestore.collection("AddToCart").document(firebaseAuth.getCurrentUser().getUid()).collection("Users")
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override
@@ -121,67 +82,15 @@ public class CartFragment extends Fragment {
                             return;
                         }
 
-                        int i = 0;
                         for(DocumentChange dc:value.getDocumentChanges()) {
                             if(dc.getType() == DocumentChange.Type.ADDED) {
                                 items.add(dc.getDocument().toObject(ItemCart.class));
+                                Log.e("TA", items.toString());
                             }
-                            if(dc.getDocument().toObject(ItemCart.class).getIsCheck()) {
-                                i++;
-                            }
-                        }
-
-                        if(items.size() > 0) {
-                            recyclerView.setVisibility(View.VISIBLE);
-                            emptyLayout.setVisibility(View.GONE);
-
-                        } else {
-                            recyclerView.setVisibility(View.GONE);
-                            emptyLayout.setVisibility(View.VISIBLE);
-
                         }
                         cartAdapter.notifyDataSetChanged();
-                        totalCart = grandTotal((items));
-
-                        tvTotal.setText(convertDot(grandTotal(items)+""));
-
                     }
 
                 });
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-    }
-
-    private int grandTotal(List<ItemCart> items){
-        if(items.size()==0) {
-            return 0;
-        }
-        int totalPrice = 0;
-        for(int i = 0 ; i < items.size(); i++) {
-            if(items.get(i).getIsCheck()) {
-                totalPrice += Integer.parseInt(items.get(i).getPrice()) *  Integer.parseInt(items.get(i).getCount());
-            }
-        }
-        return totalPrice;
-    }
-
-    public String convertDot(String no)
-    {
-        if(no.length()==0) {
-            return "";
-        }
-        Integer no1 = Integer.parseInt(no);
-        return  String.format(Locale.US,"%,d", no1).replace(',','.')+ "đ";
-    }
-
-    public List reverseList(List items) {
-        for (int k = 0, j = items.size() - 1; k < j; k++)
-        {
-            items.add(k, items.remove(j));
-        }
-        return items;
     }
 }

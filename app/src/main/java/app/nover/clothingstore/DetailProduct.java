@@ -168,7 +168,7 @@ public class DetailProduct extends AppCompatActivity {
     public String convertDot(String no)
     {
         Integer no1 = Integer.parseInt(no);
-        return  String.format(Locale.US,"%,d", no1).replace(',','.')+"đ";
+        return  String.format(Locale.US,"%,d", no1).replace(',','.');
     }
 
     public String[] convertStringArray(String sizes) {
@@ -180,14 +180,13 @@ public class DetailProduct extends AppCompatActivity {
 
     public void addToCart() {
         final HashMap<String,Object> cartMap = new HashMap<>();
-        String price = "0";
+
         if(priceIntent.isEmpty()) {
-            price = originalPriceIntent;
+            cartMap.put("price",originalPriceIntent);
         }else {
-            price = priceIntent;
+            cartMap.put("price",priceIntent);
         }
 
-        cartMap.put("price",price);
         cartMap.put("name", nameIntent);
         cartMap.put("size", saveSize);
         cartMap.put("color", saveColor);
@@ -197,8 +196,6 @@ public class DetailProduct extends AppCompatActivity {
         cartMap.put("arrayColor",colors);
         String id = getAlphaNumericString(20);
         cartMap.put("id",id);
-        cartMap.put("isCheck", false);
-        cartMap.put("totalItem", String.valueOf(Integer.valueOf(price) * 1));
 
         firestore.collection("AddToCart").document(firebaseAuth.getCurrentUser().getUid())
                 .collection("Users").document(id).set(cartMap).addOnSuccessListener(new OnSuccessListener<Void>() {

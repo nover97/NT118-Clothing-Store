@@ -174,7 +174,7 @@ public class SignUpFragment extends Fragment {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            UserModel userModel = new UserModel(name, email, password, "https://firebasestorage.googleapis.com/v0/b/clothing-store-c9cdd.appspot.com/o/images%2Fdefault-avatar-profile-icon-vector-social-media-user-image-700-205124837.jpg?alt=media&token=7d22f986-ca6a-45ee-94f3-526c0653ae72");
+                            UserModel userModel = new UserModel(name, email, password);
                             String uid = task.getResult().getUser().getUid();
                             fireStoreDB.collection("Users").document(uid)
                                     .set(userModel)
