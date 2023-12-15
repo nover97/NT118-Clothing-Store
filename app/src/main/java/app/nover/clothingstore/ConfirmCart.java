@@ -2,9 +2,6 @@ package app.nover.clothingstore;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -25,7 +22,6 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -33,9 +29,8 @@ import app.nover.clothingstore.adapter.CheckoutAdapter;
 import app.nover.clothingstore.adapter.StatusCartAdapter;
 import app.nover.clothingstore.models.ItemCart;
 import app.nover.clothingstore.models.StatusCart;
-import app.nover.clothingstore.models.StatusCartComparator;
 
-public class PendingCart extends AppCompatActivity {
+public class ConfirmCart extends AppCompatActivity {
 
     ImageView tvBack;
     List<StatusCart> items;
@@ -47,14 +42,13 @@ public class PendingCart extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_pending_cart);
+        setContentView(R.layout.activity_confirm_cart);
+
 
         firestore = FirebaseFirestore.getInstance();
         firebaseAuth = FirebaseAuth.getInstance();
 
         tvBack = findViewById(R.id.iv_back);
-
-
 
         tvBack.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -85,27 +79,14 @@ public class PendingCart extends AppCompatActivity {
                         }
 
                         for (DocumentChange dc : value.getDocumentChanges()) {
-                            if(dc.getDocument().toObject(StatusCart.class).getStatusCode().equals("1")){
+                            if(dc.getDocument().toObject(StatusCart.class).getStatusCode().equals("3")){
                                 items.add(dc.getDocument().toObject(StatusCart.class));
 
                             }
-                        }
-                        Collections.sort(items, new StatusCartComparator());
-
-                       for(int i=0;i<items.size(); i++) {
-                            Log.e("e", items.get(i).getTimeCreateAt()+"");
                         }
 
                         adapter.notifyDataSetChanged();
                     }
                 });
     }
-
-    private void replaceFragment(Fragment fragment) {
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.flFragment, fragment);
-        fragmentTransaction.commit();
-    }
-
 }

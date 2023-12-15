@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:id="@+id/layout_pending"
-    tools:context=".PendingCart">
+    tools:context=".ConfirmCart">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -37,7 +37,7 @@
                 android:gravity="center"
                 android:textSize="20sp"
                 android:textStyle="bold"
-                android:text="Pending"/>
+                android:text="Confirm"/>
             <ImageView
 
                 android:paddingVertical="10dp"

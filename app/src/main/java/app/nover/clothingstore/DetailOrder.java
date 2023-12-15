@@ -2,9 +2,6 @@ package app.nover.clothingstore;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -22,39 +19,55 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
 
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
+import java.util.Arrays;
 import java.util.List;
 
 import app.nover.clothingstore.adapter.CheckoutAdapter;
 import app.nover.clothingstore.adapter.StatusCartAdapter;
 import app.nover.clothingstore.models.ItemCart;
 import app.nover.clothingstore.models.StatusCart;
-import app.nover.clothingstore.models.StatusCartComparator;
 
-public class PendingCart extends AppCompatActivity {
+public class DetailOrder extends AppCompatActivity {
 
+    ArrayList nameIntent;
+    TextView tvHeaderTitle;
     ImageView tvBack;
-    List<StatusCart> items;
-    RecyclerView recyclerView;
-    StatusCartAdapter adapter;
     FirebaseFirestore firestore;
     FirebaseAuth firebaseAuth;
+    List<String> items;
+    List<ItemCart> itemsCart;
+    RecyclerView recyclerView;
+    String id;
+    CheckoutAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_pending_cart);
+        setContentView(R.layout.activity_detail_order);
 
         firestore = FirebaseFirestore.getInstance();
         firebaseAuth = FirebaseAuth.getInstance();
 
+        Bundle bundle = getIntent().getExtras();
+        id = bundle.getString("id");
+        String idItems = bundle.getString("obj");
+        items = convertStringToArray(idItems);
+
+
+        itemsCart = new ArrayList<>();
+        EventChangeListener();
+
+        recyclerView = findViewById(R.id.lv_checkout);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        adapter = new CheckoutAdapter(itemsCart);
+        recyclerView.setAdapter(adapter);
+
+        tvHeaderTitle = findViewById(R.id.header_title);
+
         tvBack = findViewById(R.id.iv_back);
-
-
 
         tvBack.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -63,19 +76,11 @@ public class PendingCart extends AppCompatActivity {
             }
         });
 
-        items = new ArrayList<>();
-        EventChangeListener();
-
-        recyclerView = findViewById(R.id.rv_pending);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-
-        adapter = new StatusCartAdapter(items);
-        recyclerView.setAdapter(adapter);
-
     }
 
     private void EventChangeListener() {
-        firestore.collection("AddToCheckout").document(firebaseAuth.getCurrentUser().getUid()).collection("Users")
+
+        firestore.collection("AddCheckoutItem").document(firebaseAuth.getCurrentUser().getUid()).collection(id)
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override
                     public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
@@ -85,27 +90,18 @@ public class PendingCart extends AppCompatActivity {
                         }
 
                         for (DocumentChange dc : value.getDocumentChanges()) {
-                            if(dc.getDocument().toObject(StatusCart.class).getStatusCode().equals("1")){
-                                items.add(dc.getDocument().toObject(StatusCart.class));
-
-                            }
+                            Log.e("1", dc.getDocument().toObject(ItemCart.class).getName());
+                            itemsCart.add(dc.getDocument().toObject(ItemCart.class));
                         }
-                        Collections.sort(items, new StatusCartComparator());
-
-                       for(int i=0;i<items.size(); i++) {
-                            Log.e("e", items.get(i).getTimeCreateAt()+"");
-                        }
-
                         adapter.notifyDataSetChanged();
                     }
                 });
     }
 
-    private void replaceFragment(Fragment fragment) {
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.flFragment, fragment);
-        fragmentTransaction.commit();
+    public List<String> convertStringToArray(String s1) {
+        String replace = s1.replace("[","");
+        String replace1 = replace.replace("]","");
+        List<String> myList = new ArrayList<String>(Arrays.asList(replace1.split(",")));
+       return myList;
     }
-
 }

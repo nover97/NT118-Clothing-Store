@@ -1,17 +1,18 @@
 package app.nover.clothingstore.models;
 
 public class UserModel {
-    String fullName, email, password, urlImage;
+    String fullName, email, password, urlImage, role;
 
 
     public UserModel() {
     }
 
-    public UserModel(String fullName, String email, String password, String urlImage) {
+    public UserModel(String fullName, String email, String password, String urlImage, String role) {
         this.fullName = fullName;
         this.email = email;
         this.password = password;
         this.urlImage = urlImage;
+        this.role = role;
 
     }
 
@@ -45,5 +46,13 @@ public class UserModel {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
     }
 }

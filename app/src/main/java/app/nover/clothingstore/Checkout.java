@@ -7,7 +7,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -25,23 +24,22 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentChange;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
-import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
 import app.nover.clothingstore.adapter.CheckoutAdapter;
+import app.nover.clothingstore.modal.DialogModal;
 import app.nover.clothingstore.models.ItemCart;
 
 public class Checkout extends AppCompatActivity implements DialogModal.ExampleDialogListener{
@@ -92,6 +90,7 @@ public class Checkout extends AppCompatActivity implements DialogModal.ExampleDi
 
         items = new ArrayList<>();
         EventChangeListener();
+
 
         recyclerView = findViewById(R.id.lv_checkout);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -207,6 +206,20 @@ public class Checkout extends AppCompatActivity implements DialogModal.ExampleDi
 
         }
 
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            Date date = new Date();
+            SimpleDateFormat formatterDate = new SimpleDateFormat("dd/MM/yyyy");
+            SimpleDateFormat formatterTime = new SimpleDateFormat("HH:mm:ss");
+
+            checkoutMap.put("dateCreateAt", formatterDate.format(date));
+            checkoutMap.put("timeCreateAt", formatterTime.format(date));
+
+            Long tsLong = System.currentTimeMillis()/1000;
+            String ts = tsLong.toString();
+            checkoutMap.put("timestampCreateAt", tsLong);
+
+        }
+
         checkoutMap.put("name", tvName.getText().toString());
         checkoutMap.put("phoneNumber", tvPhone.getText().toString());
         checkoutMap.put("address", tvAddress.getText().toString());
@@ -222,6 +235,7 @@ public class Checkout extends AppCompatActivity implements DialogModal.ExampleDi
 
         List<String> array = new ArrayList<String>();
 
+
         for(int i = 0; i<items.size();i++) {
             String idItem = getAlphaNumericString(20);
             array.add(idItem);
@@ -229,15 +243,15 @@ public class Checkout extends AppCompatActivity implements DialogModal.ExampleDi
             checkoutItemMap.put("name", items.get(i).getName());
             checkoutItemMap.put("price", items.get(i).getPrice());
             checkoutItemMap.put("count", items.get(i).getCount());
-            checkoutItemMap.put("imageURL",items.get(i).getImageUrl());
+            checkoutItemMap.put("imageUrl",items.get(i).getImageUrl());
             checkoutItemMap.put("size", items.get(i).getSize());
             checkoutItemMap.put("color", items.get(i).getColor());
 
+
             firestore.collection("AddCheckoutItem").document(firebaseAuth.getCurrentUser().getUid())
-                    .collection(idCheckoutItemMap).document(idItem).set(checkoutItemMap).addOnSuccessListener(new OnSuccessListener<Void>() {
+                    .collection(idCheckoutMap).document(idItem).set(checkoutItemMap).addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void unused) {
-                            Toast.makeText(Checkout.this,"Add to cart successfully", Toast.LENGTH_SHORT).show();
                         }
                     });
 
@@ -250,7 +264,7 @@ public class Checkout extends AppCompatActivity implements DialogModal.ExampleDi
                 .collection("Users").document(idCheckoutMap).set(checkoutMap).addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void unused) {
-                        Toast.makeText(Checkout.this,"Add to cart successfully", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(Checkout.this,"Checkout is successfully", Toast.LENGTH_SHORT).show();
                     }
                 });
 

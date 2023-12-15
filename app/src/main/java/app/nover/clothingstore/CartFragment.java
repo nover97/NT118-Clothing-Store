@@ -43,8 +43,8 @@ public class CartFragment extends Fragment {
     FirebaseAuth firebaseAuth;
     TextView tvTotal;
     Button tvHome;
-    Button btnCheckout;
-    LinearLayout emptyLayout, checkout;
+    Button btnCheckout, btnCheck, btnUncheck;
+    LinearLayout emptyLayout, checkout, layoutTop;
     int totalCart = 0;
 
 
@@ -73,6 +73,9 @@ public class CartFragment extends Fragment {
         emptyLayout = view.findViewById(R.id.tv_empty);
         tvHome = view.findViewById(R.id.go_to_home);
         checkout = view.findViewById(R.id.go_to_checkout);
+        layoutTop = view.findViewById(R.id.layout_top);
+        btnCheck = view.findViewById(R.id.btn_check);
+        btnUncheck = view.findViewById(R.id.btn_uncheck);
 
         tvHome.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -81,6 +84,7 @@ public class CartFragment extends Fragment {
                 startActivity(new Intent(getContext(), MainActivity.class));
             }
         });
+
 
         items = new ArrayList<>();
 
@@ -103,7 +107,31 @@ public class CartFragment extends Fragment {
             }
         });
 
+        btnCheck.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(items.size()>0)
+                {
+                    for(int i=0;i<items.size();i++) {
+                        items.get(i).setIsCheck(true);
+                    }
+                    cartAdapter.notifyDataSetChanged();
+                }
+            }
+        });
 
+        btnUncheck.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(items.size()>0)
+                {
+                    for(int i=0;i<items.size();i++) {
+                        items.get(i).setIsCheck(false);
+                    }
+                    cartAdapter.notifyDataSetChanged();
+                }
+            }
+        });
         return view;
     }
 
@@ -132,11 +160,11 @@ public class CartFragment extends Fragment {
                         }
 
                         if(items.size() > 0) {
-                            recyclerView.setVisibility(View.VISIBLE);
+                            layoutTop.setVisibility(View.VISIBLE);
                             emptyLayout.setVisibility(View.GONE);
 
                         } else {
-                            recyclerView.setVisibility(View.GONE);
+                            layoutTop.setVisibility(View.GONE);
                             emptyLayout.setVisibility(View.VISIBLE);
 
                         }

@@ -18,11 +18,12 @@ import java.time.ZonedDateTime;
 import java.util.Date;
 import java.util.Locale;
 
+import app.nover.clothingstore.databinding.ActivityMainAdminBinding;
 import app.nover.clothingstore.databinding.ActivityMainBinding;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivityAdmin extends AppCompatActivity {
 
-    ActivityMainBinding binding;
+    ActivityMainAdminBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-        binding = ActivityMainBinding.inflate(getLayoutInflater());
+        binding = ActivityMainAdminBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         //setContentView(R.layout.activity_main);
         replaceFragment(new HomeFragment());
@@ -47,9 +48,7 @@ public class MainActivity extends AppCompatActivity {
                 replaceFragment(new NotificationsFragment());
             } else if (itemId == R.id.home_nav) {
                 replaceFragment(new HomeFragment());
-            } else if (itemId == R.id.cart_nav) {
-                replaceFragment(new CartFragment());
-            } else if (itemId == R.id.profile_nav) {
+            }  else if (itemId == R.id.profile_nav) {
                 replaceFragment(new ProfileFragment());
             }
             return true;
