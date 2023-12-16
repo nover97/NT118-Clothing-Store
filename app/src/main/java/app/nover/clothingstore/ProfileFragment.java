@@ -2,7 +2,9 @@ package app.nover.clothingstore;
 
 import static android.app.Activity.RESULT_OK;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -53,11 +55,12 @@ public class ProfileFragment extends Fragment {
     FirebaseAuth firebaseAuth;
     FirebaseStorage firebaseStorage;
     StorageReference storageReference;
-    TextView tvName, tvPending, tvDelivery, tvConfirm,tvEmail;
+    TextView tvName, tvPending, tvDelivery, tvConfirm,tvEmail, tvHistoryOrder;
     String id;
     ImageView imAvatar;
     Uri selectImage;
     int[] isTrue;
+    ImageView imPending, imDelivery, imConfirm;
 
 
     public ProfileFragment() {
@@ -74,6 +77,9 @@ public class ProfileFragment extends Fragment {
         tvEmail = view.findViewById(R.id.tv_email);
         imAvatar = view.findViewById(R.id.im_avatar);
         logoutBtn = view.findViewById(R.id.logout_btn);
+        imPending = view.findViewById(R.id.pending_icon_button);
+        imDelivery = view.findViewById(R.id.delivery_icon_bage);
+        imConfirm = view.findViewById(R.id.confirm_icon_button);
 
         firebaseFirestore = FirebaseFirestore.getInstance();
         firebaseAuth = FirebaseAuth.getInstance();
@@ -83,8 +89,8 @@ public class ProfileFragment extends Fragment {
         tvPending = view.findViewById(R.id.tv_noti_pending);
         tvDelivery = view.findViewById(R.id.tv_noti_delivery);
         tvConfirm = view.findViewById(R.id.tv_noti_confirm);
+        tvHistoryOrder = view.findViewById(R.id.tv_history_order);
 
-        handleFillInfo();
 
 
 
@@ -95,7 +101,6 @@ public class ProfileFragment extends Fragment {
                             String fullName = task.getResult().getString("fullName");
                             String email = task.getResult().getString("email");
                             String url = task.getResult().getString("urlImage");
-                            Log.e("image", url);
 
 //                        String phone = task.getResult().getString("Phone");
                             //other stuff
@@ -114,17 +119,69 @@ public class ProfileFragment extends Fragment {
         }
 
 
-        logoutBtn.setOnClickListener(v -> {
-            FirebaseAuth.getInstance().signOut();
-            Intent intent = new Intent(getActivity(), LoginActivity.class);
-            startActivity(intent);
-        });
+        logoutBtn.setOnClickListener(new View.OnClickListener() {
+             @Override
+             public void onClick(View view) {
+                 AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                 builder.setTitle("Confirm Logout");
+                 builder.setMessage("Are you sure logout?");
+                 builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                     @Override
+                     public void onClick(DialogInterface dialogInterface, int i) {
+                         FirebaseAuth.getInstance().signOut();
+                         Intent intent = new Intent(getActivity(), LoginActivity.class);
+                         startActivity(intent);
+                     }
+                 });
+                 builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                     @Override
+                     public void onClick(DialogInterface dialogInterface, int i) {
+                         return;
+                     }
+                 });
+                 builder.show();
+
+             }
+
+         });
 
         imAvatar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                startActivityForResult(intent,3);
+                startActivityForResult(intent, 3);
+            }
+        });
+
+        imPending.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getContext(), PendingCart.class);
+                startActivity(intent);
+            }
+        });
+
+        imDelivery.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getContext(), DeliveryCart.class);
+                startActivity(intent);
+            }
+        });
+
+        imConfirm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getContext(), ConfirmCart.class);
+                startActivity(intent);
+            }
+        });
+
+        tvHistoryOrder.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getContext(), HistoryOrder.class);
+                startActivity(intent);
             }
         });
 
@@ -200,7 +257,6 @@ public class ProfileFragment extends Fragment {
                     public void onSuccess(DocumentSnapshot documentSnapshot) {
                         if (documentSnapshot.exists()) {
                             String statusCodes = documentSnapshot.getString("statusCode");
-                            Log.e("3", statusCodes);
                             if (statusCodes.equals("1")) {
                                 isTrue[0] += 1;
                             } else if (statusCodes.equals("2")) {
@@ -213,20 +269,32 @@ public class ProfileFragment extends Fragment {
                         if(isTrue[0] > 0) {
                             tvPending.setText(isTrue[0]+"");
                             tvPending.setVisibility(View.VISIBLE);
+                        } else {
+                            tvPending.setVisibility(View.GONE);
                         }
                         if(isTrue[1] > 0) {
                             tvDelivery.setText(isTrue[1]+"");
                             tvDelivery.setVisibility(View.VISIBLE);
+                        }else {
+                            tvDelivery.setVisibility(View.GONE);
                         }
                         if(isTrue[2] > 0) {
                             tvConfirm.setText(isTrue[2]+"");
                             tvConfirm.setVisibility(View.VISIBLE);
+                        }else {
+                            tvConfirm.setVisibility(View.GONE);
                         }
 
                     }
                 });
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        handleFillInfo();
+        getActivity().getSupportFragmentManager().beginTransaction().detach(this).attach(this).commit();
 
+    }
 
 }

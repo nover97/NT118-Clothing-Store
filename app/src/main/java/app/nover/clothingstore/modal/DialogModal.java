@@ -1,4 +1,4 @@
-package app.nover.clothingstore;
+package app.nover.clothingstore.modal;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -13,6 +13,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatDialogFragment;
+
+import app.nover.clothingstore.R;
 
 public class DialogModal extends AppCompatDialogFragment {
 
