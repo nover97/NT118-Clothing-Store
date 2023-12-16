@@ -24,7 +24,6 @@ public class DialogModal extends AppCompatDialogFragment {
     private ExampleDialogListener listener;
 
 
-
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
@@ -46,7 +45,7 @@ public class DialogModal extends AppCompatDialogFragment {
                         String username = editTextUsername.getText().toString();
                         String phoneNumber = editTextPhoneNumber.getText().toString();
                         String address = editTextAddress.getText().toString();
-                        listener.applyTexts(username,phoneNumber,address);
+                        listener.applyTexts(username, phoneNumber, address);
                     }
                 });
 

@@ -17,7 +17,6 @@ public class HistoryOrder extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_history_order);
 
-
         tvBack = findViewById(R.id.iv_back);
 
         tvBack.setOnClickListener(new View.OnClickListener() {

@@ -24,31 +24,15 @@ import app.nover.clothingstore.models.ItemCart;
 public class CheckoutAdapter extends RecyclerView.Adapter<CheckoutAdapter.ViewHolder> {
     List<ItemCart> items;
 
+
     public CheckoutAdapter(List<ItemCart> items) {
         this.items = items;
-    }
-
-
-
-    public class ViewHolder extends RecyclerView.ViewHolder {
-        ImageView imageView;
-        TextView tvName, tvColorSize, tvPrice, tvCount;
-
-        public ViewHolder(@NonNull View itemView) {
-            super(itemView);
-            imageView = itemView.findViewById(R.id.iv_checkout);
-            tvName = itemView.findViewById(R.id.tv_name_checkout);
-            tvColorSize = itemView.findViewById(R.id.tv_color_size_checkout);
-            tvPrice = itemView.findViewById(R.id.tv_price_checkout);
-            tvCount  = itemView.findViewById(R.id.tv_count_checkout);
-
-        }
     }
 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_checkout,parent,false));
+        return new ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_checkout, parent, false));
 
     }
 
@@ -61,12 +45,12 @@ public class CheckoutAdapter extends RecyclerView.Adapter<CheckoutAdapter.ViewHo
         String colorChose = items.get(position).getColor();
         String sizeChose = items.get(position).getSize();
         String id = items.get(position).getId();
-        Boolean check =  items.get(position).getIsCheck();
+        Boolean check = items.get(position).getIsCheck();
 
         holder.tvName.setText(name);
-        holder.tvColorSize.setText("Color: "+colorChose+", Size: "+sizeChose);
+        holder.tvColorSize.setText("Color: " + colorChose + ", Size: " + sizeChose);
         holder.tvPrice.setText(convertDot(price));
-        holder.tvCount.setText("x"+count);
+        holder.tvCount.setText("x" + count);
         Glide.with(holder.imageView).load(url).into(holder.imageView);
 
     }
@@ -76,12 +60,26 @@ public class CheckoutAdapter extends RecyclerView.Adapter<CheckoutAdapter.ViewHo
         return items.size();
     }
 
-    public String convertDot(String no)
-    {
-        if(no.length()==0) {
+    public String convertDot(String no) {
+        if (no.length() == 0) {
             return "";
         }
         Integer no1 = Integer.parseInt(no);
-        return  String.format(Locale.US,"%,d", no1).replace(',','.')+ "đ";
+        return String.format(Locale.US, "%,d", no1).replace(',', '.') + "đ";
+    }
+
+    public class ViewHolder extends RecyclerView.ViewHolder {
+        ImageView imageView;
+        TextView tvName, tvColorSize, tvPrice, tvCount;
+
+        public ViewHolder(@NonNull View itemView) {
+            super(itemView);
+            imageView = itemView.findViewById(R.id.iv_checkout);
+            tvName = itemView.findViewById(R.id.tv_name_checkout);
+            tvColorSize = itemView.findViewById(R.id.tv_color_size_checkout);
+            tvPrice = itemView.findViewById(R.id.tv_price_checkout);
+            tvCount = itemView.findViewById(R.id.tv_count_checkout);
+
+        }
     }
 }

@@ -8,10 +8,11 @@ import androidx.annotation.NonNull;
 import java.util.Arrays;
 import java.util.List;
 
-public class StatusCart   {
+public class StatusCart {
     String id;
     String idCheckoutItem;
     List<String> arrayIdItem;
+
     String name;
     String address;
     String phoneNumber;
@@ -21,7 +22,6 @@ public class StatusCart   {
     String statusCode;
     String total;
     int timestampCreateAt;
-
 
 
     public String getId() {
@@ -119,7 +119,6 @@ public class StatusCart   {
     public void setTotal(String total) {
         this.total = total;
     }
-
 
 
 }

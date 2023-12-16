@@ -2,20 +2,19 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingHorizontal="8dp"
-    android:orientation="vertical">
-    <EditText
-        android:inputType="textMultiLine"
-    android:lines="8"
-    android:minLines="3"
-    android:gravity="top|start"
-    android:maxLines="10"
-    android:layout_height="wrap_content"
-    android:layout_width="match_parent"
-    android:scrollbars="vertical"
-        android:hint="Reason"
-    />
+    android:orientation="vertical"
+    android:paddingHorizontal="8dp">
 
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="top|start"
+        android:hint="Reason"
+        android:inputType="textMultiLine"
+        android:lines="8"
+        android:maxLines="10"
+        android:minLines="3"
+        android:scrollbars="vertical" />
 
 
 </LinearLayout>

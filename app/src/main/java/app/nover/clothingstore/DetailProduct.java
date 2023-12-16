@@ -45,14 +45,15 @@ public class DetailProduct extends AppCompatActivity {
 
     TextView name, price, oriPrice, description;
     ImageView imageView, imageBack, imageCart;
-    String nameIntent, priceIntent,originalPriceIntent,descriptionIntent,imageURLIntent;
+    String nameIntent, priceIntent, originalPriceIntent, descriptionIntent, imageURLIntent;
     Button btnAddCart;
-    private Spinner spinnerColor,spinnerSize;
-    private   String[] color;
-    private  String[] size;
-    private String sizes, colors, saveSize, saveColor;
     FirebaseAuth firebaseAuth;
+    private Spinner spinnerColor, spinnerSize;
+    private String[] color;
+    private String[] size;
+    private String sizes, colors, saveSize, saveColor;
     private FirebaseFirestore firestore;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -105,6 +106,7 @@ public class DetailProduct extends AppCompatActivity {
 
                         //prints the text in spinner item.
                     }
+
                     public void onNothingSelected(AdapterView<?> parent) {
 
                     }
@@ -123,6 +125,7 @@ public class DetailProduct extends AppCompatActivity {
                         Object item = parent.getItemAtPosition(pos);
                         saveSize = item.toString();
                     }
+
                     public void onNothingSelected(AdapterView<?> parent) {
                     }
                 });
@@ -141,23 +144,23 @@ public class DetailProduct extends AppCompatActivity {
     public void getDataFromIntent() {
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
-            nameIntent =bundle.getString("name");
+            nameIntent = bundle.getString("name");
             priceIntent = bundle.getString("price");
             originalPriceIntent = bundle.getString("oriPrice");
             descriptionIntent = bundle.getString("description");
             imageURLIntent = bundle.getString("url");
             sizes = bundle.getString("arraySize");
-            size=convertStringArray(sizes);
+            size = convertStringArray(sizes);
             colors = bundle.getString("arrayColor");
-            color=convertStringArray(colors);
+            color = convertStringArray(colors);
         }
     }
 
     public String checkColor(String color) {
-        String[] stringColor = {"Yellow","Red","White", "Black"};
+        String[] stringColor = {"Yellow", "Red", "White", "Black"};
         String[] hexColor = {"#ffe040", "#f44336", "#ffffff", "#000000"};
-        for(int i =0 ; i < stringColor.length; i++) {
-            if(color.equals(stringColor[i])) {
+        for (int i = 0; i < stringColor.length; i++) {
+            if (color.equals(stringColor[i])) {
                 return hexColor[i];
             }
         }
@@ -165,10 +168,9 @@ public class DetailProduct extends AppCompatActivity {
     }
 
 
-    public String convertDot(String no)
-    {
+    public String convertDot(String no) {
         Integer no1 = Integer.parseInt(no);
-        return  String.format(Locale.US,"%,d", no1).replace(',','.')+"đ";
+        return String.format(Locale.US, "%,d", no1).replace(',', '.') + "đ";
     }
 
     public String[] convertStringArray(String sizes) {
@@ -179,24 +181,24 @@ public class DetailProduct extends AppCompatActivity {
     }
 
     public void addToCart() {
-        final HashMap<String,Object> cartMap = new HashMap<>();
+        final HashMap<String, Object> cartMap = new HashMap<>();
         String price = "0";
-        if(priceIntent.isEmpty()) {
+        if (priceIntent.isEmpty()) {
             price = originalPriceIntent;
-        }else {
+        } else {
             price = priceIntent;
         }
 
-        cartMap.put("price",price);
+        cartMap.put("price", price);
         cartMap.put("name", nameIntent);
         cartMap.put("size", saveSize);
         cartMap.put("color", saveColor);
         cartMap.put("count", "1");
         cartMap.put("imageUrl", imageURLIntent);
-        cartMap.put("arraySize",sizes);
-        cartMap.put("arrayColor",colors);
+        cartMap.put("arraySize", sizes);
+        cartMap.put("arrayColor", colors);
         String id = getAlphaNumericString(20);
-        cartMap.put("id",id);
+        cartMap.put("id", id);
         cartMap.put("isCheck", false);
         cartMap.put("totalItem", String.valueOf(Integer.valueOf(price) * 1));
 
@@ -204,13 +206,12 @@ public class DetailProduct extends AppCompatActivity {
                 .collection("Users").document(id).set(cartMap).addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void unused) {
-                        Toast.makeText(DetailProduct.this,"Add to cart successfully", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(DetailProduct.this, "Add to cart successfully", Toast.LENGTH_SHORT).show();
                     }
                 });
     }
 
-    public String getAlphaNumericString(int n)
-    {
+    public String getAlphaNumericString(int n) {
 
         // choose a Character random from this String
         String AlphaNumericString = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
@@ -225,7 +226,7 @@ public class DetailProduct extends AppCompatActivity {
             // generate a random number between
             // 0 to AlphaNumericString variable length
             int index
-                    = (int)(AlphaNumericString.length()
+                    = (int) (AlphaNumericString.length()
                     * Math.random());
 
             // add Character one by one in end of sb

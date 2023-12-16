@@ -39,6 +39,7 @@ public class DeliveryCart extends AppCompatActivity {
     FirebaseFirestore firestore;
     FirebaseAuth firebaseAuth;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -79,7 +80,7 @@ public class DeliveryCart extends AppCompatActivity {
                         }
 
                         for (DocumentChange dc : value.getDocumentChanges()) {
-                            if(dc.getDocument().toObject(StatusCart.class).getStatusCode().equals("2")){
+                            if (dc.getDocument().toObject(StatusCart.class).getStatusCode().equals("2")) {
                                 items.add(dc.getDocument().toObject(StatusCart.class));
 
                             }

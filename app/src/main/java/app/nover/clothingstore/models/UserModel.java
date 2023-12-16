@@ -7,6 +7,7 @@ public class UserModel {
     public UserModel() {
     }
 
+
     public UserModel(String fullName, String email, String password, String urlImage, String role) {
         this.fullName = fullName;
         this.email = email;

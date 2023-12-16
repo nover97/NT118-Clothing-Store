@@ -3,128 +3,130 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".CartFragment"
-
-   >
+    tools:context=".CartFragment">
 
     <!-- TODO: Update blank fragment layout -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        >
+        android:orientation="vertical">
+
         <TextView
-            android:background="@color/pink"
-            android:gravity="center"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="CART"
-            android:textStyle="bold"
-            android:textSize="25sp"
-            android:textColor="@color/black"
+            android:background="@color/pink"
+            android:gravity="center"
             android:padding="@dimen/base"
-           />
+            android:text="CART"
+            android:textColor="@color/black"
+            android:textSize="25sp"
+            android:textStyle="bold" />
+
         <LinearLayout
-            android:orientation="vertical"
+            android:id="@+id/layout_top"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/layout_top"
-          >
+            android:orientation="vertical">
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
                 android:gravity="center"
-                >
-            <Button
+                android:orientation="horizontal">
 
-                android:layout_marginLeft="10dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Check all"
-                android:id="@+id/btn_check"
-                android:backgroundTint="@color/pink"/>
-            <Button
-                android:layout_marginLeft="10dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Uncheck all"
-                android:id="@+id/btn_uncheck"
-                android:backgroundTint="@color/pink"/>
+                <Button
+
+                    android:id="@+id/btn_check"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:backgroundTint="@color/pink"
+                    android:text="Check all" />
+
+                <Button
+                    android:id="@+id/btn_uncheck"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:backgroundTint="@color/pink"
+                    android:text="Uncheck all" />
             </LinearLayout>
-        <androidx.recyclerview.widget.RecyclerView
-           android:id="@+id/lv_cart"
-            android:visibility="visible"
-            android:layout_width="match_parent"
-            android:layout_height="620dp" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/lv_cart"
+                android:layout_width="match_parent"
+                android:layout_height="620dp"
+                android:visibility="visible" />
         </LinearLayout>
 
         <LinearLayout
-            android:orientation="vertical"
             android:id="@+id/tv_empty"
             android:layout_width="match_parent"
             android:layout_height="670dp"
-            android:visibility="gone"
-            android:gravity="center">
+            android:gravity="center"
+            android:orientation="vertical"
+            android:visibility="gone">
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Empty Cart"
-                android:textSize="30sp"/>
+                android:textSize="30sp" />
+
             <Button
                 android:id="@+id/go_to_home"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Go to Homepage"
                 android:textColor="@color/white"
-                android:textSize="20sp"/>
+                android:textSize="20sp" />
         </LinearLayout>
-       <LinearLayout
-           android:orientation="horizontal"
-           android:layout_width="match_parent"
-           android:layout_height="wrap_content"
-           android:paddingHorizontal="@dimen/basex3"
-           android:layout_weight="1"
-           android:background="@color/white"
-           android:id="@+id/go_to_checkout"
 
-           >
+        <LinearLayout
+            android:id="@+id/go_to_checkout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@color/white"
+            android:orientation="horizontal"
+            android:paddingHorizontal="@dimen/basex3"
 
-           <TextView
-               android:layout_width="wrap_content"
-               android:layout_height="match_parent"
-               android:text="Total:"
-               android:textSize="20sp"
-               android:layout_weight="1"
-               android:gravity="center_vertical"
-               android:textColor="@color/black"
-               android:textStyle="bold"
-               />
-           <TextView
-               android:id="@+id/tv_total_cart"
-               android:layout_width="100dp"
-               android:layout_height="match_parent"
-               android:text="0"
-               android:gravity="center_vertical"
-               android:layout_weight="1"
-               android:textColor="@color/black"
-               android:textStyle="bold"
-               android:textSize="20sp"
-               />
-           <Button
-               android:id="@+id/btn_checkout"
-               android:layout_weight="1"
-               android:layout_width="80dp"
-               android:layout_height="match_parent"
-               android:layout_alignParentRight="true"
-               android:text="Checkout"
-               android:backgroundTint="@color/pink"
-               android:textColor="@color/black"/>
-       </LinearLayout>
+            >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:text="Total:"
+                android:textColor="@color/black"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tv_total_cart"
+                android:layout_width="100dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:text="0"
+                android:textColor="@color/black"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <Button
+                android:id="@+id/btn_checkout"
+                android:layout_width="80dp"
+                android:layout_height="match_parent"
+                android:layout_alignParentRight="true"
+                android:layout_weight="1"
+                android:backgroundTint="@color/pink"
+                android:text="Checkout"
+                android:textColor="@color/black" />
+        </LinearLayout>
 
     </LinearLayout>
-
 
 
 </FrameLayout>

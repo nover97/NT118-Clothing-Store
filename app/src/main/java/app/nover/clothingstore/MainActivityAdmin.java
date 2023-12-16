@@ -22,14 +22,12 @@ import app.nover.clothingstore.databinding.ActivityMainAdminBinding;
 import app.nover.clothingstore.databinding.ActivityMainBinding;
 
 public class MainActivityAdmin extends AppCompatActivity {
-
     ActivityMainAdminBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         int no = 124750;
-
 
 
         binding = ActivityMainAdminBinding.inflate(getLayoutInflater());
@@ -48,7 +46,7 @@ public class MainActivityAdmin extends AppCompatActivity {
                 replaceFragment(new NotificationsFragment());
             } else if (itemId == R.id.home_nav) {
                 replaceFragment(new HomeFragment());
-            }  else if (itemId == R.id.profile_nav) {
+            } else if (itemId == R.id.profile_nav) {
                 replaceFragment(new ProfileFragment());
             }
             return true;

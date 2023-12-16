@@ -36,7 +36,6 @@ import app.nover.clothingstore.models.StatusCart;
 import app.nover.clothingstore.models.StatusCartComparator;
 
 public class PendingCart extends AppCompatActivity {
-
     ImageView tvBack;
     List<StatusCart> items;
     RecyclerView recyclerView;
@@ -53,7 +52,6 @@ public class PendingCart extends AppCompatActivity {
         firebaseAuth = FirebaseAuth.getInstance();
 
         tvBack = findViewById(R.id.iv_back);
-
 
 
         tvBack.setOnClickListener(new View.OnClickListener() {
@@ -85,15 +83,15 @@ public class PendingCart extends AppCompatActivity {
                         }
 
                         for (DocumentChange dc : value.getDocumentChanges()) {
-                            if(dc.getDocument().toObject(StatusCart.class).getStatusCode().equals("1")){
+                            if (dc.getDocument().toObject(StatusCart.class).getStatusCode().equals("1")) {
                                 items.add(dc.getDocument().toObject(StatusCart.class));
 
                             }
                         }
                         Collections.sort(items, new StatusCartComparator());
 
-                       for(int i=0;i<items.size(); i++) {
-                            Log.e("e", items.get(i).getTimeCreateAt()+"");
+                        for (int i = 0; i < items.size(); i++) {
+                            Log.e("e", items.get(i).getTimeCreateAt() + "");
                         }
 
                         adapter.notifyDataSetChanged();

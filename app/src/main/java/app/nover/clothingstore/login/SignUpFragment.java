@@ -54,6 +54,7 @@ public class SignUpFragment extends Fragment {
     private FirebaseDatabase database;
     private DatabaseReference reference;
     private CallbackLoginFragment callbackLoginFragment;
+
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;

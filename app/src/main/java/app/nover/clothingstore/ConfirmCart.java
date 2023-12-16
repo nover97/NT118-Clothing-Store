@@ -36,6 +36,7 @@ public class ConfirmCart extends AppCompatActivity {
     List<StatusCart> items;
     RecyclerView recyclerView;
     StatusCartAdapter adapter;
+
     FirebaseFirestore firestore;
     FirebaseAuth firebaseAuth;
 
@@ -79,7 +80,7 @@ public class ConfirmCart extends AppCompatActivity {
                         }
 
                         for (DocumentChange dc : value.getDocumentChanges()) {
-                            if(dc.getDocument().toObject(StatusCart.class).getStatusCode().equals("3")){
+                            if (dc.getDocument().toObject(StatusCart.class).getStatusCode().equals("3")) {
                                 items.add(dc.getDocument().toObject(StatusCart.class));
 
                             }

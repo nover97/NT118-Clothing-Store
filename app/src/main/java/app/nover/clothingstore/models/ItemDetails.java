@@ -4,6 +4,7 @@ public class ItemDetails {
     String category;
     String color;
     int count;
+
     String description;
     String imageUrl;
     String name;

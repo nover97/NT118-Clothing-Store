@@ -21,14 +21,12 @@ import java.util.Locale;
 import app.nover.clothingstore.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity {
-
     ActivityMainBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         int no = 124750;
-
 
 
         binding = ActivityMainBinding.inflate(getLayoutInflater());

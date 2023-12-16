@@ -42,6 +42,7 @@ public class DetailOrder extends AppCompatActivity {
     String id;
     CheckoutAdapter adapter;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -99,9 +100,9 @@ public class DetailOrder extends AppCompatActivity {
     }
 
     public List<String> convertStringToArray(String s1) {
-        String replace = s1.replace("[","");
-        String replace1 = replace.replace("]","");
+        String replace = s1.replace("[", "");
+        String replace1 = replace.replace("]", "");
         List<String> myList = new ArrayList<String>(Arrays.asList(replace1.split(",")));
-       return myList;
+        return myList;
     }
 }

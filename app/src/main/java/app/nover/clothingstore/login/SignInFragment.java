@@ -123,6 +123,7 @@ public class SignInFragment extends Fragment {
         signUpRedirectText.setOnClickListener(v -> {
             if (callbackLoginFragment != null) {
                 callbackLoginFragment.setSignUpFragment();
+
             }
         });
 

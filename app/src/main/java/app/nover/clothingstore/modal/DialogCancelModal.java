@@ -14,5 +14,6 @@ public class DialogCancelModal extends AppCompatDialogFragment {
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         return super.onCreateDialog(savedInstanceState);
+
     }
 }

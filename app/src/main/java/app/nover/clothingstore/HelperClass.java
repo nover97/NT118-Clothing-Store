@@ -10,6 +10,7 @@ public class HelperClass {
     @PropertyName("password")
     public String password;
 
+
     public HelperClass(String fullName, String email, String password) {
         this.fullName = fullName;
         this.email = email;

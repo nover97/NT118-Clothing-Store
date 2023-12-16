@@ -33,7 +33,6 @@ public class HomeFragment extends Fragment {
     FirebaseFirestore db;
 
     public HomeFragment() {
-
     }
 
     @Override
@@ -43,7 +42,7 @@ public class HomeFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
 
         recyclerView = view.findViewById(R.id.item_gridview_home);
-        recyclerView.setLayoutManager(new GridLayoutManager(getContext(),2));
+        recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
         items = new ArrayList<>();
 
         db = FirebaseFirestore.getInstance();
@@ -53,10 +52,8 @@ public class HomeFragment extends Fragment {
         recyclerView.setAdapter(productAdapter);
 
 
-
         return view;
     }
-
 
 
     private void EventChangeListener() {
@@ -64,13 +61,13 @@ public class HomeFragment extends Fragment {
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override
                     public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
-                        if(error != null) {
+                        if (error != null) {
                             Log.e("db", error.getMessage());
                             return;
                         }
 
-                        for(DocumentChange dc:value.getDocumentChanges()) {
-                            if(dc.getType() == DocumentChange.Type.ADDED) {
+                        for (DocumentChange dc : value.getDocumentChanges()) {
+                            if (dc.getType() == DocumentChange.Type.ADDED) {
                                 items.add(dc.getDocument().toObject(ItemModel.class));
                             }
                         }

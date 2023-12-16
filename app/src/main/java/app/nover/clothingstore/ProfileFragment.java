@@ -49,13 +49,12 @@ import app.nover.clothingstore.login.LoginActivity;
 
 
 public class ProfileFragment extends Fragment {
-
     Button logoutBtn;
     FirebaseFirestore firebaseFirestore;
     FirebaseAuth firebaseAuth;
     FirebaseStorage firebaseStorage;
     StorageReference storageReference;
-    TextView tvName, tvPending, tvDelivery, tvConfirm,tvEmail, tvHistoryOrder;
+    TextView tvName, tvPending, tvDelivery, tvConfirm, tvEmail, tvHistoryOrder;
     String id;
     ImageView imAvatar;
     Uri selectImage;
@@ -83,15 +82,13 @@ public class ProfileFragment extends Fragment {
 
         firebaseFirestore = FirebaseFirestore.getInstance();
         firebaseAuth = FirebaseAuth.getInstance();
-        firebaseStorage =FirebaseStorage.getInstance();
+        firebaseStorage = FirebaseStorage.getInstance();
         storageReference = firebaseStorage.getReference();
 
         tvPending = view.findViewById(R.id.tv_noti_pending);
         tvDelivery = view.findViewById(R.id.tv_noti_delivery);
         tvConfirm = view.findViewById(R.id.tv_noti_confirm);
         tvHistoryOrder = view.findViewById(R.id.tv_history_order);
-
-
 
 
         try {
@@ -120,30 +117,30 @@ public class ProfileFragment extends Fragment {
 
 
         logoutBtn.setOnClickListener(new View.OnClickListener() {
-             @Override
-             public void onClick(View view) {
-                 AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                 builder.setTitle("Confirm Logout");
-                 builder.setMessage("Are you sure logout?");
-                 builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                     @Override
-                     public void onClick(DialogInterface dialogInterface, int i) {
-                         FirebaseAuth.getInstance().signOut();
-                         Intent intent = new Intent(getActivity(), LoginActivity.class);
-                         startActivity(intent);
-                     }
-                 });
-                 builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
-                     @Override
-                     public void onClick(DialogInterface dialogInterface, int i) {
-                         return;
-                     }
-                 });
-                 builder.show();
+            @Override
+            public void onClick(View view) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                builder.setTitle("Confirm Logout");
+                builder.setMessage("Are you sure logout?");
+                builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        FirebaseAuth.getInstance().signOut();
+                        Intent intent = new Intent(getActivity(), LoginActivity.class);
+                        startActivity(intent);
+                    }
+                });
+                builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        return;
+                    }
+                });
+                builder.show();
 
-             }
+            }
 
-         });
+        });
 
         imAvatar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -191,24 +188,24 @@ public class ProfileFragment extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(resultCode == RESULT_OK && data!=null) {
+        if (resultCode == RESULT_OK && data != null) {
             selectImage = data.getData();
 
             StorageReference ref
                     = storageReference
-                    .child("images/"+UUID.randomUUID().toString());
+                    .child("images/" + UUID.randomUUID().toString());
 
             ref.putFile(selectImage)
                     .addOnSuccessListener(
                             new OnSuccessListener<UploadTask.TaskSnapshot>() {
                                 @Override
-                                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot){
+                                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                                     taskSnapshot.getStorage().getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
                                         @Override
                                         public void onComplete(@NonNull Task<Uri> task) {
                                             String fileLink = task.getResult().toString();
                                             Log.e("link", fileLink);
-                                            HashMap<String,Object> upload = new HashMap<>();
+                                            HashMap<String, Object> upload = new HashMap<>();
                                             upload.put("urlImage", fileLink);
                                             firebaseFirestore.collection("Users").document(firebaseAuth.getCurrentUser().getUid()).update(upload).addOnSuccessListener(new OnSuccessListener<Void>() {
                                                 @Override
@@ -220,11 +217,11 @@ public class ProfileFragment extends Fragment {
                                         }
                                     });
 
-                            }}).addOnFailureListener(new OnFailureListener() {
+                                }
+                            }).addOnFailureListener(new OnFailureListener() {
                         @Override
-                        public void onFailure(@NonNull Exception e)
-                        {
-                            Toast.makeText(getContext(),"Failed " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                        public void onFailure(@NonNull Exception e) {
+                            Toast.makeText(getContext(), "Failed " + e.getMessage(), Toast.LENGTH_SHORT).show();
                         }
                     });
 
@@ -241,7 +238,7 @@ public class ProfileFragment extends Fragment {
                         if (task.isSuccessful()) {
                             List<DocumentSnapshot> myListOfDocuments = task.getResult().getDocuments();
                             for (int i = 0; i < myListOfDocuments.size(); i++) {
-                                 countStatusPending(myListOfDocuments.get(i).getId());
+                                countStatusPending(myListOfDocuments.get(i).getId());
                             }
                         }
                     }
@@ -266,22 +263,22 @@ public class ProfileFragment extends Fragment {
                             }
                         }
 
-                        if(isTrue[0] > 0) {
-                            tvPending.setText(isTrue[0]+"");
+                        if (isTrue[0] > 0) {
+                            tvPending.setText(isTrue[0] + "");
                             tvPending.setVisibility(View.VISIBLE);
                         } else {
                             tvPending.setVisibility(View.GONE);
                         }
-                        if(isTrue[1] > 0) {
-                            tvDelivery.setText(isTrue[1]+"");
+                        if (isTrue[1] > 0) {
+                            tvDelivery.setText(isTrue[1] + "");
                             tvDelivery.setVisibility(View.VISIBLE);
-                        }else {
+                        } else {
                             tvDelivery.setVisibility(View.GONE);
                         }
-                        if(isTrue[2] > 0) {
-                            tvConfirm.setText(isTrue[2]+"");
+                        if (isTrue[2] > 0) {
+                            tvConfirm.setText(isTrue[2] + "");
                             tvConfirm.setVisibility(View.VISIBLE);
-                        }else {
+                        } else {
                             tvConfirm.setVisibility(View.GONE);
                         }
 

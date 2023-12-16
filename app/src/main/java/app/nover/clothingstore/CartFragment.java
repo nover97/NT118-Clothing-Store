@@ -39,20 +39,20 @@ public class CartFragment extends Fragment {
     List<ItemCart> items;
     CartAdapter cartAdapter;
     RecyclerView recyclerView;
-    private FirebaseFirestore firestore;
     FirebaseAuth firebaseAuth;
     TextView tvTotal;
     Button tvHome;
     Button btnCheckout, btnCheck, btnUncheck;
     LinearLayout emptyLayout, checkout, layoutTop;
     int totalCart = 0;
-
-
     int totalAmount;
-    public CartFragment () {
+    private FirebaseFirestore firestore;
+
+    public CartFragment() {
 
     }
-     @Override
+
+    @Override
     public void onStart() {
         super.onStart();
     }
@@ -98,8 +98,8 @@ public class CartFragment extends Fragment {
 
             @Override
             public void onClick(View view) {
-                if(totalCart == 0) {
-                    Toast.makeText(getContext(),"No have product in cart", Toast.LENGTH_SHORT).show();
+                if (totalCart == 0) {
+                    Toast.makeText(getContext(), "No have product in cart", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 Intent intent = new Intent(getContext(), Checkout.class);
@@ -110,9 +110,8 @@ public class CartFragment extends Fragment {
         btnCheck.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(items.size()>0)
-                {
-                    for(int i=0;i<items.size();i++) {
+                if (items.size() > 0) {
+                    for (int i = 0; i < items.size(); i++) {
                         items.get(i).setIsCheck(true);
                     }
                     cartAdapter.notifyDataSetChanged();
@@ -123,9 +122,8 @@ public class CartFragment extends Fragment {
         btnUncheck.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(items.size()>0)
-                {
-                    for(int i=0;i<items.size();i++) {
+                if (items.size() > 0) {
+                    for (int i = 0; i < items.size(); i++) {
                         items.get(i).setIsCheck(false);
                     }
                     cartAdapter.notifyDataSetChanged();
@@ -136,30 +134,28 @@ public class CartFragment extends Fragment {
     }
 
 
-
-
     private void EventChangeListener() {
 
         firestore.collection("AddToCart").document(firebaseAuth.getCurrentUser().getUid()).collection("Users")
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override
                     public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
-                        if(error != null) {
+                        if (error != null) {
                             Log.e("db", error.getMessage());
                             return;
                         }
 
                         int i = 0;
-                        for(DocumentChange dc:value.getDocumentChanges()) {
-                            if(dc.getType() == DocumentChange.Type.ADDED) {
+                        for (DocumentChange dc : value.getDocumentChanges()) {
+                            if (dc.getType() == DocumentChange.Type.ADDED) {
                                 items.add(dc.getDocument().toObject(ItemCart.class));
                             }
-                            if(dc.getDocument().toObject(ItemCart.class).getIsCheck()) {
+                            if (dc.getDocument().toObject(ItemCart.class).getIsCheck()) {
                                 i++;
                             }
                         }
 
-                        if(items.size() > 0) {
+                        if (items.size() > 0) {
                             layoutTop.setVisibility(View.VISIBLE);
                             emptyLayout.setVisibility(View.GONE);
 
@@ -171,7 +167,7 @@ public class CartFragment extends Fragment {
                         cartAdapter.notifyDataSetChanged();
                         totalCart = grandTotal((items));
 
-                        tvTotal.setText(convertDot(grandTotal(items)+""));
+                        tvTotal.setText(convertDot(grandTotal(items) + ""));
 
                     }
 
@@ -183,31 +179,29 @@ public class CartFragment extends Fragment {
         super.onPause();
     }
 
-    private int grandTotal(List<ItemCart> items){
-        if(items.size()==0) {
+    private int grandTotal(List<ItemCart> items) {
+        if (items.size() == 0) {
             return 0;
         }
         int totalPrice = 0;
-        for(int i = 0 ; i < items.size(); i++) {
-            if(items.get(i).getIsCheck()) {
-                totalPrice += Integer.parseInt(items.get(i).getPrice()) *  Integer.parseInt(items.get(i).getCount());
+        for (int i = 0; i < items.size(); i++) {
+            if (items.get(i).getIsCheck()) {
+                totalPrice += Integer.parseInt(items.get(i).getPrice()) * Integer.parseInt(items.get(i).getCount());
             }
         }
         return totalPrice;
     }
 
-    public String convertDot(String no)
-    {
-        if(no.length()==0) {
+    public String convertDot(String no) {
+        if (no.length() == 0) {
             return "";
         }
         Integer no1 = Integer.parseInt(no);
-        return  String.format(Locale.US,"%,d", no1).replace(',','.')+ "đ";
+        return String.format(Locale.US, "%,d", no1).replace(',', '.') + "đ";
     }
 
     public List reverseList(List items) {
-        for (int k = 0, j = items.size() - 1; k < j; k++)
-        {
+        for (int k = 0, j = items.size() - 1; k < j; k++) {
             items.add(k, items.remove(j));
         }
         return items;

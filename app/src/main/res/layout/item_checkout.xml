@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:paddingHorizontal="@dimen/basex2">
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -15,53 +16,59 @@
             android:id="@+id/iv_checkout"
             android:layout_width="100dp"
             android:layout_height="100dp"
-            android:src="@drawable/vay"/>
+            android:src="@drawable/vay" />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="@dimen/base"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:padding="@dimen/base">
+
             <TextView
-                android:paddingVertical="5dp"
-                android:textColor="@color/black"
-                android:textSize="20sp"
-                android:layout_weight="1"
                 android:id="@+id/tv_name_checkout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="T-shirt - Quality clothes for Men"/>
-            <LinearLayout
+                android:layout_weight="1"
                 android:paddingVertical="5dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-               <TextView
-                   android:id="@+id/tv_color_size_checkout"
-                   android:layout_width="wrap_content"
-                   android:layout_height="wrap_content"
-                   android:text="Color:"/>
-            </LinearLayout>
+                android:text="T-shirt - Quality clothes for Men"
+                android:textColor="@color/black"
+                android:textSize="20sp" />
+
             <LinearLayout
-                android:paddingVertical="5dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:layout_weight="1">
+                android:paddingVertical="5dp">
 
                 <TextView
-                    android:layout_weight="1"
+                    android:id="@+id/tv_color_size_checkout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Color:" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="horizontal"
+                android:paddingVertical="5dp">
+
+                <TextView
                     android:id="@+id/tv_price_checkout"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
+                    android:layout_weight="1"
                     android:text="80.000"
-                    android:textSize="20sp"/>
+                    android:textSize="20sp" />
+
                 <TextView
                     android:id="@+id/tv_count_checkout"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:text="x1"
-                    android:textSize="20sp"
-                    android:textAlignment="center"/>
+                    android:textAlignment="center"
+                    android:textSize="20sp" />
 
             </LinearLayout>
 

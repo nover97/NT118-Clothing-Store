@@ -9,8 +9,19 @@ public class ItemModel {
     String Price;
     String originalPrice;
     String description;
+
     List<String> arraySize;
     List<String> arrayColor;
+
+    public ItemModel() {
+    }
+
+    public ItemModel(String imageUrl, String name, String price, String originalPrice) {
+        this.imageUrl = imageUrl;
+        this.name = name;
+        Price = price;
+        this.originalPrice = originalPrice;
+    }
 
     public List<String> getArrayColor() {
         return arrayColor;
@@ -28,23 +39,12 @@ public class ItemModel {
         this.arraySize = arraySize;
     }
 
-
     public String getDescription() {
         return description;
     }
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public ItemModel() {
-    }
-
-    public ItemModel(String imageUrl, String name, String price, String originalPrice) {
-        this.imageUrl = imageUrl;
-        this.name = name;
-        Price = price;
-        this.originalPrice = originalPrice;
     }
 
     public String getImageUrl() {

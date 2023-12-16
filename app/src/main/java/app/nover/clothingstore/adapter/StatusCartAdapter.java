@@ -39,38 +39,15 @@ import app.nover.clothingstore.models.StatusCart;
 public class StatusCartAdapter extends RecyclerView.Adapter<StatusCartAdapter.ViewHolder> implements Serializable {
     List<StatusCart> items;
 
+
     public StatusCartAdapter(List<StatusCart> items) {
         this.items = items;
-    }
-
-    public class ViewHolder extends RecyclerView.ViewHolder {
-        TextView tvId, tvDate, tvTime, tvTotal, tvPayment, tvName,tvPhone,tvAddress, tvStatus;
-        LinearLayout layout;
-        Button btnCancel, btnReceived;
-        FirebaseAuth firebaseAuth= FirebaseAuth.getInstance();
-        FirebaseFirestore firestore = FirebaseFirestore.getInstance();
-        public ViewHolder(@NonNull View itemView) {
-            super(itemView);
-
-            tvId = itemView.findViewById(R.id.tv_id);
-            tvDate = itemView.findViewById(R.id.tv_date);
-            tvTime = itemView.findViewById(R.id.tv_time);
-            tvPayment = itemView.findViewById(R.id.tv_payment);
-            tvAddress = itemView.findViewById(R.id.tv_address);
-            tvName = itemView.findViewById(R.id.tv_name);
-            tvTotal = itemView.findViewById(R.id.tv_total);
-            tvPhone = itemView.findViewById(R.id.tv_phone);
-            tvStatus = itemView.findViewById(R.id.tv_status);
-            layout= itemView.findViewById(R.id.ln_status_cart);
-            btnCancel = itemView.findViewById(R.id.btn_cancel);
-            btnReceived = itemView.findViewById(R.id.btn_received);
-        }
     }
 
     @NonNull
     @Override
     public StatusCartAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return  new ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.status_cart_item,parent,false));
+        return new ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.status_cart_item, parent, false));
     }
 
     @Override
@@ -78,29 +55,29 @@ public class StatusCartAdapter extends RecyclerView.Adapter<StatusCartAdapter.Vi
         StatusCart item = items.get(position);
         String id = items.get(position).getId();
         String date = items.get(position).getDateCreateAt();
-        String time =items.get(position).getTimeCreateAt();
+        String time = items.get(position).getTimeCreateAt();
         String payment = items.get(position).getPayment();
-        String address =items.get(position).getAddress();
-        String name =items.get(position).getName();
+        String address = items.get(position).getAddress();
+        String name = items.get(position).getName();
         String total = items.get(position).getTotal();
-        String phone =items.get(position).getPhoneNumber();
+        String phone = items.get(position).getPhoneNumber();
         String status = items.get(position).getStatusCode();
 
-        holder.tvId.setText("ID Order: "+id);
-        holder.tvName.setText("Name: "+name);
-        holder.tvPhone.setText("Phone number: "+phone);
-        holder.tvTotal.setText("Total: "+convertDot(total));
-        holder.tvDate.setText("Date: "+date);
-        holder.tvTime.setText("Time: "+time);
-        holder.tvPayment.setText("Payment: "+payment);
-        holder.tvAddress.setText("Address: "+address);
+        holder.tvId.setText("ID Order: " + id);
+        holder.tvName.setText("Name: " + name);
+        holder.tvPhone.setText("Phone number: " + phone);
+        holder.tvTotal.setText("Total: " + convertDot(total));
+        holder.tvDate.setText("Date: " + date);
+        holder.tvTime.setText("Time: " + time);
+        holder.tvPayment.setText("Payment: " + payment);
+        holder.tvAddress.setText("Address: " + address);
 
-        if(status.equals("1")) {
+        if (status.equals("1")) {
             holder.tvStatus.setText("Status: Pending");
-        }else if(status.equals("2")) {
+        } else if (status.equals("2")) {
             holder.btnCancel.setVisibility(View.GONE);
             holder.tvStatus.setText("Status: Delivery");
-        }else if(status.equals("3")) {
+        } else if (status.equals("3")) {
             holder.btnReceived.setVisibility(View.VISIBLE);
             holder.tvStatus.setText("Status: Success");
         }
@@ -109,7 +86,7 @@ public class StatusCartAdapter extends RecyclerView.Adapter<StatusCartAdapter.Vi
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(holder.layout.getContext(), DetailOrder.class);
-                intent.putExtra("obj",  item.getArrayIdItem().toString());
+                intent.putExtra("obj", item.getArrayIdItem().toString());
                 intent.putExtra("id", id);
                 holder.layout.getContext().startActivity(intent);
             }
@@ -118,11 +95,11 @@ public class StatusCartAdapter extends RecyclerView.Adapter<StatusCartAdapter.Vi
         holder.btnCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                final HashMap<String,Object> checkoutMap = new HashMap<>();
+                final HashMap<String, Object> checkoutMap = new HashMap<>();
                 Date date = new Date();
                 SimpleDateFormat formatterDate = new SimpleDateFormat("dd/MM/yyyy");
                 SimpleDateFormat formatterTime = new SimpleDateFormat("HH:mm:ss");
-                Long tsLong = System.currentTimeMillis()/1000;
+                Long tsLong = System.currentTimeMillis() / 1000;
                 String ts = tsLong.toString();
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(holder.layout.getContext());
@@ -135,10 +112,10 @@ public class StatusCartAdapter extends RecyclerView.Adapter<StatusCartAdapter.Vi
                         checkoutMap.put("timeUpdateAt", formatterTime.format(date));
                         checkoutMap.put("timestampUpdateAt", tsLong);
 
-                        if(status.equals("1")){
+                        if (status.equals("1")) {
                             checkoutMap.put("statusCode", "4");
                         }
-                        if(status.equals("3")) {
+                        if (status.equals("3")) {
                             checkoutMap.put("statusCode", "5");
                         }
 
@@ -166,12 +143,12 @@ public class StatusCartAdapter extends RecyclerView.Adapter<StatusCartAdapter.Vi
         holder.btnReceived.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                final HashMap<String,Object> checkoutMap = new HashMap<>();
+                final HashMap<String, Object> checkoutMap = new HashMap<>();
 
                 Date date = new Date();
                 SimpleDateFormat formatterDate = new SimpleDateFormat("dd/MM/yyyy");
                 SimpleDateFormat formatterTime = new SimpleDateFormat("HH:mm:ss");
-                Long tsLong = System.currentTimeMillis()/1000;
+                Long tsLong = System.currentTimeMillis() / 1000;
                 String ts = tsLong.toString();
 
 
@@ -215,12 +192,36 @@ public class StatusCartAdapter extends RecyclerView.Adapter<StatusCartAdapter.Vi
         return items.size();
     }
 
-    public String convertDot(String no)
-    {
-        if(no.length()==0) {
+    public String convertDot(String no) {
+        if (no.length() == 0) {
             return "";
         }
         Integer no1 = Integer.parseInt(no);
-        return  String.format(Locale.US,"%,d", no1).replace(',','.')+ "đ";
+        return String.format(Locale.US, "%,d", no1).replace(',', '.') + "đ";
+    }
+
+    public class ViewHolder extends RecyclerView.ViewHolder {
+        TextView tvId, tvDate, tvTime, tvTotal, tvPayment, tvName, tvPhone, tvAddress, tvStatus;
+        LinearLayout layout;
+        Button btnCancel, btnReceived;
+        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+        FirebaseFirestore firestore = FirebaseFirestore.getInstance();
+
+        public ViewHolder(@NonNull View itemView) {
+            super(itemView);
+
+            tvId = itemView.findViewById(R.id.tv_id);
+            tvDate = itemView.findViewById(R.id.tv_date);
+            tvTime = itemView.findViewById(R.id.tv_time);
+            tvPayment = itemView.findViewById(R.id.tv_payment);
+            tvAddress = itemView.findViewById(R.id.tv_address);
+            tvName = itemView.findViewById(R.id.tv_name);
+            tvTotal = itemView.findViewById(R.id.tv_total);
+            tvPhone = itemView.findViewById(R.id.tv_phone);
+            tvStatus = itemView.findViewById(R.id.tv_status);
+            layout = itemView.findViewById(R.id.ln_status_cart);
+            btnCancel = itemView.findViewById(R.id.btn_cancel);
+            btnReceived = itemView.findViewById(R.id.btn_received);
+        }
     }
 }

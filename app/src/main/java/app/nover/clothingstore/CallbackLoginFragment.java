@@ -4,4 +4,5 @@ public interface CallbackLoginFragment {
     void setSignUpFragment();
 
     void setSignInFragment();
+
 }

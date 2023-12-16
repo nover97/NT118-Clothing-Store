@@ -42,14 +42,14 @@ import app.nover.clothingstore.adapter.CheckoutAdapter;
 import app.nover.clothingstore.modal.DialogModal;
 import app.nover.clothingstore.models.ItemCart;
 
-public class Checkout extends AppCompatActivity implements DialogModal.ExampleDialogListener{
+public class Checkout extends AppCompatActivity implements DialogModal.ExampleDialogListener {
 
     RecyclerView recyclerView;
     CheckoutAdapter adapter;
     List<ItemCart> items;
     FirebaseFirestore firestore;
     FirebaseAuth firebaseAuth;
-    TextView tvTotal, tvEdit,tvName, tvPhone, tvAddress,tvHome;
+    TextView tvTotal, tvEdit, tvName, tvPhone, tvAddress, tvHome;
     LinearLayout emptyLayout;
     ImageView imageBack;
     Spinner spinnerPayment;
@@ -57,7 +57,7 @@ public class Checkout extends AppCompatActivity implements DialogModal.ExampleDi
     String paymentOption;
     String totalCart;
     String paymentChoose;
-    private   String[] payment= {"Payment on delivery", "Payment via Momo wallet"};
+    private String[] payment = {"Payment on delivery", "Payment via Momo wallet"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -117,10 +117,11 @@ public class Checkout extends AppCompatActivity implements DialogModal.ExampleDi
                 new AdapterView.OnItemSelectedListener() {
                     public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
                         Object item = parent.getItemAtPosition(pos);
-                        paymentOption= item.toString();
+                        paymentOption = item.toString();
 
                         //prints the text in spinner item.
                     }
+
                     public void onNothingSelected(AdapterView<?> parent) {
 
                     }
@@ -139,29 +140,29 @@ public class Checkout extends AppCompatActivity implements DialogModal.ExampleDi
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override
                     public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
-                        if(error != null) {
+                        if (error != null) {
                             Log.e("db", error.getMessage());
                             return;
                         }
 
-                        for(DocumentChange dc:value.getDocumentChanges()) {
+                        for (DocumentChange dc : value.getDocumentChanges()) {
                             Log.e("obj", dc.getDocument().toObject(ItemCart.class).getName());
-                            if(dc.getDocument().toObject(ItemCart.class).getIsCheck()==true){
+                            if (dc.getDocument().toObject(ItemCart.class).getIsCheck() == true) {
                                 items.add(dc.getDocument().toObject(ItemCart.class));
                             }
                         }
 
-                       if(items.size() > 0) {
-                           recyclerView.setVisibility(View.VISIBLE);
-                           emptyLayout.setVisibility(View.GONE);
-                       } else {
-                           recyclerView.setVisibility(View.GONE);
-                           emptyLayout.setVisibility(View.VISIBLE);
-                       }
+                        if (items.size() > 0) {
+                            recyclerView.setVisibility(View.VISIBLE);
+                            emptyLayout.setVisibility(View.GONE);
+                        } else {
+                            recyclerView.setVisibility(View.GONE);
+                            emptyLayout.setVisibility(View.VISIBLE);
+                        }
 
                         adapter.notifyDataSetChanged();
-                        totalCart = grandTotal(items)+"";
-                        tvTotal.setText(convertDot(grandTotal(items)+""));
+                        totalCart = grandTotal(items) + "";
+                        tvTotal.setText(convertDot(grandTotal(items) + ""));
 
                     }
                 });
@@ -171,15 +172,13 @@ public class Checkout extends AppCompatActivity implements DialogModal.ExampleDi
         firestore.collection("Users").document(firebaseAuth.getCurrentUser().getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
-                if(documentSnapshot.exists())
-                {
+                if (documentSnapshot.exists()) {
                     String name = documentSnapshot.getString("fullName");
                     String phoneNumber = documentSnapshot.getString("phoneNumber");
                     String address = documentSnapshot.getString("address");
 
-                    applyTexts(name,phoneNumber,address);
-                }
-                else{
+                    applyTexts(name, phoneNumber, address);
+                } else {
                     Toast.makeText(Checkout.this, "Record not found.", Toast.LENGTH_SHORT).show();
                 }
 
@@ -194,14 +193,14 @@ public class Checkout extends AppCompatActivity implements DialogModal.ExampleDi
     }
 
     public void handleOnClickCheckout() {
-        final HashMap<String,Object> checkoutMap = new HashMap<>();
-        final HashMap<String,Object> checkoutItemMap = new HashMap<>();
+        final HashMap<String, Object> checkoutMap = new HashMap<>();
+        final HashMap<String, Object> checkoutItemMap = new HashMap<>();
 
         String idCheckoutMap = getAlphaNumericString(20);
         String idCheckoutItemMap = getAlphaNumericString(20);
 
-        if(tvName.getText().toString().isEmpty() || tvPhone.getText().toString().isEmpty()||tvAddress.getText().toString().isEmpty()) {
-            Toast.makeText(Checkout.this,"Missing parameter!!!", Toast.LENGTH_SHORT).show();
+        if (tvName.getText().toString().isEmpty() || tvPhone.getText().toString().isEmpty() || tvAddress.getText().toString().isEmpty()) {
+            Toast.makeText(Checkout.this, "Missing parameter!!!", Toast.LENGTH_SHORT).show();
             return;
 
         }
@@ -214,7 +213,7 @@ public class Checkout extends AppCompatActivity implements DialogModal.ExampleDi
             checkoutMap.put("dateCreateAt", formatterDate.format(date));
             checkoutMap.put("timeCreateAt", formatterTime.format(date));
 
-            Long tsLong = System.currentTimeMillis()/1000;
+            Long tsLong = System.currentTimeMillis() / 1000;
             String ts = tsLong.toString();
             checkoutMap.put("timestampCreateAt", tsLong);
 
@@ -228,7 +227,7 @@ public class Checkout extends AppCompatActivity implements DialogModal.ExampleDi
 
         checkoutMap.put("id", idCheckoutMap);
         checkoutMap.put("idCheckoutItem", idCheckoutItemMap);
-        checkoutMap.put("statusCode","1");
+        checkoutMap.put("statusCode", "1");
 
         checkoutItemMap.put("id", checkoutItemMap);
         checkoutItemMap.put("idCheckout", idCheckoutMap);
@@ -236,14 +235,14 @@ public class Checkout extends AppCompatActivity implements DialogModal.ExampleDi
         List<String> array = new ArrayList<String>();
 
 
-        for(int i = 0; i<items.size();i++) {
+        for (int i = 0; i < items.size(); i++) {
             String idItem = getAlphaNumericString(20);
             array.add(idItem);
             checkoutItemMap.put("id", idItem);
             checkoutItemMap.put("name", items.get(i).getName());
             checkoutItemMap.put("price", items.get(i).getPrice());
             checkoutItemMap.put("count", items.get(i).getCount());
-            checkoutItemMap.put("imageUrl",items.get(i).getImageUrl());
+            checkoutItemMap.put("imageUrl", items.get(i).getImageUrl());
             checkoutItemMap.put("size", items.get(i).getSize());
             checkoutItemMap.put("color", items.get(i).getColor());
 
@@ -264,7 +263,7 @@ public class Checkout extends AppCompatActivity implements DialogModal.ExampleDi
                 .collection("Users").document(idCheckoutMap).set(checkoutMap).addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void unused) {
-                        Toast.makeText(Checkout.this,"Checkout is successfully", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(Checkout.this, "Checkout is successfully", Toast.LENGTH_SHORT).show();
                     }
                 });
 
@@ -290,9 +289,9 @@ public class Checkout extends AppCompatActivity implements DialogModal.ExampleDi
                 .collection("Users").document(id).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                     @Override
                     public void onSuccess(DocumentSnapshot documentSnapshot) {
-                        if(documentSnapshot.exists()) {
-                            ItemCart itemCart =  documentSnapshot.toObject(ItemCart.class);
-                            if(itemCart.getIsCheck()) {
+                        if (documentSnapshot.exists()) {
+                            ItemCart itemCart = documentSnapshot.toObject(ItemCart.class);
+                            if (itemCart.getIsCheck()) {
                                 firestore.collection("AddToCart").document(firebaseAuth.getCurrentUser().getUid()).collection("Users").document(id).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
                                     @Override
                                     public void onSuccess(Void unused) {
@@ -305,8 +304,7 @@ public class Checkout extends AppCompatActivity implements DialogModal.ExampleDi
                 });
     }
 
-    public String getAlphaNumericString(int n)
-    {
+    public String getAlphaNumericString(int n) {
 
         // choose a Character random from this String
         String AlphaNumericString = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
@@ -321,7 +319,7 @@ public class Checkout extends AppCompatActivity implements DialogModal.ExampleDi
             // generate a random number between
             // 0 to AlphaNumericString variable length
             int index
-                    = (int)(AlphaNumericString.length()
+                    = (int) (AlphaNumericString.length()
                     * Math.random());
 
             // add Character one by one in end of sb
@@ -332,26 +330,25 @@ public class Checkout extends AppCompatActivity implements DialogModal.ExampleDi
         return sb.toString();
     }
 
-    private int grandTotal(List<ItemCart> items){
-        if(items.size()==0) {
+    private int grandTotal(List<ItemCart> items) {
+        if (items.size() == 0) {
             return 0;
         }
         int totalPrice = 0;
-        for(int i = 0 ; i < items.size(); i++) {
-            if(items.get(i).getIsCheck()) {
-                totalPrice += Integer.parseInt(items.get(i).getPrice()) *  Integer.parseInt(items.get(i).getCount());
+        for (int i = 0; i < items.size(); i++) {
+            if (items.get(i).getIsCheck()) {
+                totalPrice += Integer.parseInt(items.get(i).getPrice()) * Integer.parseInt(items.get(i).getCount());
             }
         }
         return totalPrice;
     }
 
-    public String convertDot(String no)
-    {
-        if(no.length()==0) {
+    public String convertDot(String no) {
+        if (no.length() == 0) {
             return "";
         }
         Integer no1 = Integer.parseInt(no);
-        return  String.format(Locale.US,"%,d", no1).replace(',','.')+ "đ";
+        return String.format(Locale.US, "%,d", no1).replace(',', '.') + "đ";
     }
 
     public void openDialog() {

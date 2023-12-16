@@ -2,62 +2,67 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/layout_detail"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:id="@+id/layout_detail"
     tools:context=".DetailProduct">
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
         android:background="@color/pink"
-        android:paddingVertical="10dp"
         android:gravity="center"
+        android:orientation="horizontal"
+        android:paddingVertical="10dp"
         android:weightSum="3">
+
         <ImageView
             android:id="@+id/iv_back"
-            android:layout_weight="1"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:src="@drawable/baseline_chevron_left_24"
-            android:paddingVertical="10dp"
-           />
-        <TextView
             android:layout_weight="1"
+            android:paddingVertical="10dp"
+            android:src="@drawable/baseline_chevron_left_24" />
 
+        <TextView
             android:layout_width="wrap_content"
+
             android:layout_height="wrap_content"
-            android:textColor="@color/black"
+            android:layout_weight="1"
             android:gravity="center"
+            android:text="Detail Product"
+            android:textColor="@color/black"
             android:textSize="20sp"
-            android:textStyle="bold"
-            android:text="Detail Product"/>
+            android:textStyle="bold" />
+
         <ImageView
 
-            android:paddingVertical="10dp"
-            android:layout_weight="1"
-
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Cart"/>
+
+            android:layout_weight="1"
+            android:paddingVertical="10dp"
+            android:text="Cart" />
 
     </LinearLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
-    <ImageView
-        android:id="@+id/iv_detail_product"
-        android:layout_margin="@dimen/base"
-        android:scaleType="fitCenter"
-        android:adjustViewBounds="true"
-        android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:padding="@dimen/base"
-        android:src="@drawable/tshirt"
-        app:flow_verticalAlign="center"
-        app:riv_corner_radius="30dp" />
+
+        <ImageView
+            android:id="@+id/iv_detail_product"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_margin="@dimen/base"
+            android:adjustViewBounds="true"
+            android:padding="@dimen/base"
+            android:scaleType="fitCenter"
+            android:src="@drawable/tshirt"
+            app:flow_verticalAlign="center"
+            app:riv_corner_radius="30dp" />
 
     </LinearLayout>
 
@@ -65,8 +70,8 @@
         android:layout_width="match_parent"
         android:layout_height="470dp"
         android:fillViewport="true"
-        android:scrollbars="none"
-        >
+        android:scrollbars="none">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -75,42 +80,40 @@
             android:weightSum="7">
 
             <TextView
-                android:layout_marginVertical="10dp"
                 android:id="@+id/tv_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginVertical="10dp"
                 android:layout_weight="1"
-                android:textColor="@color/black"
                 android:text="PRODUCT NAME / PRODUCT NAME / PRODUCT NAME / PRODUCT NAME /"
+                android:textColor="@color/black"
                 android:textSize="25sp"
                 android:textStyle="bold" />
 
             <LinearLayout
-                android:layout_marginVertical="10dp"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
+                android:layout_marginVertical="10dp"
                 android:layout_weight="1"
-                android:orientation="horizontal"
-               >
+                android:orientation="horizontal">
 
                 <LinearLayout
-                    android:layout_weight="1"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
+                    android:layout_weight="1"
                     android:orientation="vertical">
 
                     <TextView
-                        android:layout_marginBottom="5dp"
                         android:id="@+id/tv_price"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginBottom="5dp"
                         android:ellipsize="end"
                         android:lines="1"
                         android:text="CURRENT PRICE"
                         android:textAlignment="textStart"
                         android:textColor="@color/red"
-                        android:textSize="20sp"
-                        />
+                        android:textSize="20sp" />
 
                     <TextView
                         android:id="@+id/tv_original_price"
@@ -121,54 +124,59 @@
                         android:lines="1"
                         android:text=""
                         android:textAlignment="textStart"
-                        android:textSize="20sp"
-                        />
+                        android:textSize="20sp" />
 
                 </LinearLayout>
+
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:textAlignment="center"
                     android:orientation="vertical"
-                    >
+                    android:textAlignment="center">
+
                     <LinearLayout
-                        android:layout_marginBottom="5dp"
-                        android:gravity="right"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginBottom="5dp"
+                        android:gravity="right"
                         android:lines="1"
                         android:textColor="@color/red"
-                        android:textSize="20sp"
-                        >
+                        android:textSize="20sp">
+
                         <ImageView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:src="@drawable/baseline_star_24"/>
+                            android:src="@drawable/baseline_star_24" />
+
                         <ImageView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:src="@drawable/baseline_star_24"/>
+                            android:src="@drawable/baseline_star_24" />
+
                         <ImageView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:src="@drawable/baseline_star_24"/>
+                            android:src="@drawable/baseline_star_24" />
+
                         <ImageView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:src="@drawable/baseline_star_24"/>
+                            android:src="@drawable/baseline_star_24" />
+
                         <ImageView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:src="@drawable/baseline_star_24"/>
+                            android:src="@drawable/baseline_star_24" />
                     </LinearLayout>
+
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:gravity="right"
-                        android:orientation="horizontal"
-                        >
+                        android:orientation="horizontal">
+
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -176,8 +184,7 @@
                             android:lines="1"
                             android:text="Sold 525 products"
                             android:textAlignment="textEnd"
-                            android:textSize="18sp"
-                            />
+                            android:textSize="18sp" />
 
                     </LinearLayout>
 
@@ -185,67 +192,75 @@
                 </LinearLayout>
 
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_marginVertical="5dp"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="5dp">
+
                 <TextView
                     android:layout_width="140dp"
-                    android:textColor="@color/black"
-                    android:textSize="20sp"
                     android:layout_height="match_parent"
-                    android:text="Choose color: "/>
+                    android:text="Choose color: "
+                    android:textColor="@color/black"
+                    android:textSize="20sp" />
+
                 <RelativeLayout
                     android:layout_width="wrap_content"
-                    android:padding="1dp"
+                    android:layout_height="wrap_content"
                     android:background="@drawable/border"
 
-                    android:layout_height="wrap_content">
-            <Spinner
-                android:padding="5dp"
-                android:id="@+id/spinner_color"
-                android:layout_width="80dp"
-                android:layout_height="wrap_content" />
+                    android:padding="1dp">
+
+                    <Spinner
+                        android:id="@+id/spinner_color"
+                        android:layout_width="80dp"
+                        android:layout_height="wrap_content"
+                        android:padding="5dp" />
                 </RelativeLayout>
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
+
                 <TextView
-                    android:textColor="@color/black"
-                    android:textSize="20sp"
                     android:layout_width="140dp"
                     android:layout_height="wrap_content"
-                    android:text="Choose size: "/>
+                    android:text="Choose size: "
+                    android:textColor="@color/black"
+                    android:textSize="20sp" />
+
                 <Spinner
-                    android:padding="5dp"
-                    android:background="@drawable/border"
                     android:id="@+id/spinner_size"
                     android:layout_width="50dp"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/border"
+                    android:padding="5dp" />
             </LinearLayout>
 
 
-
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:text="\nDescription"
                 android:textColor="@color/black"
                 android:textSize="20sp"
-                android:textStyle="bold"
-                android:text="\nDescription"/>
+                android:textStyle="bold" />
+
             <TextView
                 android:id="@+id/tv_des"
-                android:paddingLeft="30dp"
-                android:textColor="@color/black"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="18sp"
-                android:text="Thành phần: 95% Cotton + 5% Spandex\nXử lí hoàn thiện giúp bề mặt vải ít xù lông, mềm mịn và bền màu hơn\nCo giãn 4 chiều, mang đến sự thoải mái trong hoạt động\nChất liệu Cotton tự nhiên thấm hút mồ hôi tốt\nĐộ bền và chống nhăn tốt hơn so với Cotton thường\nForm: áo regular, ôm nhẹ\nTự hào sản xuất tại Việt Nam"/>
+                android:paddingLeft="30dp"
+                android:text="Thành phần: 95% Cotton + 5% Spandex\nXử lí hoàn thiện giúp bề mặt vải ít xù lông, mềm mịn và bền màu hơn\nCo giãn 4 chiều, mang đến sự thoải mái trong hoạt động\nChất liệu Cotton tự nhiên thấm hút mồ hôi tốt\nĐộ bền và chống nhăn tốt hơn so với Cotton thường\nForm: áo regular, ôm nhẹ\nTự hào sản xuất tại Việt Nam"
+                android:textColor="@color/black"
+                android:textSize="18sp" />
         </LinearLayout>
 
 
     </ScrollView>
+
     <Button
         android:id="@+id/btn_add_cart"
         android:layout_width="match_parent"

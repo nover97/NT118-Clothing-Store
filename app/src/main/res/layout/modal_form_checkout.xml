@@ -2,10 +2,10 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingHorizontal="8dp"
-    android:orientation="vertical">
-    <EditText
+    android:orientation="vertical"
+    android:paddingHorizontal="8dp">
 
+    <EditText
         android:id="@+id/edit_username"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -16,6 +16,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Phone number" />
+
     <EditText
         android:id="@+id/edit_address"
         android:layout_width="match_parent"

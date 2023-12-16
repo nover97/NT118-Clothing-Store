@@ -8,6 +8,7 @@
     app:layoutDescription="@xml/activity_splash_scene"
     tools:context=".SplashActivity">
 
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout"
         android:layout_width="150dp"

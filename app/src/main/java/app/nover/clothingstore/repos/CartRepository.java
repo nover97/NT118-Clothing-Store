@@ -13,9 +13,8 @@ public class CartRepository {
     private MutableLiveData<Double> mutableTotalPrice = new MutableLiveData<>();
 
 
-
     public LiveData<List<ItemCart>> getCart() {
-        if(mutableCart.getValue()==null) {
+        if (mutableCart.getValue() == null) {
             initCart();
         }
         return mutableCart;
@@ -24,7 +23,6 @@ public class CartRepository {
     private void initCart() {
         mutableCart.setValue(new ArrayList<ItemCart>());
     }
-
 
 
 }
