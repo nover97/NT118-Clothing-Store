@@ -109,3 +109,4 @@ public class ItemDetails {
         this.size = size;
     }
 }
+

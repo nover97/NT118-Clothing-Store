@@ -74,3 +74,4 @@ public class HomeItemAdapter extends ArrayAdapter<ItemModel> {
         TextView originalPriceTV;
     }
 }
+

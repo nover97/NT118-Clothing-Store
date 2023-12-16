@@ -42,7 +42,6 @@ public class DetailOrder extends AppCompatActivity {
     String id;
     CheckoutAdapter adapter;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

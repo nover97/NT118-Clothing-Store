@@ -54,7 +54,6 @@ public class DetailProduct extends AppCompatActivity {
     private String sizes, colors, saveSize, saveColor;
     private FirebaseFirestore firestore;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

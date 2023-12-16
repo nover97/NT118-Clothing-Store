@@ -9,7 +9,6 @@ public class ItemModel {
     String Price;
     String originalPrice;
     String description;
-
     List<String> arraySize;
     List<String> arrayColor;
 
@@ -79,3 +78,4 @@ public class ItemModel {
         this.originalPrice = originalPrice;
     }
 }
+

@@ -49,6 +49,7 @@ import app.nover.clothingstore.login.LoginActivity;
 
 
 public class ProfileFragment extends Fragment {
+
     Button logoutBtn;
     FirebaseFirestore firebaseFirestore;
     FirebaseAuth firebaseAuth;
@@ -295,3 +296,4 @@ public class ProfileFragment extends Fragment {
     }
 
 }
+

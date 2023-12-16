@@ -36,7 +36,6 @@ public class ConfirmCart extends AppCompatActivity {
     List<StatusCart> items;
     RecyclerView recyclerView;
     StatusCartAdapter adapter;
-
     FirebaseFirestore firestore;
     FirebaseAuth firebaseAuth;
 

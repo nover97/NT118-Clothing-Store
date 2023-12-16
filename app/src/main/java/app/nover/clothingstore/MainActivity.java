@@ -21,6 +21,7 @@ import java.util.Locale;
 import app.nover.clothingstore.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity {
+
     ActivityMainBinding binding;
 
     @Override
@@ -61,5 +62,5 @@ public class MainActivity extends AppCompatActivity {
         fragmentTransaction.commit();
     }
 
-//handle bug
+
 }

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:paddingHorizontal="@dimen/basex2">
 
     <LinearLayout
@@ -12,17 +12,20 @@
         android:gravity="center"
         android:orientation="horizontal"
         tools:ignore="MissingConstraints">
-        <CheckBox android:id="@+id/cb_item_cart"
+
+        <CheckBox
+            android:id="@+id/cb_item_cart"
             android:layout_width="20dp"
             android:layout_height="wrap_content"
             android:buttonTint="@color/pink"
-            android:checked="true"
-            />
+            android:checked="true" />
+
         <ImageView
             android:id="@+id/iv_cart"
             android:layout_width="100dp"
-            android:layout_height="100dp" />
-        <!--            android:src="@drawable/vay"/>-->
+            android:layout_height="100dp"
+            android:src="@drawable/vay" />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -47,14 +50,14 @@
 
                 <RelativeLayout
                     android:layout_width="wrap_content"
-                    android:padding="1dp"                    android:background="@drawable/border"
-                    android:layout_height="35dp">
-                <Spinner
-                    android:padding="5dp"                    android:background="@drawable/border"
+                    android:layout_height="35dp"
+                    android:background="@drawable/border"
+                    android:padding="1dp">
 
                     <Spinner
                         android:id="@+id/spinner_color_cart"
                         android:layout_width="80dp"
+
                         android:layout_height="wrap_content"
                         android:background="@drawable/border"
                         android:padding="5dp" />
@@ -63,7 +66,10 @@
                 <Spinner
                     android:id="@+id/spinner_size_cart"
                     android:layout_width="50dp"
-                    android:layout_height="35dp"/>
+                    android:layout_height="35dp"
+                    android:layout_marginHorizontal="10dp"
+                    android:background="@drawable/border"
+                    android:padding="6dp" />
 
                 <TextView
                     android:id="@+id/tv_delete"

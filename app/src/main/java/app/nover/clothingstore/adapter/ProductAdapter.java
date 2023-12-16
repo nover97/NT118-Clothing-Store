@@ -34,6 +34,7 @@ import app.nover.clothingstore.MainActivity;
 import app.nover.clothingstore.R;
 import app.nover.clothingstore.SplashActivity;
 import app.nover.clothingstore.models.ItemModel;
+
 import java.util.Locale;
 
 public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHolder> {
@@ -43,25 +44,28 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
         this.items = items;
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
-        ImageView imageView;
-        TextView tvName, tvPrice, tvOriginalPrice;
-        CardView mainLayout;
-        public ViewHolder(@NonNull View itemView) {
-            super(itemView);
-
-            imageView = itemView.findViewById(R.id.item_cardview_image);
-            tvPrice = itemView.findViewById(R.id.item_cardview_price);
-            tvOriginalPrice = itemView.findViewById(R.id.item_cardview_original_price);
-            tvName = itemView.findViewById(R.id.item_cardview_name);
-            mainLayout = itemView.findViewById(R.id.main_layout);
+    public static Bitmap getBitmapFromURL(String src) {
+        try {
+            Log.e("src", src);
+            URL url = new URL(src);
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setDoInput(true);
+            connection.connect();
+            InputStream input = connection.getInputStream();
+            Bitmap myBitmap = BitmapFactory.decodeStream(input);
+            Log.e("Bitmap", "returned");
+            return myBitmap;
+        } catch (IOException e) {
+            e.printStackTrace();
+            Log.e("Exception", e.getMessage());
+            return null;
         }
     }
 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new ViewHolder((LayoutInflater.from(parent.getContext())).inflate(R.layout.item_cardview,parent,false));
+        return new ViewHolder((LayoutInflater.from(parent.getContext())).inflate(R.layout.item_cardview, parent, false));
     }
 
     @Override
@@ -97,14 +101,14 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
 
 
         holder.tvName.setText(name);
-        if(price == "") {
-            holder.tvPrice.setText( "đ " + convertDot(oriPrice));
+        if (price == "") {
+            holder.tvPrice.setText("đ " + convertDot(oriPrice));
 //            Log.e("TAG",  String.format(Locale.US,"%,d", oriPrice).replace(',','.'));
         } else {
             holder.tvOriginalPrice.setText("đ " + convertDot(oriPrice));
-            holder.tvPrice.setText("đ " +convertDot(price));
+            holder.tvPrice.setText("đ " + convertDot(price));
         }
-        if(url != "") {
+        if (url != "") {
             String imageUrl;
             Glide.with(holder.imageView).load(url).into(holder.imageView);
         }
@@ -113,6 +117,27 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
     @Override
     public int getItemCount() {
         return items.size();
+    }
+
+    public String convertDot(String no) {
+        Integer no1 = Integer.parseInt(no);
+        return String.format(Locale.US, "%,d", no1).replace(',', '.');
+    }
+
+    public class ViewHolder extends RecyclerView.ViewHolder {
+        ImageView imageView;
+        TextView tvName, tvPrice, tvOriginalPrice;
+        CardView mainLayout;
+
+        public ViewHolder(@NonNull View itemView) {
+            super(itemView);
+
+            imageView = itemView.findViewById(R.id.item_cardview_image);
+            tvPrice = itemView.findViewById(R.id.item_cardview_price);
+            tvOriginalPrice = itemView.findViewById(R.id.item_cardview_original_price);
+            tvName = itemView.findViewById(R.id.item_cardview_name);
+            mainLayout = itemView.findViewById(R.id.main_layout);
+        }
     }
 
     class FetchImage extends Thread {
@@ -129,32 +154,5 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
         }
     }
 
-    public static Bitmap getBitmapFromURL(String src) {
-        try {
-            Log.e("src",src);
-            URL url = new URL(src);
-            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-            connection.setDoInput(true);
-            connection.connect();
-            InputStream input = connection.getInputStream();
-            Bitmap myBitmap = BitmapFactory.decodeStream(input);
-            Log.e("Bitmap","returned");
-            return myBitmap;
-        } catch (IOException e) {
-            e.printStackTrace();
-            Log.e("Exception",e.getMessage());
-            return null;
-        }
-    }
-    public String convertDot(String no)
-    {
-        Integer no1 = Integer.parseInt(no);
-            return  String.format(Locale.US,"%,d", no1).replace(',','.');
-    }
-
-    public void searchDataList(ArrayList<ItemModel> searchList){
-        items = searchList;
-        notifyDataSetChanged();
-    }
-
 }
+

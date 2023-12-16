@@ -72,3 +72,4 @@ public class DialogModal extends AppCompatDialogFragment {
         void applyTexts(String username, String phoneNumber, String address);
     }
 }
+

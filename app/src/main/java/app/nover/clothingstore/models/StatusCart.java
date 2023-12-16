@@ -12,7 +12,6 @@ public class StatusCart {
     String id;
     String idCheckoutItem;
     List<String> arrayIdItem;
-
     String name;
     String address;
     String phoneNumber;
@@ -122,4 +121,5 @@ public class StatusCart {
 
 
 }
+
 

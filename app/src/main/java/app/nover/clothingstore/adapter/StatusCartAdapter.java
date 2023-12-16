@@ -39,7 +39,6 @@ import app.nover.clothingstore.models.StatusCart;
 public class StatusCartAdapter extends RecyclerView.Adapter<StatusCartAdapter.ViewHolder> implements Serializable {
     List<StatusCart> items;
 
-
     public StatusCartAdapter(List<StatusCart> items) {
         this.items = items;
     }
@@ -225,3 +224,4 @@ public class StatusCartAdapter extends RecyclerView.Adapter<StatusCartAdapter.Vi
         }
     }
 }
+

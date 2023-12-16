@@ -24,7 +24,6 @@ import app.nover.clothingstore.models.ItemCart;
 public class CheckoutAdapter extends RecyclerView.Adapter<CheckoutAdapter.ViewHolder> {
     List<ItemCart> items;
 
-
     public CheckoutAdapter(List<ItemCart> items) {
         this.items = items;
     }
@@ -83,3 +82,4 @@ public class CheckoutAdapter extends RecyclerView.Adapter<CheckoutAdapter.ViewHo
         }
     }
 }
+

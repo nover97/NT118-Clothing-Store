@@ -22,6 +22,7 @@ import app.nover.clothingstore.databinding.ActivityMainAdminBinding;
 import app.nover.clothingstore.databinding.ActivityMainBinding;
 
 public class MainActivityAdmin extends AppCompatActivity {
+
     ActivityMainAdminBinding binding;
 
     @Override
