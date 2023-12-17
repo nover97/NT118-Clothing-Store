@@ -3,7 +3,6 @@ package app.nover.clothingstore;
 import android.content.Intent;
 import android.os.Bundle;
 
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -102,7 +101,7 @@ public class CartFragment extends Fragment {
                     Toast.makeText(getContext(), "No have product in cart", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                Intent intent = new Intent(getContext(), Checkout.class);
+                Intent intent = new Intent(getContext(), CheckoutActivity.class);
                 startActivity(intent);
             }
         });

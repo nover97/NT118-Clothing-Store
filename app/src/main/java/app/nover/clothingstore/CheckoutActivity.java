@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -31,6 +32,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import org.json.JSONObject;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -41,8 +44,13 @@ import java.util.Locale;
 import app.nover.clothingstore.adapter.CheckoutAdapter;
 import app.nover.clothingstore.modal.DialogModal;
 import app.nover.clothingstore.models.ItemCart;
+import app.nover.clothingstore.zalopay.CreateOrder;
+import vn.zalopay.sdk.Environment;
+import vn.zalopay.sdk.ZaloPayError;
+import vn.zalopay.sdk.ZaloPaySDK;
+import vn.zalopay.sdk.listeners.PayOrderListener;
 
-public class Checkout extends AppCompatActivity implements DialogModal.ExampleDialogListener {
+public class CheckoutActivity extends AppCompatActivity implements DialogModal.ExampleDialogListener {
 
     RecyclerView recyclerView;
     CheckoutAdapter adapter;
@@ -57,22 +65,22 @@ public class Checkout extends AppCompatActivity implements DialogModal.ExampleDi
     String paymentOption;
     String totalCart;
     String paymentChoose;
-    private String[] payment = {"Payment on delivery", "Payment via Momo wallet"};
+    private String[] payment = {"Payment on delivery", "Payment via ZaloPay"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_checkout);
 
-        tvTotal = findViewById(R.id.tv_total_cart);
-        tvAddress = findViewById(R.id.tv_address);
-        tvName = findViewById(R.id.tv_name);
-        tvPhone = findViewById(R.id.tv_phone);
-        tvEdit = findViewById(R.id.tv_edit);
-        emptyLayout = findViewById(R.id.tv_empty);
-        tvHome = findViewById(R.id.go_to_home);
-        imageBack = findViewById(R.id.iv_back);
-        btnCheckout = findViewById(R.id.btn_confirm);
+        //ZaloPay
+        StrictMode.ThreadPolicy policy = new
+                StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
+
+        // ZaloPay SDK Init
+        ZaloPaySDK.init(2553, Environment.SANDBOX);
+
+        bindView();
 
         imageBack.setOnClickListener(view -> {
             this.finish();
@@ -81,7 +89,7 @@ public class Checkout extends AppCompatActivity implements DialogModal.ExampleDi
         tvHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(Checkout.this, MainActivity.class));
+                startActivity(new Intent(CheckoutActivity.this, MainActivity.class));
             }
         });
 
@@ -108,7 +116,7 @@ public class Checkout extends AppCompatActivity implements DialogModal.ExampleDi
         });
 
         spinnerPayment = (Spinner) findViewById(R.id.spinner_payment);
-        ArrayAdapter<String> adapterColor = new ArrayAdapter<String>(Checkout.this,
+        ArrayAdapter<String> adapterColor = new ArrayAdapter<String>(CheckoutActivity.this,
                 android.R.layout.simple_spinner_item, payment);
 
         adapterColor.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -179,14 +187,14 @@ public class Checkout extends AppCompatActivity implements DialogModal.ExampleDi
 
                     applyTexts(name, phoneNumber, address);
                 } else {
-                    Toast.makeText(Checkout.this, "Record not found.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(CheckoutActivity.this, "Record not found.", Toast.LENGTH_SHORT).show();
                 }
 
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                Toast.makeText(Checkout.this, "Failed to fetch data.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(CheckoutActivity.this, "Failed to fetch data.", Toast.LENGTH_SHORT).show();
 
             }
         });
@@ -200,7 +208,7 @@ public class Checkout extends AppCompatActivity implements DialogModal.ExampleDi
         String idCheckoutItemMap = getAlphaNumericString(20);
 
         if (tvName.getText().toString().isEmpty() || tvPhone.getText().toString().isEmpty() || tvAddress.getText().toString().isEmpty()) {
-            Toast.makeText(Checkout.this, "Missing parameter!!!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(CheckoutActivity.this, "Missing parameter!!!", Toast.LENGTH_SHORT).show();
             return;
 
         }
@@ -263,7 +271,7 @@ public class Checkout extends AppCompatActivity implements DialogModal.ExampleDi
                 .collection("Users").document(idCheckoutMap).set(checkoutMap).addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void unused) {
-                        Toast.makeText(Checkout.this, "Checkout is successfully", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(CheckoutActivity.this, "CheckoutActivity is successful", Toast.LENGTH_SHORT).show();
                     }
                 });
 
@@ -273,14 +281,19 @@ public class Checkout extends AppCompatActivity implements DialogModal.ExampleDi
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
-                            List<DocumentSnapshot> myListOfDocuments = task.getResult().getDocuments();
-                            for (int i = 0; i < myListOfDocuments.size(); i++) {
-                                deleteItemAfterCheckout(myListOfDocuments.get(i).getId());
+                            if (paymentOption.equals("Payment via ZaloPay")) {
+                                String orderID = "order1";
+                                requestZaloPay(orderID);
                             }
+                            List<DocumentSnapshot> myListOfDocuments = task.getResult().getDocuments();
+                            // Uncomment this section after done payment
+//                            for (int i = 0; i < myListOfDocuments.size(); i++) {
+//                                deleteItemAfterCheckout(myListOfDocuments.get(i).getId());
+//                            }
                         }
                     }
                 });
-        startActivity(new Intent(Checkout.this, MainActivity.class));
+//        startActivity(new Intent(CheckoutActivity.this, MainActivity.class));
 
     }
 
@@ -356,9 +369,60 @@ public class Checkout extends AppCompatActivity implements DialogModal.ExampleDi
         exampleDialog.show(getSupportFragmentManager(), "example dialog");
     }
 
+    public void bindView() {
+        tvTotal = findViewById(R.id.tv_total_cart);
+        tvAddress = findViewById(R.id.tv_address);
+        tvName = findViewById(R.id.tv_name);
+        tvPhone = findViewById(R.id.tv_phone);
+        tvEdit = findViewById(R.id.tv_edit);
+        emptyLayout = findViewById(R.id.tv_empty);
+        tvHome = findViewById(R.id.go_to_home);
+        imageBack = findViewById(R.id.iv_back);
+        btnCheckout = findViewById(R.id.btn_confirm);
+    }
+
     public void applyTexts(String username, String phoneNumber, String address) {
         tvName.setText(username);
         tvPhone.setText(phoneNumber);
         tvAddress.setText(address);
+    }
+
+    public void requestZaloPay(String orderID) {
+        CreateOrder orderApi = new CreateOrder();
+        String amount = totalCart;    // get from orderID from Firebase
+        try {
+            JSONObject data = orderApi.createOrder(amount);
+            String code = data.getString("return_code");
+
+            if (code.equals("1")) {
+                String token = data.getString("zp_trans_token");
+                ZaloPaySDK.getInstance().payOrder(CheckoutActivity.this, token, "demozpdk://app", new PayOrderListener() {
+                    @Override
+                    public void onPaymentSucceeded(final String transactionId, final String transToken, final String appTransID) {
+                        Toast.makeText(CheckoutActivity.this, "Thanh toán thành công", Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onPaymentCanceled(String zpTransToken, String appTransID) {
+                        Toast.makeText(CheckoutActivity.this, "Thanh toán bị hủy", Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onPaymentError(ZaloPayError zaloPayError, String zpTransToken, String appTransID) {
+                        Log.e("Zalo Pay Error", zaloPayError.toString());
+                        Toast.makeText(CheckoutActivity.this, "Thanh toán thất bại", Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        ZaloPaySDK.getInstance().onResult(intent);
     }
 }
