@@ -2,60 +2,55 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/layout_pending"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".HistoryOrder">
+    android:id="@+id/layout_pending"
+    android:noHistory="true"
+    tools:context=".ChoosenAddress">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
-
+        android:orientation="vertical"
+        >
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/pink"
-            android:gravity="center"
             android:orientation="horizontal"
+            android:background="@color/pink"
             android:paddingVertical="10dp"
+            android:gravity="center"
             android:weightSum="3">
-
             <ImageView
                 android:id="@+id/iv_back"
+                android:layout_weight="1"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
+                android:src="@drawable/baseline_chevron_left_24"
                 android:paddingVertical="10dp"
-                android:src="@drawable/baseline_chevron_left_24" />
-
+                />
             <TextView
+                android:layout_weight="1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="Confirm"
                 android:textColor="@color/black"
+                android:gravity="center"
                 android:textSize="20sp"
                 android:textStyle="bold"
-                android:text="History order"/>
+                android:text="Add address"/>
             <ImageView
+
                 android:paddingVertical="10dp"
                 android:layout_weight="1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:paddingVertical="10dp"
-                android:text="Cart" />
+                android:text="Cart"/>
         </LinearLayout>
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_pending"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-
-
     </LinearLayout>
-
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/lv_address"/>
 </LinearLayout>

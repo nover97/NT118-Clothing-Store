@@ -74,6 +74,17 @@
                     android:textStyle="bold" />
 
                 <TextView
+                    android:id="@+id/tv_choose"
+                    android:textAlignment="textStart"
+                    android:layout_weight="1"
+                    android:paddingVertical="2dp"
+                    android:paddingRight="3dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/choose"
+                    android:textColor="@color/blue"
+                    android:textSize="18sp"/>
+                <TextView
                     android:id="@+id/tv_edit"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

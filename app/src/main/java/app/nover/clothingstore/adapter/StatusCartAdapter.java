@@ -6,6 +6,7 @@ import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -78,8 +79,21 @@ public class StatusCartAdapter extends RecyclerView.Adapter<StatusCartAdapter.Vi
             holder.tvStatus.setText("Status: Delivery");
         } else if (status.equals("3")) {
             holder.btnReceived.setVisibility(View.VISIBLE);
+            holder.tvStatus.setText("Status: Wait for confirm");
+        }else if(status.equals("4")) {
+            holder.btnCancel.setVisibility(View.GONE);
+            holder.tvStatus.setText("Status: Cancel when pending");
+            holder.layout.setBackgroundResource(R.color.cancel);
+        }else if(status.equals("5")) {
+            holder.btnCancel.setVisibility(View.GONE);
+            holder.tvStatus.setText("Status: Cancel when confirm");
+            holder.layout.setBackgroundResource(R.color.cancel);
+        }else if(status.equals("6")) {
+            holder.btnCancel.setVisibility(View.GONE);
             holder.tvStatus.setText("Status: Success");
+            holder.layout.setBackgroundResource(R.color.confirm);
         }
+
 
         holder.layout.setOnClickListener(new View.OnClickListener() {
             @Override

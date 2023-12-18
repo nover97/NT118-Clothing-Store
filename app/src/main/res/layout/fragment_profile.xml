@@ -238,24 +238,27 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                >
+            <TextView
+                android:id="@+id/tv_update_info"
+                android:background="@drawable/text_line"
+                android:textSize="20sp"
+                android:paddingVertical="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Update info user"
+                android:paddingLeft="10dp"
+               />
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/text_line"
-                    android:paddingVertical="10dp"
-                    android:paddingLeft="10dp"
-                    android:text="Chinh sua ho so"
-                    android:textSize="20sp" />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingVertical="10dp"
-                    android:paddingLeft="10dp"
-                    android:text="Them dia chi nhan hang"
-                    android:textSize="20sp" />
+            <TextView
+                android:id="@+id/add_address"
+                android:paddingLeft="10dp"
+                android:textSize="20sp"
+                android:paddingVertical="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Add address"/>
 
                 <TextView
                     android:id="@+id/tv_history_order"

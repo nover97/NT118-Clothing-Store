@@ -91,9 +91,7 @@ public class PendingCart extends AppCompatActivity {
                         }
                         Collections.sort(items, new StatusCartComparator());
 
-                        for (int i = 0; i < items.size(); i++) {
-                            Log.e("e", items.get(i).getTimeCreateAt() + "");
-                        }
+
 
                         adapter.notifyDataSetChanged();
                     }

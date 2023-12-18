@@ -102,6 +102,7 @@ public class CartFragment extends Fragment {
                     return;
                 }
                 Intent intent = new Intent(getContext(), CheckoutActivity.class);
+                intent.putExtra("id","");
                 startActivity(intent);
             }
         });

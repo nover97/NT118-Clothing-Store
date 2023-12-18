@@ -55,7 +55,7 @@ public class ProfileFragment extends Fragment {
     FirebaseAuth firebaseAuth;
     FirebaseStorage firebaseStorage;
     StorageReference storageReference;
-    TextView tvName, tvPending, tvDelivery, tvConfirm, tvEmail, tvHistoryOrder;
+    TextView tvName, tvPending, tvDelivery, tvConfirm, tvEmail, tvHistoryOrder, tvUpdate, tvAddAddress;
     String id;
     ImageView imAvatar;
     Uri selectImage;
@@ -80,6 +80,8 @@ public class ProfileFragment extends Fragment {
         imPending = view.findViewById(R.id.pending_icon_button);
         imDelivery = view.findViewById(R.id.delivery_icon_bage);
         imConfirm = view.findViewById(R.id.confirm_icon_button);
+        tvUpdate = view.findViewById(R.id.tv_update_info);
+        tvAddAddress = view.findViewById(R.id.add_address);
 
         firebaseFirestore = FirebaseFirestore.getInstance();
         firebaseAuth = FirebaseAuth.getInstance();
@@ -179,6 +181,22 @@ public class ProfileFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getContext(), HistoryOrder.class);
+                startActivity(intent);
+            }
+        });
+
+        tvUpdate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getContext(), UpdateInfo.class);
+                startActivity(intent);
+            }
+        });
+
+        tvAddAddress.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getContext(), AddAddress.class);
                 startActivity(intent);
             }
         });

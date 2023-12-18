@@ -5,12 +5,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentChange;
@@ -20,50 +18,49 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
-import app.nover.clothingstore.adapter.StatusCartAdapter;
-import app.nover.clothingstore.models.StatusCart;
-import app.nover.clothingstore.models.StatusCartComparator;
+import app.nover.clothingstore.adapter.AddressAdapter;
+import app.nover.clothingstore.adapter.ChosenAdapter;
+import app.nover.clothingstore.models.AddressModel;
 
-public class HistoryOrder extends AppCompatActivity {
-
-    ImageView tvBack;
+public class ChoosenAddress extends AppCompatActivity {
+    RecyclerView recyclerView;
+    ChosenAdapter adapter;
+    ImageView imBack;
     FirebaseFirestore firestore;
     FirebaseAuth firebaseAuth;
-    List<StatusCart> items;
-    RecyclerView recyclerView;
-    StatusCartAdapter adapter;
+    List<AddressModel> items;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_history_order);
+        setContentView(R.layout.activity_choosen_address);
+
         firestore = FirebaseFirestore.getInstance();
         firebaseAuth = FirebaseAuth.getInstance();
 
-        tvBack = findViewById(R.id.iv_back);
+        imBack = findViewById(R.id.iv_back);
 
+        recyclerView = findViewById(R.id.lv_address);
         items = new ArrayList<>();
         EventChangeListener();
-
-        recyclerView = findViewById(R.id.rv_pending);
+        adapter = new ChosenAdapter(items);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-
-        adapter = new StatusCartAdapter(items);
         recyclerView.setAdapter(adapter);
 
-        tvBack.setOnClickListener(new View.OnClickListener() {
+        imBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 finish();
             }
         });
+
     }
 
     private void EventChangeListener() {
-        firestore.collection("AddToCheckout").document(firebaseAuth.getCurrentUser().getUid()).collection("Users")
+        firestore.collection("AddAddress").document(firebaseAuth.getCurrentUser().getUid()).collection("Users")
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override
                     public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
@@ -73,23 +70,19 @@ public class HistoryOrder extends AppCompatActivity {
                         }
 
                         for (DocumentChange dc : value.getDocumentChanges()) {
-                            if(dc.getDocument().toObject(StatusCart.class).getStatusCode().equals("4")){
-                                items.add(dc.getDocument().toObject(StatusCart.class));
-
-                            }
-                            if(dc.getDocument().toObject(StatusCart.class).getStatusCode().equals("5")){
-                                items.add(dc.getDocument().toObject(StatusCart.class));
-
-                            }
-                            if(dc.getDocument().toObject(StatusCart.class).getStatusCode().equals("6")){
-                                items.add(dc.getDocument().toObject(StatusCart.class));
-
+                            if (dc.getType() == DocumentChange.Type.ADDED) {
+                                items.add(dc.getDocument().toObject(AddressModel.class));
                             }
                         }
-                        Collections.sort(items, new StatusCartComparator());
-
                         adapter.notifyDataSetChanged();
                     }
                 });
     }
+
+
+//    @Override
+//    protected void onDestroy() {
+//        super.onDestroy();
+//        this.remove();
+//    }
 }
