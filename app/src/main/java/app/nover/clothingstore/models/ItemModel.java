@@ -11,6 +11,7 @@ public class ItemModel {
     String description;
     List<String> arraySize;
     List<String> arrayColor;
+    String category;
 
     public List<String> getArrayColor() {
         return arrayColor;
@@ -78,4 +79,8 @@ public class ItemModel {
     public void setOriginalPrice(String originalPrice) {
         this.originalPrice = originalPrice;
     }
+
+    public String getCategory() {return category;}
+
+    public void setCategory(String category) {this.category = category;}
 }

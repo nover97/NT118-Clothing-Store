@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+xmlns:android="http://schemas.android.com/apk/res/android"
+android:layout_width="200dp"
+android:layout_height="wrap_content"
+android:layout_gravity="start"
+    android:layout_margin="5dp">
+
+<TextView
+    android:id="@+id/tvusermessage"
+    android:layout_width="200dp"
+    android:layout_height="50dp"
+    android:gravity="center"
+    android:layout_gravity="start"
+    android:text="noi dung thong"
+    android:textColor="@android:color/black"
+    android:textSize="20sp"
+    android:background="@drawable/rounded_user_card_view"/>
+</androidx.cardview.widget.CardView>
+
