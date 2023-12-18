@@ -6,7 +6,8 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:id="@+id/layout_pending"
-    tools:context=".HistoryOrder">
+    android:noHistory="true"
+    tools:context=".ChoosenAddress">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -37,8 +38,9 @@
                 android:gravity="center"
                 android:textSize="20sp"
                 android:textStyle="bold"
-                android:text="History order"/>
+                android:text="Add address"/>
             <ImageView
+
                 android:paddingVertical="10dp"
                 android:layout_weight="1"
                 android:layout_width="wrap_content"
@@ -46,12 +48,9 @@
                 android:text="Cart"/>
         </LinearLayout>
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_pending"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
-
-
     </LinearLayout>
-
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/lv_address"/>
 </LinearLayout>

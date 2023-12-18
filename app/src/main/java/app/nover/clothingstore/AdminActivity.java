@@ -1,5 +1,6 @@
 package app.nover.clothingstore;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -18,12 +19,11 @@ import java.time.ZonedDateTime;
 import java.util.Date;
 import java.util.Locale;
 
-import app.nover.clothingstore.databinding.ActivityMainAdminBinding;
-import app.nover.clothingstore.databinding.ActivityMainBinding;
+import app.nover.clothingstore.databinding.ActivityAdminBinding;
 
-public class MainActivityAdmin extends AppCompatActivity {
+public class AdminActivity extends AppCompatActivity {
 
-    ActivityMainAdminBinding binding;
+    ActivityAdminBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,7 +32,7 @@ public class MainActivityAdmin extends AppCompatActivity {
 
 
 
-        binding = ActivityMainAdminBinding.inflate(getLayoutInflater());
+        binding = ActivityAdminBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         //setContentView(R.layout.activity_main);
         replaceFragment(new HomeFragment());
