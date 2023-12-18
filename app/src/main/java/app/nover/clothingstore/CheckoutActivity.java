@@ -44,6 +44,7 @@ import java.util.Locale;
 import app.nover.clothingstore.adapter.CheckoutAdapter;
 import app.nover.clothingstore.modal.DialogModal;
 import app.nover.clothingstore.models.ItemCart;
+import app.nover.clothingstore.zalopay.AppInfo;
 import app.nover.clothingstore.zalopay.CreateOrder;
 import vn.zalopay.sdk.Environment;
 import vn.zalopay.sdk.ZaloPayError;
@@ -78,7 +79,7 @@ public class CheckoutActivity extends AppCompatActivity implements DialogModal.E
         StrictMode.setThreadPolicy(policy);
 
         // ZaloPay SDK Init
-        ZaloPaySDK.init(2553, Environment.SANDBOX);
+        ZaloPaySDK.init(AppInfo.APP_ID, Environment.SANDBOX);
 
         bindView();
 
@@ -286,14 +287,14 @@ public class CheckoutActivity extends AppCompatActivity implements DialogModal.E
                                 requestZaloPay(orderID);
                             }
                             List<DocumentSnapshot> myListOfDocuments = task.getResult().getDocuments();
-                            // Uncomment this section after done payment
-//                            for (int i = 0; i < myListOfDocuments.size(); i++) {
-//                                deleteItemAfterCheckout(myListOfDocuments.get(i).getId());
-//                            }
+                            
+                            for (int i = 0; i < myListOfDocuments.size(); i++) {
+                                deleteItemAfterCheckout(myListOfDocuments.get(i).getId());
+                            }
                         }
                     }
                 });
-//        startActivity(new Intent(CheckoutActivity.this, MainActivity.class));
+        startActivity(new Intent(CheckoutActivity.this, MainActivity.class));
 
     }
 
