@@ -9,5 +9,8 @@
     <color name="red">#FF0000</color>
     <color name="gray">#CCCCCC</color>
     <color name="blue">#2986cc</color>
+    <color name="confirm">#b6d7a8</color>
+    <color name="cancel">#ea9999</color>
+    <color name="green">#28a745</color>
 </resources>
 
