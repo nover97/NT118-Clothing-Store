@@ -82,6 +82,8 @@ public class ProfileFragment extends Fragment {
         imConfirm = view.findViewById(R.id.confirm_icon_button);
         tvUpdate = view.findViewById(R.id.tv_update_info);
         tvAddAddress = view.findViewById(R.id.add_address);
+        tvUpdate = view.findViewById(R.id.tv_update_info);
+        tvAddAddress = view.findViewById(R.id.add_address);
 
         firebaseFirestore = FirebaseFirestore.getInstance();
         firebaseAuth = FirebaseAuth.getInstance();
@@ -181,6 +183,22 @@ public class ProfileFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getContext(), HistoryOrder.class);
+                startActivity(intent);
+            }
+        });
+
+        tvUpdate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getContext(), UpdateInfo.class);
+                startActivity(intent);
+            }
+        });
+
+        tvAddAddress.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getContext(), AddAddress.class);
                 startActivity(intent);
             }
         });

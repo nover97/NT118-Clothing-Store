@@ -48,7 +48,7 @@ public class AdminActivity extends AppCompatActivity {
                 replaceFragment(new NotificationsFragment());
             } else if (itemId == R.id.home_nav) {
                 replaceFragment(new HomeFragment());
-            }  else if (itemId == R.id.profile_nav) {
+            }   else if (itemId == R.id.profile_nav) {
                 replaceFragment(new ProfileFragment());
             }
             return true;
