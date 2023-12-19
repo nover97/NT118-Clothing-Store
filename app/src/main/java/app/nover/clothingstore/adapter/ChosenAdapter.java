@@ -17,7 +17,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.List;
 
-import app.nover.clothingstore.Checkout;
+import app.nover.clothingstore.CheckoutActivity;
 import app.nover.clothingstore.R;
 import app.nover.clothingstore.models.AddressModel;
 
@@ -30,28 +30,10 @@ public class ChosenAdapter extends RecyclerView.Adapter<ChosenAdapter.ViewHolder
         this.items = items;
     }
 
-    public class ViewHolder extends  RecyclerView.ViewHolder{
-        EditText etName, etPhoneNumber, etAddress;
-        Button btnChosen ;
-        LinearLayout layout;
-
-        public ViewHolder(@NonNull View itemView) {
-            super(itemView);
-
-            etName = itemView.findViewById(R.id.et_full_name);
-            etPhoneNumber = itemView.findViewById(R.id.et_phone_number);
-            etAddress = itemView.findViewById(R.id.et_address);
-            btnChosen = itemView.findViewById(R.id.btn_chosen);
-            layout = itemView.findViewById(R.id.ln_status_cart);
-
-
-        }
-    }
-
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new ViewHolder((LayoutInflater.from(parent.getContext())).inflate(R.layout.item_chosen_address,parent,false));
+        return new ViewHolder((LayoutInflater.from(parent.getContext())).inflate(R.layout.item_chosen_address, parent, false));
 
     }
 
@@ -73,15 +55,12 @@ public class ChosenAdapter extends RecyclerView.Adapter<ChosenAdapter.ViewHolder
         holder.btnChosen.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(holder.layout.getContext(), Checkout.class);
+                Intent intent = new Intent(holder.layout.getContext(), CheckoutActivity.class);
                 intent.putExtra("id", id);
                 holder.layout.getContext().startActivity(intent);
             }
 
         });
-
-
-
 
 
     }
@@ -91,6 +70,23 @@ public class ChosenAdapter extends RecyclerView.Adapter<ChosenAdapter.ViewHolder
         return items.size();
     }
 
+    public class ViewHolder extends RecyclerView.ViewHolder {
+        EditText etName, etPhoneNumber, etAddress;
+        Button btnChosen;
+        LinearLayout layout;
+
+        public ViewHolder(@NonNull View itemView) {
+            super(itemView);
+
+            etName = itemView.findViewById(R.id.et_full_name);
+            etPhoneNumber = itemView.findViewById(R.id.et_phone_number);
+            etAddress = itemView.findViewById(R.id.et_address);
+            btnChosen = itemView.findViewById(R.id.btn_chosen);
+            layout = itemView.findViewById(R.id.ln_status_cart);
+
+
+        }
+    }
 
 
 }
