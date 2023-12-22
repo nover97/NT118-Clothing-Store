@@ -49,7 +49,7 @@ public class AdminActivity extends AppCompatActivity {
             } else if (itemId == R.id.home_nav) {
                 replaceFragment(new HomeFragment());
             }  else if (itemId == R.id.profile_nav) {
-                replaceFragment(new ProfileFragment());
+                replaceFragment(new AdminProfileFragment());
             }
             return true;
         });

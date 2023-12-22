@@ -265,6 +265,7 @@ public class Checkout extends AppCompatActivity implements DialogModal.ExampleDi
         checkoutMap.put("address", tvAddress.getText().toString());
         checkoutMap.put("payment", paymentOption);
         checkoutMap.put("total", totalCart);
+        checkoutMap.put("idUser", firebaseAuth.getCurrentUser().getUid());
 
         checkoutMap.put("id", idCheckoutMap);
         checkoutMap.put("idCheckoutItem", idCheckoutItemMap);

@@ -19,7 +19,9 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.io.Serializable;
@@ -36,9 +38,12 @@ import app.nover.clothingstore.MainActivity;
 import app.nover.clothingstore.R;
 import app.nover.clothingstore.login.LoginActivity;
 import app.nover.clothingstore.models.StatusCart;
+import app.nover.clothingstore.models.UserModel;
 
 public class StatusCartAdapter extends RecyclerView.Adapter<StatusCartAdapter.ViewHolder> implements Serializable {
     List<StatusCart> items;
+    FirebaseAuth firebaseAuth= FirebaseAuth.getInstance();
+    FirebaseFirestore firestore = FirebaseFirestore.getInstance();
 
     public StatusCartAdapter(List<StatusCart> items) {
         this.items = items;
@@ -47,9 +52,8 @@ public class StatusCartAdapter extends RecyclerView.Adapter<StatusCartAdapter.Vi
     public class ViewHolder extends RecyclerView.ViewHolder {
         TextView tvId, tvDate, tvTime, tvTotal, tvPayment, tvName,tvPhone,tvAddress, tvStatus;
         LinearLayout layout;
-        Button btnCancel, btnReceived;
-        FirebaseAuth firebaseAuth= FirebaseAuth.getInstance();
-        FirebaseFirestore firestore = FirebaseFirestore.getInstance();
+        Button btnCancel, btnReceived, btnConfirm;
+
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
@@ -65,6 +69,9 @@ public class StatusCartAdapter extends RecyclerView.Adapter<StatusCartAdapter.Vi
             layout= itemView.findViewById(R.id.ln_status_cart);
             btnCancel = itemView.findViewById(R.id.btn_cancel);
             btnReceived = itemView.findViewById(R.id.btn_received);
+            btnConfirm = itemView.findViewById(R.id.btn_confirm);
+
+
         }
     }
 
@@ -86,6 +93,7 @@ public class StatusCartAdapter extends RecyclerView.Adapter<StatusCartAdapter.Vi
         String total = items.get(position).getTotal();
         String phone =items.get(position).getPhoneNumber();
         String status = items.get(position).getStatusCode();
+        String idUser = items.get(position).getIdUser();
 
         holder.tvId.setText("ID Order: "+id);
         holder.tvName.setText("Name: "+name);
@@ -96,27 +104,60 @@ public class StatusCartAdapter extends RecyclerView.Adapter<StatusCartAdapter.Vi
         holder.tvPayment.setText("Payment: "+payment);
         holder.tvAddress.setText("Address: "+address);
 
-        if(status.equals("1")) {
-            holder.tvStatus.setText("Status: Pending");
-        }else if(status.equals("2")) {
-            holder.btnCancel.setVisibility(View.GONE);
-            holder.tvStatus.setText("Status: Delivery");
-        }else if(status.equals("3")) {
-            holder.btnReceived.setVisibility(View.VISIBLE);
-            holder.tvStatus.setText("Status: Wait for confirm");
-        }else if(status.equals("4")) {
-            holder.btnCancel.setVisibility(View.GONE);
-            holder.tvStatus.setText("Status: Cancel when pending");
-            holder.layout.setBackgroundResource(R.color.cancel);
-        }else if(status.equals("5")) {
-            holder.btnCancel.setVisibility(View.GONE);
-            holder.tvStatus.setText("Status: Cancel when confirm");
-            holder.layout.setBackgroundResource(R.color.cancel);
-        }else if(status.equals("6")) {
-            holder.btnCancel.setVisibility(View.GONE);
-            holder.tvStatus.setText("Status: Success");
-            holder.layout.setBackgroundResource(R.color.confirm);
-        }
+        firestore.collection("Users").document(firebaseAuth.getCurrentUser().getUid())
+            .get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                if(documentSnapshot.toObject(UserModel.class).getRole().equals("user")) {
+                    if (status.equals("1")) {
+                        holder.tvStatus.setText("Status: Pending");
+                        holder.btnCancel.setVisibility(View.VISIBLE);
+                    } else if (status.equals("2")) {
+                        holder.btnCancel.setVisibility(View.GONE);
+                        holder.tvStatus.setText("Status: Delivery");
+                    } else if (status.equals("3")) {
+                        holder.btnReceived.setVisibility(View.VISIBLE);
+                        holder.tvStatus.setText("Status: Wait for confirm");
+                    } else if (status.equals("4")) {
+                        holder.btnCancel.setVisibility(View.GONE);
+                        holder.tvStatus.setText("Status: Cancel when pending");
+                        holder.layout.setBackgroundResource(R.color.cancel);
+                    } else if (status.equals("5")) {
+                        holder.btnCancel.setVisibility(View.GONE);
+                        holder.tvStatus.setText("Status: Cancel when confirm");
+                        holder.layout.setBackgroundResource(R.color.cancel);
+                    } else if (status.equals("6")) {
+                        holder.btnCancel.setVisibility(View.GONE);
+                        holder.tvStatus.setText("Status: Success");
+                        holder.layout.setBackgroundResource(R.color.confirm);
+                    }
+                } else {
+                    if (status.equals("1")) {
+                        holder.tvStatus.setText("Status: Pending");
+                        holder.btnConfirm.setVisibility(View.VISIBLE);
+                        holder.btnCancel.setVisibility(View.VISIBLE);
+                    } else if (status.equals("2")) {
+                        holder.btnCancel.setVisibility(View.VISIBLE);
+                        holder.tvStatus.setText("Status: Delivery");
+                        holder.btnConfirm.setVisibility(View.VISIBLE);
+                    } else if (status.equals("3")) {
+                        holder.tvStatus.setText("Status: Wait for confirm");
+                    } else if (status.equals("4")) {
+                        holder.btnCancel.setVisibility(View.GONE);
+                        holder.tvStatus.setText("Status: Cancel when pending");
+                        holder.layout.setBackgroundResource(R.color.cancel);
+                    } else if (status.equals("5")) {
+                        holder.btnCancel.setVisibility(View.GONE);
+                        holder.tvStatus.setText("Status: Cancel when confirm");
+                        holder.layout.setBackgroundResource(R.color.cancel);
+                    } else if (status.equals("6")) {
+                        holder.btnCancel.setVisibility(View.GONE);
+                        holder.tvStatus.setText("Status: Success");
+                        holder.layout.setBackgroundResource(R.color.confirm);
+                    }
+                }
+            }
+        });
 
 
         holder.layout.setOnClickListener(new View.OnClickListener() {
@@ -125,6 +166,7 @@ public class StatusCartAdapter extends RecyclerView.Adapter<StatusCartAdapter.Vi
                 Intent intent = new Intent(holder.layout.getContext(), DetailOrder.class);
                 intent.putExtra("obj",  item.getArrayIdItem().toString());
                 intent.putExtra("id", id);
+                intent.putExtra("idUser", idUser);
                 holder.layout.getContext().startActivity(intent);
             }
         });
@@ -152,12 +194,15 @@ public class StatusCartAdapter extends RecyclerView.Adapter<StatusCartAdapter.Vi
                         if(status.equals("1")){
                             checkoutMap.put("statusCode", "4");
                         }
+                        if(status.equals("2")){
+                            checkoutMap.put("statusCode", "4");
+                        }
                         if(status.equals("3")) {
                             checkoutMap.put("statusCode", "5");
                         }
 
-                        holder.firestore.collection("AddToCheckout")
-                                .document(holder.firebaseAuth.getCurrentUser().getUid())
+                        firestore.collection("AddToCheckout")
+                                .document(idUser)
                                 .collection("Users").document(id).update(checkoutMap);
                         Toast.makeText(holder.layout.getContext(), "Cancel order successfully", Toast.LENGTH_SHORT).show();
                         items.remove(position);
@@ -201,8 +246,8 @@ public class StatusCartAdapter extends RecyclerView.Adapter<StatusCartAdapter.Vi
                         checkoutMap.put("timestampUpdateAt", tsLong);
                         checkoutMap.put("statusCode", "6");
 
-                        holder.firestore.collection("AddToCheckout")
-                                .document(holder.firebaseAuth.getCurrentUser().getUid())
+                        firestore.collection("AddToCheckout")
+                                .document(idUser)
                                 .collection("Users").document(id).update(checkoutMap);
 
                         Toast.makeText(holder.layout.getContext(), "Receive order successfully", Toast.LENGTH_SHORT).show();
@@ -210,6 +255,53 @@ public class StatusCartAdapter extends RecyclerView.Adapter<StatusCartAdapter.Vi
                         notifyItemRemoved(position);
                         notifyItemRangeChanged(position, items.size());
                         notifyDataSetChanged();
+                    }
+                });
+                builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        return;
+                    }
+                });
+                builder.show();
+            }
+        });
+
+        holder.btnConfirm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                final HashMap<String,Object> checkoutMap = new HashMap<>();
+                Date date = new Date();
+                SimpleDateFormat formatterDate = new SimpleDateFormat("dd/MM/yyyy");
+                SimpleDateFormat formatterTime = new SimpleDateFormat("HH:mm:ss");
+                Long tsLong = System.currentTimeMillis()/1000;
+                String ts = tsLong.toString();
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(holder.layout.getContext());
+                builder.setTitle("Confirm order");
+                builder.setMessage("Are you sure confirm order?");
+                builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        checkoutMap.put("dateUpdateAt", formatterDate.format(date));
+                        checkoutMap.put("timeUpdateAt", formatterTime.format(date));
+                        checkoutMap.put("timestampUpdateAt", tsLong);
+                        if(status.equals("1")){
+                            checkoutMap.put("statusCode", "2");
+                        }
+                        if(status.equals("2")) {
+                            checkoutMap.put("statusCode", "3");
+                        }
+
+                        firestore.collection("AddToCheckout")
+                                .document(idUser)
+                                .collection("Users").document(id).update(checkoutMap);
+                        Toast.makeText(holder.layout.getContext(), "Cancel order successfully", Toast.LENGTH_SHORT).show();
+                        items.remove(position);
+                        notifyItemRemoved(position);
+                        notifyItemRangeChanged(position, items.size());
+                        notifyDataSetChanged();
+
                     }
                 });
                 builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
@@ -237,4 +329,6 @@ public class StatusCartAdapter extends RecyclerView.Adapter<StatusCartAdapter.Vi
         Integer no1 = Integer.parseInt(no);
         return  String.format(Locale.US,"%,d", no1).replace(',','.')+ "đ";
     }
+
+
 }

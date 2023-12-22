@@ -21,6 +21,7 @@ import app.nover.clothingstore.AdminActivity;
 import app.nover.clothingstore.CallbackLoginFragment;
 import app.nover.clothingstore.MainActivity;
 import app.nover.clothingstore.R;
+import app.nover.clothingstore.SplashActivity;
 import app.nover.clothingstore.databinding.ActivityLoginBinding;
 import app.nover.clothingstore.models.UserModel;
 
@@ -32,7 +33,6 @@ public class LoginActivity extends AppCompatActivity implements CallbackLoginFra
      FirebaseAuth mAuth;
     FirebaseFirestore firestore;
 
-    String role ="";
 
 
     @Override
@@ -44,36 +44,29 @@ public class LoginActivity extends AppCompatActivity implements CallbackLoginFra
 
         mAuth = FirebaseAuth.getInstance();
         firestore = FirebaseFirestore.getInstance();
-        Log.e("e", role);
-
     }
 
     @Override
     public void onResume() {
         super.onResume();
         // Check if user is signed in (non-null) and update UI accordingly.
-        FirebaseUser currentUser = mAuth.getCurrentUser();
-        if(currentUser != null) {
-
-
-        firestore.collection("Users").document(mAuth.getCurrentUser().getUid()).get()
-                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                    @Override
-                    public void onSuccess(DocumentSnapshot documentSnapshot) {
-                        if (documentSnapshot.exists()) {
-                            role = documentSnapshot.toObject(UserModel.class).getRole();
-                            Log.e("e", role);
-                           if(role.equals("admin")) {
-                               startActivity(new Intent(LoginActivity.this, AdminActivity.class));
-                           } else {
-                               startActivity(new Intent(LoginActivity.this, MainActivity.class));
-                           }
-                        }
-                    }
-                });
-        finish();
-        }
-
+//        FirebaseUser currentUser = mAuth.getCurrentUser();
+//        if(currentUser != null) {
+//            firestore.collection("Users").document(mAuth.getCurrentUser().getUid()).get()
+//                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+//                    @Override
+//                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+//                        if(task.isSuccessful()) {
+//                            if(task.getResult().toObject(UserModel.class).getRole().equals("admin")) {
+//                                startActivity(new Intent(LoginActivity.this, AdminActivity.class));
+//                            } else {
+//                                startActivity(new Intent(LoginActivity.this, MainActivity.class));
+//                            }
+//                        }
+//                    }
+//                });
+//                finish();
+//            }
     }
 
     public void makeSignInFragment() {
