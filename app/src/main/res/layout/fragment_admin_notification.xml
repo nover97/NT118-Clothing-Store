@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Notification"
+        android:background="@color/pink"
+        android:gravity="center"
+        android:textSize="25dp">
+    </TextView>
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Title"
+            android:textSize="20dp"
+            android:layout_margin="13dp">
+
+        </TextView>
+
+        <EditText
+            android:id="@+id/ettitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="nhap title"
+            android:layout_margin="13dp">
+
+        </EditText>
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Content"
+            android:textSize="20dp"
+            android:layout_margin="13dp">
+
+        </TextView>
+
+        <EditText
+            android:id="@+id/etcontent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="nhap content"
+            android:layout_margin="13dp">
+
+        </EditText>
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+    <Button
+        android:id="@+id/btnthemtb"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="thêm thông báo"
+        android:layout_gravity="end"
+        android:layout_margin="13dp"
+        android:background="@color/pink"
+        android:clickable="true">
+
+    </Button>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0">
+
+        <!-- Thêm các thuộc tính và adapter cho RecyclerView ở đây -->
+
+    </androidx.recyclerview.widget.RecyclerView>
+
+
+</LinearLayout>

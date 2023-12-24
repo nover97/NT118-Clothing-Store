@@ -43,9 +43,9 @@ public class AdminActivity extends AppCompatActivity {
         binding.bottomNavigationView.setOnItemSelectedListener(item -> {
             int itemId = item.getItemId();
             if (itemId == R.id.menu_nav) {
-                replaceFragment(new MenuFragment());
+                replaceFragment(new NotiAdminFragment());
             } else if (itemId == R.id.noti_nav) {
-                replaceFragment(new NotificationsFragment());
+                replaceFragment(new UserListFragment());
             } else if (itemId == R.id.home_nav) {
                 replaceFragment(new HomeFragment());
             }   else if (itemId == R.id.profile_nav) {

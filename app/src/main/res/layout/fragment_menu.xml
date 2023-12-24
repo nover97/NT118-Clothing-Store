@@ -4,13 +4,197 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MenuFragment">
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <androidx.appcompat.widget.LinearLayoutCompat
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:gravity="center"
-        android:text="Menu Fragment"
-        android:textSize="28dp" />
+        android:orientation="vertical">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Category"
+            android:gravity="center"
+            android:background="@color/pink"
+            android:textSize="30dp"
+            android:textStyle="bold">
+        </TextView>
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="12dp">
+            <ImageButton
+                android:id="@+id/btn_category_vay"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/vay2"
+                android:clickable="true"
+                android:layout_margin="12dp"
+                >
 
+            </ImageButton>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="top|start"
+                android:paddingStart="8dp"
+                android:paddingTop="8dp"
+                android:text="Váy - Đa dạng kiểu dáng, màu sắc. Phù hợp cho mọi dịp"
+                android:textSize="20dp" />
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="12dp">
+            <ImageButton
+                android:id="@+id/btn_category_polo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/polo"
+                android:clickable="true"
+                android:layout_margin="12dp">
+
+            </ImageButton>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="top|start"
+                android:paddingStart="8dp"
+                android:paddingTop="8dp"
+                android:text="Polo - Áo polo với kiểu tay ngắn và dài, may từ chất liệu cao cấp. Mang lại sự thoải mái và lịch sự."
+                android:textSize="20dp" />
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="12dp">
+            <ImageButton
+                android:id="@+id/btn_category_jean"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/jeans"
+                android:clickable="true"
+                android:layout_margin="12dp">
+
+            </ImageButton>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="top|start"
+                android:paddingStart="8dp"
+                android:paddingTop="8dp"
+                android:text="Doanh mục sản phẩm quần, áo nam nữ có chất liệu Jean"
+                android:textSize="20dp" />
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="12dp">
+            <ImageButton
+                android:id="@+id/btn_category_tshirt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/tshirt13"
+                android:clickable="true"
+                android:layout_margin="12dp">
+
+            </ImageButton>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Danh mục áo thun mang đến sự đa dạng và phong cách cho mọi người. Với thiết kế tay ngắn và chất liệu thoáng mát"
+                android:textSize="20dp"
+                android:gravity="top|start"
+                android:paddingStart="8dp"
+                android:paddingTop="8dp"/>
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="12dp">
+            <ImageButton
+                android:id="@+id/btn_category_quan"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/pants"
+                android:clickable="true"
+                android:layout_margin="12dp">
+
+            </ImageButton>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="top|start"
+                android:paddingStart="8dp"
+                android:paddingTop="8dp"
+                android:text="Quần - Phong phú kiểu dáng, màu sắc. Đa dụng, thoải mái, thời trang."
+                android:textSize="20dp" />
+        </androidx.appcompat.widget.LinearLayoutCompat>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Khác"
+                android:gravity="center"
+                android:background="@color/pink"
+                android:textSize="30dp"
+                android:textStyle="bold">
+            </TextView>
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="12dp">
+            <ImageButton
+                android:id="@+id/btn_chat"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/chat"
+                android:clickable="true"
+                android:layout_margin="12dp">
+
+            </ImageButton>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="top|start"
+                android:paddingStart="8dp"
+                android:paddingTop="8dp"
+                android:text="Chat"
+                android:textSize="20dp" />
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="12dp">
+            <ImageButton
+                android:id="@+id/btn_aboutus"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/question"
+                android:clickable="true"
+                android:layout_margin="12dp">
+
+            </ImageButton>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="top|start"
+                android:paddingStart="8dp"
+                android:paddingTop="8dp"
+                android:text="About us!"
+                android:textSize="20dp" />
+        </androidx.appcompat.widget.LinearLayoutCompat>
+    </androidx.appcompat.widget.LinearLayoutCompat>
+    <!-- TODO: Update blank fragment layout -->
 
 </FrameLayout>

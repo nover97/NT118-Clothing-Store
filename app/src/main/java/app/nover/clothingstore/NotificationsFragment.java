@@ -1,57 +1,41 @@
 package app.nover.clothingstore;
 
+import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link NotificationsFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
-public class NotificationsFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+import com.google.firebase.firestore.DocumentChange;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QuerySnapshot;
+
+import java.util.ArrayList;
+
+import app.nover.clothingstore.models.Noti;
+import app.nover.clothingstore.adapter.NotiAdapter;
+
+public class NotificationsFragment extends Fragment {
+
+    private RecyclerView recyclerView;
+    private ArrayList<Noti> notiArrayList;
+    private NotiAdapter notiAdapter;
+    private FirebaseFirestore db;
+    private ProgressDialog progressDialog;
 
     public NotificationsFragment() {
         // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment NotificationsFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static NotificationsFragment newInstance(String param1, String param2) {
-        NotificationsFragment fragment = new NotificationsFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
     }
 
     @Override
@@ -59,5 +43,105 @@ public class NotificationsFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_notifications, container, false);
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        progressDialog = new ProgressDialog(requireActivity());
+        progressDialog.setCancelable(false);
+        progressDialog.setMessage("Waiting");
+        progressDialog.show();
+
+        recyclerView = view.findViewById(R.id.recyclerview);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
+
+        db = FirebaseFirestore.getInstance();
+        notiArrayList = new ArrayList<>();
+        notiAdapter = new NotiAdapter(requireContext(), notiArrayList);
+
+        recyclerView.setAdapter(notiAdapter);
+
+        eventChangeListener();
+
+        notiAdapter.setOnItemClickListener(new NotiAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(Noti noti) {
+
+                String documentId = noti.getDocumentId(); // Lấy ID
+                if (documentId != null) {
+                    DocumentReference docRef = db.collection("Notification").document(documentId);
+                    docRef.update("onclicked", true)
+                            .addOnSuccessListener(aVoid -> {
+                                Log.d("Firestore", "Trường onclicked đã được cập nhật thành true.");
+                                noti.setOnclicked(true);
+                                notiAdapter.notifyDataSetChanged();
+                            })
+                            .addOnFailureListener(e -> {
+                                Log.e("Firestore", "Lỗi khi cập nhật trường onclicked: " + e.getMessage());
+                            });
+                }
+
+                Intent intent = new Intent(requireContext(), NotiDetail.class);
+                intent.putExtra("title", noti.getTitle());
+                intent.putExtra("content", noti.getContent());
+                startActivity(intent);
+            }
+        });
+    }
+
+    private void eventChangeListener() {
+        db.collection("Notification")
+                .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                    @Override
+                    public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
+                        if (error != null) {
+                            if (progressDialog.isShowing())
+                                progressDialog.dismiss();
+                            Log.e("Firestore error", error.getMessage());
+                            return;
+                        }
+
+                        for (DocumentChange dc : value.getDocumentChanges()) {
+                            String documentId = dc.getDocument().getId();
+                            Noti noti = dc.getDocument().toObject(Noti.class);
+                            noti.setDocumentId(documentId);
+
+                            switch (dc.getType()) {
+                                case ADDED:
+                                    notiArrayList.add(noti);
+                                    break;
+                                case MODIFIED:
+                                    // Tìm và cập nhật thông báo đã thay đổi trong danh sách hiển thị
+                                    for (int i = 0; i < notiArrayList.size(); i++) {
+                                        Noti temp = notiArrayList.get(i);
+                                        if (temp.getDocumentId().equals(documentId)) {
+                                            notiArrayList.set(i, noti);
+                                            break;
+                                        }
+                                    }
+                                    break;
+                                case REMOVED:
+                                    // Xóa thông báo không còn tồn tại trong Firestore khỏi danh sách hiển thị
+                                    for (int i = 0; i < notiArrayList.size(); i++) {
+                                        Noti temp = notiArrayList.get(i);
+                                        if (temp.getDocumentId().equals(documentId)) {
+                                            notiArrayList.remove(i);
+                                            break;
+                                        }
+                                    }
+                                    break;
+                            }
+                        }
+
+                        notiAdapter.sortDataByTime();
+                        notiAdapter.notifyDataSetChanged();
+
+                        if (progressDialog.isShowing())
+                            progressDialog.dismiss();
+                    }
+                });
     }
 }
