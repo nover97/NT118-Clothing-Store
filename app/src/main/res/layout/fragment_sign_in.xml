@@ -80,6 +80,15 @@
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
+            <TextView
+                android:id="@+id/tv_forgot_password"
+                android:layout_marginTop="10dp"
+                android:textSize="18dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Forgot password?"
+                android:textAlignment="textEnd"
+                />
 
             <Button
                 android:id="@+id/button_signin"

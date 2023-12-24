@@ -64,7 +64,7 @@ public class SignInFragment extends Fragment {
     String role = "";
 
     private FirebaseFirestore firestore;
-
+    TextView tvForgotPassword;
     public SignInFragment() {
         // Required empty public constructor
     }
@@ -115,6 +115,7 @@ public class SignInFragment extends Fragment {
         showHidePwIV = view.findViewById(R.id.showHidePw_signin);
         signInBtn = view.findViewById(R.id.button_signin);
         signUpRedirectText = view.findViewById(R.id.signUpRedirectText);
+        tvForgotPassword = view.findViewById(R.id.tv_forgot_password);
 
         signInBtn.setOnClickListener(v -> {
 
@@ -126,6 +127,13 @@ public class SignInFragment extends Fragment {
             } else {
                 authorizeUser(email, password);
 
+            }
+        });
+
+        tvForgotPassword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getActivity(), ForgotPassword.class));
             }
         });
 

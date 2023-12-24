@@ -15,6 +15,9 @@
         android:theme="@style/Theme.ClothingStore"
         tools:targetApi="31">
         <activity
+            android:name=".login.ForgotPassword"
+            android:exported="false" />
+        <activity
             android:name=".HistoryOrderFailure"
             android:exported="false" />
         <activity

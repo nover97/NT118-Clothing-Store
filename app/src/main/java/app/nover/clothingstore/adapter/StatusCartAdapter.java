@@ -116,6 +116,7 @@ public class StatusCartAdapter extends RecyclerView.Adapter<StatusCartAdapter.Vi
                         holder.btnCancel.setVisibility(View.GONE);
                         holder.tvStatus.setText("Status: Delivery");
                     } else if (status.equals("3")) {
+                        holder.btnCancel.setVisibility(View.VISIBLE);
                         holder.btnReceived.setVisibility(View.VISIBLE);
                         holder.tvStatus.setText("Status: Wait for confirm");
                     } else if (status.equals("4")) {
@@ -296,7 +297,7 @@ public class StatusCartAdapter extends RecyclerView.Adapter<StatusCartAdapter.Vi
                         firestore.collection("AddToCheckout")
                                 .document(idUser)
                                 .collection("Users").document(id).update(checkoutMap);
-                        Toast.makeText(holder.layout.getContext(), "Cancel order successfully", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(holder.layout.getContext(), "Confirm order successfully", Toast.LENGTH_SHORT).show();
                         items.remove(position);
                         notifyItemRemoved(position);
                         notifyItemRangeChanged(position, items.size());

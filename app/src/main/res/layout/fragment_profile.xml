@@ -262,7 +262,15 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="History orders"/>
-
+                <TextView
+                    android:paddingLeft="10dp"
+                    android:id="@+id/tv_reset_password"
+                    android:background="@drawable/text_line"
+                    android:textSize="20sp"
+                    android:paddingVertical="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Change password"/>
 
 
 

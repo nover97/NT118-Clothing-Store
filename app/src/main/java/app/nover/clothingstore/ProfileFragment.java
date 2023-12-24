@@ -45,7 +45,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
+import app.nover.clothingstore.login.ForgotPassword;
 import app.nover.clothingstore.login.LoginActivity;
+import app.nover.clothingstore.models.UserModel;
 
 
 public class ProfileFragment extends Fragment {
@@ -55,7 +57,7 @@ public class ProfileFragment extends Fragment {
     FirebaseAuth firebaseAuth;
     FirebaseStorage firebaseStorage;
     StorageReference storageReference;
-    TextView tvName, tvPending, tvDelivery, tvConfirm,tvEmail, tvHistoryOrder, tvUpdate, tvAddAddress;
+    TextView tvName, tvPending, tvDelivery, tvConfirm,tvEmail, tvHistoryOrder, tvUpdate, tvAddAddress, tvReset;
     String id;
     ImageView imAvatar;
     Uri selectImage;
@@ -82,6 +84,7 @@ public class ProfileFragment extends Fragment {
         imConfirm = view.findViewById(R.id.confirm_icon_button);
         tvUpdate = view.findViewById(R.id.tv_update_info);
         tvAddAddress = view.findViewById(R.id.add_address);
+        tvReset = view.findViewById(R.id.tv_reset_password);
 
         firebaseFirestore = FirebaseFirestore.getInstance();
         firebaseAuth = FirebaseAuth.getInstance();
@@ -120,32 +123,63 @@ public class ProfileFragment extends Fragment {
             Log.d("debug", e.getMessage());
         }
 
+        tvReset.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                builder.setTitle("Reset password");
+                builder.setMessage("Are you sure reset your password?");
+                builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        firebaseFirestore.collection("Users").document(firebaseAuth.getCurrentUser().getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                            @Override
+                            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                String email = documentSnapshot.toObject(UserModel.class).getEmail();
+                                resetPassword(email);
+                            }
+                        });
+
+                    }
+                });
+                builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        return;
+                    }
+                });
+                builder.show();
+            }
+        });
+
+
+
 
         logoutBtn.setOnClickListener(new View.OnClickListener() {
-             @Override
-             public void onClick(View view) {
-                 AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                 builder.setTitle("Confirm Logout");
-                 builder.setMessage("Are you sure logout?");
-                 builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                     @Override
-                     public void onClick(DialogInterface dialogInterface, int i) {
-                         FirebaseAuth.getInstance().signOut();
-                         Intent intent = new Intent(getActivity(), LoginActivity.class);
-                         startActivity(intent);
-                     }
-                 });
-                 builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
-                     @Override
-                     public void onClick(DialogInterface dialogInterface, int i) {
-                         return;
-                     }
-                 });
-                 builder.show();
+            @Override
+            public void onClick(View view) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                builder.setTitle("Confirm Logout");
+                builder.setMessage("Are you sure logout?");
+                builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        FirebaseAuth.getInstance().signOut();
+                        Intent intent = new Intent(getActivity(), LoginActivity.class);
+                        startActivity(intent);
+                    }
+                });
+                builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        return;
+                    }
+                });
+                builder.show();
 
-             }
+            }
 
-         });
+        });
 
         imAvatar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -209,24 +243,24 @@ public class ProfileFragment extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(resultCode == RESULT_OK && data!=null) {
+        if (resultCode == RESULT_OK && data != null) {
             selectImage = data.getData();
 
             StorageReference ref
                     = storageReference
-                    .child("images/"+UUID.randomUUID().toString());
+                    .child("images/" + UUID.randomUUID().toString());
 
             ref.putFile(selectImage)
                     .addOnSuccessListener(
                             new OnSuccessListener<UploadTask.TaskSnapshot>() {
                                 @Override
-                                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot){
+                                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                                     taskSnapshot.getStorage().getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
                                         @Override
                                         public void onComplete(@NonNull Task<Uri> task) {
                                             String fileLink = task.getResult().toString();
                                             Log.e("link", fileLink);
-                                            HashMap<String,Object> upload = new HashMap<>();
+                                            HashMap<String, Object> upload = new HashMap<>();
                                             upload.put("urlImage", fileLink);
                                             firebaseFirestore.collection("Users").document(firebaseAuth.getCurrentUser().getUid()).update(upload).addOnSuccessListener(new OnSuccessListener<Void>() {
                                                 @Override
@@ -238,11 +272,11 @@ public class ProfileFragment extends Fragment {
                                         }
                                     });
 
-                            }}).addOnFailureListener(new OnFailureListener() {
+                                }
+                            }).addOnFailureListener(new OnFailureListener() {
                         @Override
-                        public void onFailure(@NonNull Exception e)
-                        {
-                            Toast.makeText(getContext(),"Failed " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                        public void onFailure(@NonNull Exception e) {
+                            Toast.makeText(getContext(), "Failed " + e.getMessage(), Toast.LENGTH_SHORT).show();
                         }
                     });
 
@@ -259,12 +293,13 @@ public class ProfileFragment extends Fragment {
                         if (task.isSuccessful()) {
                             List<DocumentSnapshot> myListOfDocuments = task.getResult().getDocuments();
                             for (int i = 0; i < myListOfDocuments.size(); i++) {
-                                 countStatusPending(myListOfDocuments.get(i).getId());
+                                countStatusPending(myListOfDocuments.get(i).getId());
                             }
                         }
                     }
                 });
     }
+
 
     public void countStatusPending(String id) {
         isTrue = new int[]{0, 0, 0};
@@ -284,22 +319,22 @@ public class ProfileFragment extends Fragment {
                             }
                         }
 
-                        if(isTrue[0] > 0) {
-                            tvPending.setText(isTrue[0]+"");
+                        if (isTrue[0] > 0) {
+                            tvPending.setText(isTrue[0] + "");
                             tvPending.setVisibility(View.VISIBLE);
                         } else {
                             tvPending.setVisibility(View.GONE);
                         }
-                        if(isTrue[1] > 0) {
-                            tvDelivery.setText(isTrue[1]+"");
+                        if (isTrue[1] > 0) {
+                            tvDelivery.setText(isTrue[1] + "");
                             tvDelivery.setVisibility(View.VISIBLE);
-                        }else {
+                        } else {
                             tvDelivery.setVisibility(View.GONE);
                         }
-                        if(isTrue[2] > 0) {
-                            tvConfirm.setText(isTrue[2]+"");
+                        if (isTrue[2] > 0) {
+                            tvConfirm.setText(isTrue[2] + "");
                             tvConfirm.setVisibility(View.VISIBLE);
-                        }else {
+                        } else {
                             tvConfirm.setVisibility(View.GONE);
                         }
 
@@ -313,6 +348,21 @@ public class ProfileFragment extends Fragment {
         handleFillInfo();
         getActivity().getSupportFragmentManager().beginTransaction().detach(this).attach(this).commit();
 
+    }
+
+    public void resetPassword(String email) {
+        firebaseAuth.sendPasswordResetEmail(email).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void unused) {
+                Toast.makeText(getActivity(), "Reset password link has been sent to your registered email", Toast.LENGTH_SHORT).show();
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(getActivity(), "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+
+            }
+        });
     }
 
 }
