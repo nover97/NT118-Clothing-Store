@@ -81,6 +81,9 @@
         <activity
             android:name=".MainActivity"
             android:exported="true" />
+        <activity
+            android:name=".NotiDetail"
+            android:exported="true" />
     </application>
 
 </manifest>

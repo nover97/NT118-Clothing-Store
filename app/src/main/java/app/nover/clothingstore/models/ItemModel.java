@@ -30,6 +30,7 @@ public class ItemModel {
         this.arraySize = arraySize;
     }
 
+
     public String getDescription() {
         return description;
     }
@@ -95,5 +96,8 @@ public class ItemModel {
     public void setOriginalPrice(String originalPrice) {
         this.originalPrice = originalPrice;
     }
-}
 
+    public String getCategory() {return category;}
+
+    public void setCategory(String category) {this.category = category;}
+}
