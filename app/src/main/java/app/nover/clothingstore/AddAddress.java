@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -89,6 +90,11 @@ public class AddAddress extends AppCompatActivity {
     }
 
     public void handleSaveAddressUser() {
+        if(!validateInput()) {
+            Toast.makeText(this, "Missing parameter", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         HashMap<String,Object> address = new HashMap<>();
         String id =  getAlphaNumericString(20);
         address.put("id", id);
@@ -155,6 +161,18 @@ public class AddAddress extends AppCompatActivity {
         etName.setText("");
         etAddress.setText("");
         etPhoneNumber.setText("");
+    }
+
+    public boolean validateInput() {
+        if(etAddress.getText().toString().isEmpty() ||
+                etPhoneNumber.getText().toString().isEmpty()||
+                etName.getText().toString().isEmpty()) {
+            return false;
+        }
+        if(!etPhoneNumber.getText().toString().matches("^[0-9]+$")) {
+            return false;
+        }
+        return true;
     }
 
 }

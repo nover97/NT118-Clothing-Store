@@ -77,6 +77,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
         String description = items.get(position).getDescription();
         String arraySize = items.get(position).getArraySize().toString();
         String arrayColor = items.get(position).getArrayColor().toString();
+        String id = items.get(position).getProjectId();
 //        Log.e("AS", Arrays.toString(arraySize));
 
         holder.mainLayout.setOnClickListener(new View.OnClickListener() {
@@ -91,6 +92,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
                 intent.putExtra("description", description);
                 intent.putExtra("arraySize", arraySize);
                 intent.putExtra("arrayColor", arrayColor);
+                intent.putExtra("projectId", id);
 
 //                intent.putStringArrayListExtra("arrayColor", arrayColor);
 //                intent.putStringArrayListExtra("arraySize", arraySize);

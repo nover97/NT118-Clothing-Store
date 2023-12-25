@@ -1,5 +1,6 @@
 package app.nover.clothingstore;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
@@ -15,11 +16,18 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentChange;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.text.SimpleDateFormat;
@@ -34,6 +42,7 @@ import app.nover.clothingstore.adapter.StatusCartAdapter;
 import app.nover.clothingstore.models.ItemCart;
 import app.nover.clothingstore.models.StatusCart;
 import app.nover.clothingstore.models.StatusCartComparator;
+import app.nover.clothingstore.models.UserModel;
 
 public class PendingCart extends AppCompatActivity {
 
@@ -54,7 +63,6 @@ public class PendingCart extends AppCompatActivity {
 
         tvBack = findViewById(R.id.iv_back);
 
-
         tvBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -62,14 +70,28 @@ public class PendingCart extends AppCompatActivity {
             }
         });
 
-        items = new ArrayList<>();
-        EventChangeListener();
+        final String[] role = {""};
+        firestore.collection("Users").document(firebaseAuth.getCurrentUser().getUid()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if(task.isSuccessful()) {
+                   role[0] = task.getResult().toObject(UserModel.class).getRole();
+                    items = new ArrayList<>();
+                    if(role[0].equals("admin")) {
+                        EventChangeListenerAdmin();
+                    } else {
+                        EventChangeListener();
+                    }
 
-        recyclerView = findViewById(R.id.rv_pending);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+                    recyclerView = findViewById(R.id.rv_pending);
+                    recyclerView.setLayoutManager(new LinearLayoutManager(PendingCart.this));
 
-        adapter = new StatusCartAdapter(items);
-        recyclerView.setAdapter(adapter);
+                    adapter = new StatusCartAdapter(items);
+                    recyclerView.setAdapter(adapter);
+                }
+            }
+        });
+
 
     }
 
@@ -86,14 +108,47 @@ public class PendingCart extends AppCompatActivity {
                         for (DocumentChange dc : value.getDocumentChanges()) {
                             if (dc.getDocument().toObject(StatusCart.class).getStatusCode().equals("1")) {
                                 items.add(dc.getDocument().toObject(StatusCart.class));
-
                             }
                         }
                         Collections.sort(items, new StatusCartComparator());
-
-
-
                         adapter.notifyDataSetChanged();
+                    }
+                });
+    }
+
+    private void EventChangeListenerAdmin() {
+      firestore.collection("Users").get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+
+                                firestore.collection("AddToCheckout")
+                                        .document(document.getId()).collection("Users")
+                                        .get() .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                                if (task.isSuccessful()) {
+                                                    for (QueryDocumentSnapshot document : task.getResult()) {
+                                                        if(document.toObject(StatusCart.class).getStatusCode().equals("1")) {
+                                                            items.add(document.toObject(StatusCart.class));
+                                                        }
+                                                        Log.e("TAG", items.size()+"");
+                                                        Collections.sort(items, new StatusCartComparator());
+                                                        adapter.notifyDataSetChanged();
+
+                                                    }
+                                                } else {
+                                                    Log.d("TAG", "Error getting documents: ", task.getException());
+                                                }
+                                            }
+                                        });
+
+                            }
+                        } else {
+                            Log.d("123", "Error getting documents: ", task.getException());
+                        }
                     }
                 });
     }
@@ -104,5 +159,7 @@ public class PendingCart extends AppCompatActivity {
         fragmentTransaction.replace(R.id.flFragment, fragment);
         fragmentTransaction.commit();
     }
+
+
 
 }

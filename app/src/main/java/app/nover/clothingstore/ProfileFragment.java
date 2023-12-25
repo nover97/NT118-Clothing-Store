@@ -45,7 +45,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
+import app.nover.clothingstore.login.ForgotPassword;
 import app.nover.clothingstore.login.LoginActivity;
+import app.nover.clothingstore.models.UserModel;
 
 
 public class ProfileFragment extends Fragment {
@@ -55,7 +57,7 @@ public class ProfileFragment extends Fragment {
     FirebaseAuth firebaseAuth;
     FirebaseStorage firebaseStorage;
     StorageReference storageReference;
-    TextView tvName, tvPending, tvDelivery, tvConfirm,tvEmail, tvHistoryOrder, tvUpdate, tvAddAddress;
+    TextView tvName, tvPending, tvDelivery, tvConfirm,tvEmail, tvHistoryOrder, tvUpdate, tvAddAddress, tvReset;
     String id;
     ImageView imAvatar;
     Uri selectImage;
@@ -82,8 +84,7 @@ public class ProfileFragment extends Fragment {
         imConfirm = view.findViewById(R.id.confirm_icon_button);
         tvUpdate = view.findViewById(R.id.tv_update_info);
         tvAddAddress = view.findViewById(R.id.add_address);
-        tvUpdate = view.findViewById(R.id.tv_update_info);
-        tvAddAddress = view.findViewById(R.id.add_address);
+        tvReset = view.findViewById(R.id.tv_reset_password);
 
         firebaseFirestore = FirebaseFirestore.getInstance();
         firebaseAuth = FirebaseAuth.getInstance();
@@ -119,6 +120,37 @@ public class ProfileFragment extends Fragment {
         } catch (Exception e) {
             Log.d("debug", e.getMessage());
         }
+
+        tvReset.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                builder.setTitle("Reset password");
+                builder.setMessage("Are you sure reset your password?");
+                builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        firebaseFirestore.collection("Users").document(firebaseAuth.getCurrentUser().getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                            @Override
+                            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                String email = documentSnapshot.toObject(UserModel.class).getEmail();
+                                resetPassword(email);
+                            }
+                        });
+
+                    }
+                });
+                builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        return;
+                    }
+                });
+                builder.show();
+            }
+        });
+
+
 
 
         logoutBtn.setOnClickListener(new View.OnClickListener() {
@@ -282,6 +314,7 @@ public class ProfileFragment extends Fragment {
                 });
     }
 
+
     public void countStatusPending(String id) {
         isTrue = new int[]{0, 0, 0};
         FirebaseFirestore.getInstance()
@@ -331,5 +364,19 @@ public class ProfileFragment extends Fragment {
 
     }
 
-}
+    public void resetPassword(String email) {
+        firebaseAuth.sendPasswordResetEmail(email).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void unused) {
+                Toast.makeText(getActivity(), "Reset password link has been sent to your registered email", Toast.LENGTH_SHORT).show();
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(getActivity(), "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
 
+            }
+        });
+    }
+
+}

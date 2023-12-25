@@ -260,15 +260,25 @@
                 android:layout_height="wrap_content"
                 android:text="Add address"/>
 
+            <TextView
+                android:paddingLeft="10dp"
+                android:id="@+id/tv_history_order"
+                android:background="@drawable/text_line"
+                android:textSize="20sp"
+                android:paddingVertical="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="History orders"/>
                 <TextView
-                    android:id="@+id/tv_history_order"
+                    android:paddingLeft="10dp"
+                    android:id="@+id/tv_reset_password"
+                    android:background="@drawable/text_line"
+                    android:textSize="20sp"
+                    android:paddingVertical="10dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/text_line"
-                    android:paddingVertical="10dp"
-                    android:paddingLeft="10dp"
-                    android:text="History orders"
-                    android:textSize="20sp" />
+                    android:text="Change password"/>
+
 
 
             </LinearLayout>

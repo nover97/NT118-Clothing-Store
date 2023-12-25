@@ -33,6 +33,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.Arrays;
@@ -40,13 +41,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
+import app.nover.clothingstore.models.UserModel;
+
 
 public class DetailProduct extends AppCompatActivity {
 
     TextView name, price, oriPrice, description;
     ImageView imageView, imageBack, imageCart;
-    String nameIntent, priceIntent, originalPriceIntent, descriptionIntent, imageURLIntent;
-    Button btnAddCart;
+    String nameIntent, priceIntent, originalPriceIntent, descriptionIntent, imageURLIntent, projectIdIntent;
+    Button btnAddCart, btnEdit;
     FirebaseAuth firebaseAuth;
     private Spinner spinnerColor, spinnerSize;
     private String[] color;
@@ -62,7 +65,6 @@ public class DetailProduct extends AppCompatActivity {
         firestore = FirebaseFirestore.getInstance();
         firebaseAuth = FirebaseAuth.getInstance();
 
-
         getDataFromIntent();
         name = findViewById(R.id.tv_name);
         price = findViewById(R.id.tv_price);
@@ -71,6 +73,20 @@ public class DetailProduct extends AppCompatActivity {
         imageView = findViewById(R.id.iv_detail_product);
         imageBack = findViewById(R.id.iv_back);
         btnAddCart = findViewById(R.id.btn_add_cart);
+        btnEdit = findViewById(R.id.btn_edit_product);
+
+        firestore.collection("Users").document(firebaseAuth.getCurrentUser().getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                if (documentSnapshot.toObject(UserModel.class).getRole().equals("admin")) {
+                    btnEdit.setVisibility(View.VISIBLE);
+                    btnAddCart.setVisibility(View.GONE);
+                } else {
+                    btnAddCart.setVisibility(View.VISIBLE);
+                    btnEdit.setVisibility(View.GONE);
+                }
+            }
+        });
 
         name.setText(nameIntent);
 
@@ -129,12 +145,21 @@ public class DetailProduct extends AppCompatActivity {
                     }
                 });
 
+
         //Handle add item to cart
         btnAddCart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 addToCart();
-                FirebaseUser currentFirebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+            }
+        });
+
+        btnEdit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(DetailProduct.this, EditProduct.class);
+                intent.putExtra("projectId", projectIdIntent);
+                startActivity(intent);
             }
         });
     }
@@ -152,6 +177,8 @@ public class DetailProduct extends AppCompatActivity {
             size = convertStringArray(sizes);
             colors = bundle.getString("arrayColor");
             color = convertStringArray(colors);
+            projectIdIntent = bundle.getString("projectId");
+
         }
     }
 
