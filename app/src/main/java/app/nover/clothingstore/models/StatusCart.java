@@ -21,7 +21,15 @@ public class StatusCart {
     String statusCode;
     String total;
     int timestampCreateAt;
+    String idUser;
 
+    public String getIdUser() {
+        return idUser;
+    }
+
+    public void setIdUser(String idUser) {
+        this.idUser = idUser;
+    }
 
     public String getId() {
         return id;

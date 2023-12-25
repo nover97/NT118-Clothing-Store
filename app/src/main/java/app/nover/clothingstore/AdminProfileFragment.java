@@ -3,7 +3,6 @@ package app.nover.clothingstore;
 import static android.app.Activity.RESULT_OK;
 
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
@@ -12,6 +11,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.provider.MediaStore;
 import android.util.Log;
@@ -29,52 +29,45 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.OnProgressListener;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
-import java.net.URI;
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
-import app.nover.clothingstore.login.ForgotPassword;
 import app.nover.clothingstore.login.LoginActivity;
-import app.nover.clothingstore.models.UserModel;
+import app.nover.clothingstore.models.StatusCart;
+import app.nover.clothingstore.models.StatusCartComparator;
 
 
-public class ProfileFragment extends Fragment {
-
+public class AdminProfileFragment extends Fragment {
     Button logoutBtn;
     FirebaseFirestore firebaseFirestore;
     FirebaseAuth firebaseAuth;
     FirebaseStorage firebaseStorage;
     StorageReference storageReference;
-    TextView tvName, tvPending, tvDelivery, tvConfirm,tvEmail, tvHistoryOrder, tvUpdate, tvAddAddress, tvReset;
+    TextView tvName, tvPending, tvDelivery, tvConfirm,tvEmail, tvAdd,tvEdit, tvChart, tvOrderSuccess, tvOrderFail;
     String id;
     ImageView imAvatar;
     Uri selectImage;
     int[] isTrue;
     ImageView imPending, imDelivery, imConfirm;
 
-
-    public ProfileFragment() {
+    public AdminProfileFragment() {
         // Required empty public constructor
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_profile, container, false);
+        View view = inflater.inflate(R.layout.fragment_admin_profile, container, false);
         tvName = view.findViewById(R.id.tv_name);
         tvEmail = view.findViewById(R.id.tv_email);
         imAvatar = view.findViewById(R.id.im_avatar);
@@ -82,21 +75,23 @@ public class ProfileFragment extends Fragment {
         imPending = view.findViewById(R.id.pending_icon_button);
         imDelivery = view.findViewById(R.id.delivery_icon_bage);
         imConfirm = view.findViewById(R.id.confirm_icon_button);
-        tvUpdate = view.findViewById(R.id.tv_update_info);
-        tvAddAddress = view.findViewById(R.id.add_address);
-        tvReset = view.findViewById(R.id.tv_reset_password);
+        tvAdd = view.findViewById(R.id.tv_add_product);
+        tvChart = view.findViewById(R.id.tv_chart);
+        tvEdit = view.findViewById(R.id.tv_edit_product);
+        tvOrderFail = view.findViewById(R.id.tv_failure);
+        tvOrderSuccess = view.findViewById(R.id.tv_success);
 
         firebaseFirestore = FirebaseFirestore.getInstance();
         firebaseAuth = FirebaseAuth.getInstance();
-        firebaseStorage = FirebaseStorage.getInstance();
+        firebaseStorage =FirebaseStorage.getInstance();
         storageReference = firebaseStorage.getReference();
 
         tvPending = view.findViewById(R.id.tv_noti_pending);
         tvDelivery = view.findViewById(R.id.tv_noti_delivery);
         tvConfirm = view.findViewById(R.id.tv_noti_confirm);
-        tvHistoryOrder = view.findViewById(R.id.tv_history_order);
 
 
+        // Inflate the layout for this fragment
         try {
             firebaseFirestore.collection("Users").document(FirebaseAuth.getInstance().getCurrentUser().getUid())
                     .get().addOnCompleteListener(task -> {
@@ -120,37 +115,6 @@ public class ProfileFragment extends Fragment {
         } catch (Exception e) {
             Log.d("debug", e.getMessage());
         }
-
-        tvReset.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                builder.setTitle("Reset password");
-                builder.setMessage("Are you sure reset your password?");
-                builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        firebaseFirestore.collection("Users").document(firebaseAuth.getCurrentUser().getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                            @Override
-                            public void onSuccess(DocumentSnapshot documentSnapshot) {
-                                String email = documentSnapshot.toObject(UserModel.class).getEmail();
-                                resetPassword(email);
-                            }
-                        });
-
-                    }
-                });
-                builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        return;
-                    }
-                });
-                builder.show();
-            }
-        });
-
-
 
 
         logoutBtn.setOnClickListener(new View.OnClickListener() {
@@ -211,42 +175,42 @@ public class ProfileFragment extends Fragment {
             }
         });
 
-        tvHistoryOrder.setOnClickListener(new View.OnClickListener() {
+        tvOrderFail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getContext(), HistoryOrder.class);
+                Intent intent = new Intent(getContext(), HistoryOrderFailure.class);
                 startActivity(intent);
             }
         });
 
-        tvUpdate.setOnClickListener(new View.OnClickListener() {
+        tvOrderSuccess.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getContext(), UpdateInfo.class);
+                Intent intent = new Intent(getContext(), HistoryOrderSuccess.class);
                 startActivity(intent);
             }
         });
 
-        tvAddAddress.setOnClickListener(new View.OnClickListener() {
+        tvAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getContext(), AddAddress.class);
+                Intent intent = new Intent(getContext(), AddNewProduct.class);
                 startActivity(intent);
             }
         });
 
-        tvUpdate.setOnClickListener(new View.OnClickListener() {
+        tvEdit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getContext(), UpdateInfo.class);
+                Intent intent = new Intent(getContext(), EditProduct.class);
                 startActivity(intent);
             }
         });
 
-        tvAddAddress.setOnClickListener(new View.OnClickListener() {
+        tvChart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getContext(), AddAddress.class);
+                Intent intent = new Intent(getContext(), BusinessChart.class);
                 startActivity(intent);
             }
         });
@@ -257,24 +221,24 @@ public class ProfileFragment extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == RESULT_OK && data != null) {
+        if(resultCode == RESULT_OK && data!=null) {
             selectImage = data.getData();
 
             StorageReference ref
                     = storageReference
-                    .child("images/" + UUID.randomUUID().toString());
+                    .child("images/"+ UUID.randomUUID().toString());
 
             ref.putFile(selectImage)
                     .addOnSuccessListener(
                             new OnSuccessListener<UploadTask.TaskSnapshot>() {
                                 @Override
-                                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot){
                                     taskSnapshot.getStorage().getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
                                         @Override
                                         public void onComplete(@NonNull Task<Uri> task) {
                                             String fileLink = task.getResult().toString();
                                             Log.e("link", fileLink);
-                                            HashMap<String, Object> upload = new HashMap<>();
+                                            HashMap<String,Object> upload = new HashMap<>();
                                             upload.put("urlImage", fileLink);
                                             firebaseFirestore.collection("Users").document(firebaseAuth.getCurrentUser().getUid()).update(upload).addOnSuccessListener(new OnSuccessListener<Void>() {
                                                 @Override
@@ -286,97 +250,84 @@ public class ProfileFragment extends Fragment {
                                         }
                                     });
 
-                                }
-                            }).addOnFailureListener(new OnFailureListener() {
+                                }}).addOnFailureListener(new OnFailureListener() {
                         @Override
-                        public void onFailure(@NonNull Exception e) {
-                            Toast.makeText(getContext(), "Failed " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                        public void onFailure(@NonNull Exception e)
+                        {
+                            Toast.makeText(getContext(),"Failed " + e.getMessage(), Toast.LENGTH_SHORT).show();
                         }
                     });
 
         }
     }
 
-    public void handleFillInfo() {
-        FirebaseFirestore.getInstance()
-                .collection("AddToCheckout").document(firebaseAuth.getCurrentUser().getUid()).collection("Users")
-                .get()
+    private void handleFillInfoAdmin() {
+        isTrue = new int[]{0, 0, 0};
+        firebaseFirestore.collection("Users").get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
-                            List<DocumentSnapshot> myListOfDocuments = task.getResult().getDocuments();
-                            for (int i = 0; i < myListOfDocuments.size(); i++) {
-                                countStatusPending(myListOfDocuments.get(i).getId());
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+
+                                firebaseFirestore.collection("AddToCheckout")
+                                        .document(document.getId()).collection("Users")
+                                        .get() .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                                if (task.isSuccessful()) {
+                                                    for (QueryDocumentSnapshot document : task.getResult()) {
+                                                           if(document.toObject(StatusCart.class).getStatusCode().equals("1")) {
+                                                               isTrue[0] += 1;
+                                                           } else if (document.toObject(StatusCart.class).getStatusCode().equals("2")) {
+                                                               isTrue[1] += 1;
+                                                           } else if (document.toObject(StatusCart.class).getStatusCode().equals("3")) {
+                                                               isTrue[2] += 1;
+                                                           }
+
+                                                    }
+
+                                                    if(isTrue[0] > 0) {
+                                                        tvPending.setText(isTrue[0]+"");
+                                                        tvPending.setVisibility(View.VISIBLE);
+                                                    } else {
+                                                        tvPending.setVisibility(View.GONE);
+                                                    }
+                                                    if(isTrue[1] > 0) {
+                                                        tvDelivery.setText(isTrue[1]+"");
+                                                        tvDelivery.setVisibility(View.VISIBLE);
+                                                    }else {
+                                                        tvDelivery.setVisibility(View.GONE);
+                                                    }
+                                                    if(isTrue[2] > 0) {
+                                                        tvConfirm.setText(isTrue[2]+"");
+                                                        tvConfirm.setVisibility(View.VISIBLE);
+                                                    }else {
+                                                        tvConfirm.setVisibility(View.GONE);
+                                                    }
+                                                } else {
+                                                    Log.d("TAG", "Error getting documents: ", task.getException());
+                                                }
+                                            }
+                                        });
+
+
                             }
+                        } else {
+                            Log.d("123", "Error getting documents: ", task.getException());
                         }
                     }
                 });
+
     }
 
-
-    public void countStatusPending(String id) {
-        isTrue = new int[]{0, 0, 0};
-        FirebaseFirestore.getInstance()
-                .collection("AddToCheckout").document(firebaseAuth.getCurrentUser().getUid()).collection("Users").document(id)
-                .get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                    @Override
-                    public void onSuccess(DocumentSnapshot documentSnapshot) {
-                        if (documentSnapshot.exists()) {
-                            String statusCodes = documentSnapshot.getString("statusCode");
-                            if (statusCodes.equals("1")) {
-                                isTrue[0] += 1;
-                            } else if (statusCodes.equals("2")) {
-                                isTrue[1] += 1;
-                            } else if (statusCodes.equals("3")) {
-                                isTrue[2] += 1;
-                            }
-                        }
-
-                        if (isTrue[0] > 0) {
-                            tvPending.setText(isTrue[0] + "");
-                            tvPending.setVisibility(View.VISIBLE);
-                        } else {
-                            tvPending.setVisibility(View.GONE);
-                        }
-                        if (isTrue[1] > 0) {
-                            tvDelivery.setText(isTrue[1] + "");
-                            tvDelivery.setVisibility(View.VISIBLE);
-                        } else {
-                            tvDelivery.setVisibility(View.GONE);
-                        }
-                        if (isTrue[2] > 0) {
-                            tvConfirm.setText(isTrue[2] + "");
-                            tvConfirm.setVisibility(View.VISIBLE);
-                        } else {
-                            tvConfirm.setVisibility(View.GONE);
-                        }
-
-                    }
-                });
-    }
 
     @Override
     public void onStart() {
         super.onStart();
-        handleFillInfo();
+        handleFillInfoAdmin();
         getActivity().getSupportFragmentManager().beginTransaction().detach(this).attach(this).commit();
 
-    }
-
-    public void resetPassword(String email) {
-        firebaseAuth.sendPasswordResetEmail(email).addOnSuccessListener(new OnSuccessListener<Void>() {
-            @Override
-            public void onSuccess(Void unused) {
-                Toast.makeText(getActivity(), "Reset password link has been sent to your registered email", Toast.LENGTH_SHORT).show();
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Toast.makeText(getActivity(), "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-
-            }
-        });
     }
 
 }

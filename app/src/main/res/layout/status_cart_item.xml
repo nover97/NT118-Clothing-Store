@@ -110,10 +110,19 @@
             android:visibility="gone" />
 
         <Button
+            android:visibility="gone"
+            android:id="@+id/btn_confirm"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Confirm order"
+            android:layout_marginRight="20dp"/>
+        <Button
+            android:visibility="gone"
             android:id="@+id/btn_cancel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Cancel order" />
+
 
     </LinearLayout>
 
