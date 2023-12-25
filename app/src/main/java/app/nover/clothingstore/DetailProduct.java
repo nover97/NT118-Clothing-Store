@@ -48,11 +48,12 @@ public class DetailProduct extends AppCompatActivity {
 
     TextView name, price, oriPrice, description;
     ImageView imageView, imageBack, imageCart;
-    String nameIntent, priceIntent,originalPriceIntent,descriptionIntent,imageURLIntent, projectIdIntent;
+    String nameIntent, priceIntent, originalPriceIntent, descriptionIntent, imageURLIntent, projectIdIntent;
     Button btnAddCart, btnEdit;
-    private Spinner spinnerColor,spinnerSize;
-    private   String[] color;
-    private  String[] size;
+    FirebaseAuth firebaseAuth;
+    private Spinner spinnerColor, spinnerSize;
+    private String[] color;
+    private String[] size;
     private String sizes, colors, saveSize, saveColor;
     private FirebaseFirestore firestore;
 
@@ -77,7 +78,7 @@ public class DetailProduct extends AppCompatActivity {
         firestore.collection("Users").document(firebaseAuth.getCurrentUser().getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
-                if(documentSnapshot.toObject(UserModel.class).getRole().equals("admin")) {
+                if (documentSnapshot.toObject(UserModel.class).getRole().equals("admin")) {
                     btnEdit.setVisibility(View.VISIBLE);
                     btnAddCart.setVisibility(View.GONE);
                 } else {
@@ -145,7 +146,6 @@ public class DetailProduct extends AppCompatActivity {
                 });
 
 
-
         //Handle add item to cart
         btnAddCart.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -176,7 +176,7 @@ public class DetailProduct extends AppCompatActivity {
             sizes = bundle.getString("arraySize");
             size = convertStringArray(sizes);
             colors = bundle.getString("arrayColor");
-            color=convertStringArray(colors);
+            color = convertStringArray(colors);
             projectIdIntent = bundle.getString("projectId");
 
         }
