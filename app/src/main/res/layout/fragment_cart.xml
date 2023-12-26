@@ -25,16 +25,47 @@
             android:textColor="@color/black"
             android:padding="@dimen/base"
            />
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/layout_top"
+          >
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center"
+                >
+            <Button
+
+                android:layout_marginLeft="10dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Check all"
+                android:id="@+id/btn_check"
+                android:backgroundTint="@color/pink"/>
+            <Button
+                android:layout_marginLeft="10dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Uncheck all"
+                android:id="@+id/btn_uncheck"
+                android:backgroundTint="@color/pink"/>
+            </LinearLayout>
         <androidx.recyclerview.widget.RecyclerView
            android:id="@+id/lv_cart"
-            android:visibility="gone"
+            android:visibility="visible"
             android:layout_width="match_parent"
-            android:layout_height="670dp" />
+            android:layout_height="620dp" />
+        </LinearLayout>
+
         <LinearLayout
             android:orientation="vertical"
             android:id="@+id/tv_empty"
             android:layout_width="match_parent"
             android:layout_height="670dp"
+            android:visibility="gone"
             android:gravity="center">
             <TextView
                 android:layout_width="wrap_content"

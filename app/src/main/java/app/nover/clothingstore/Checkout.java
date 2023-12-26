@@ -7,7 +7,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -25,23 +24,22 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentChange;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
-import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
 import app.nover.clothingstore.adapter.CheckoutAdapter;
+import app.nover.clothingstore.modal.DialogModal;
 import app.nover.clothingstore.models.ItemCart;
 
 public class Checkout extends AppCompatActivity implements DialogModal.ExampleDialogListener{
@@ -51,7 +49,7 @@ public class Checkout extends AppCompatActivity implements DialogModal.ExampleDi
     List<ItemCart> items;
     FirebaseFirestore firestore;
     FirebaseAuth firebaseAuth;
-    TextView tvTotal, tvEdit,tvName, tvPhone, tvAddress,tvHome;
+    TextView tvTotal, tvEdit,tvName, tvPhone, tvAddress,tvHome, tvChosen;
     LinearLayout emptyLayout;
     ImageView imageBack;
     Spinner spinnerPayment;
@@ -59,6 +57,7 @@ public class Checkout extends AppCompatActivity implements DialogModal.ExampleDi
     String paymentOption;
     String totalCart;
     String paymentChoose;
+
     private   String[] payment= {"Payment on delivery", "Payment via Momo wallet"};
 
     @Override
@@ -75,9 +74,19 @@ public class Checkout extends AppCompatActivity implements DialogModal.ExampleDi
         tvHome = findViewById(R.id.go_to_home);
         imageBack = findViewById(R.id.iv_back);
         btnCheckout = findViewById(R.id.btn_confirm);
+        tvChosen = findViewById(R.id.tv_choose);
+
 
         imageBack.setOnClickListener(view -> {
             this.finish();
+        });
+
+
+        tvChosen.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(Checkout.this, ChoosenAddress.class));
+            }
         });
 
         tvHome.setOnClickListener(new View.OnClickListener() {
@@ -92,6 +101,7 @@ public class Checkout extends AppCompatActivity implements DialogModal.ExampleDi
 
         items = new ArrayList<>();
         EventChangeListener();
+
 
         recyclerView = findViewById(R.id.lv_checkout);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -169,29 +179,58 @@ public class Checkout extends AppCompatActivity implements DialogModal.ExampleDi
     }
 
     private void setInfoUser() {
-        firestore.collection("Users").document(firebaseAuth.getCurrentUser().getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-            @Override
-            public void onSuccess(DocumentSnapshot documentSnapshot) {
-                if(documentSnapshot.exists())
-                {
-                    String name = documentSnapshot.getString("fullName");
-                    String phoneNumber = documentSnapshot.getString("phoneNumber");
-                    String address = documentSnapshot.getString("address");
+        Intent intent = getIntent();
+        String idAddress = intent.getStringExtra("id");
+        if(idAddress.isEmpty()) {
+            firestore.collection("Users").document(firebaseAuth.getCurrentUser().getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                @Override
+                public void onSuccess(DocumentSnapshot documentSnapshot) {
+                    if(documentSnapshot.exists())
+                    {
+                        String name = documentSnapshot.getString("fullName");
+                        String phoneNumber = documentSnapshot.getString("phoneNumber");
+                        String address = documentSnapshot.getString("address");
 
-                    applyTexts(name,phoneNumber,address);
+                        applyTexts(name,phoneNumber,address);
+                    }
+                    else{
+                        Toast.makeText(Checkout.this, "Record not found.", Toast.LENGTH_SHORT).show();
+                    }
+
                 }
-                else{
-                    Toast.makeText(Checkout.this, "Record not found.", Toast.LENGTH_SHORT).show();
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Toast.makeText(Checkout.this, "Failed to fetch data.", Toast.LENGTH_SHORT).show();
+
                 }
+            });
+        } else {
+            firestore.collection("AddAddress").document(firebaseAuth.getCurrentUser().getUid()).collection("Users").document(idAddress).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                @Override
+                public void onSuccess(DocumentSnapshot documentSnapshot) {
+                    if(documentSnapshot.exists())
+                    {
+                        String name = documentSnapshot.getString("fullName");
+                        String phoneNumber = documentSnapshot.getString("phoneNumber");
+                        String address = documentSnapshot.getString("addressUser");
 
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Toast.makeText(Checkout.this, "Failed to fetch data.", Toast.LENGTH_SHORT).show();
+                        applyTexts(name,phoneNumber,address);
+                    }
+                    else{
+                        Toast.makeText(Checkout.this, "Record not found.", Toast.LENGTH_SHORT).show();
+                    }
 
-            }
-        });
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Toast.makeText(Checkout.this, "Failed to fetch data.", Toast.LENGTH_SHORT).show();
+
+                }
+            });
+        }
+
     }
 
     public void handleOnClickCheckout() {
@@ -207,11 +246,26 @@ public class Checkout extends AppCompatActivity implements DialogModal.ExampleDi
 
         }
 
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            Date date = new Date();
+            SimpleDateFormat formatterDate = new SimpleDateFormat("dd/MM/yyyy");
+            SimpleDateFormat formatterTime = new SimpleDateFormat("HH:mm:ss");
+
+            checkoutMap.put("dateCreateAt", formatterDate.format(date));
+            checkoutMap.put("timeCreateAt", formatterTime.format(date));
+
+            Long tsLong = System.currentTimeMillis()/1000;
+            String ts = tsLong.toString();
+            checkoutMap.put("timestampCreateAt", tsLong);
+
+        }
+
         checkoutMap.put("name", tvName.getText().toString());
         checkoutMap.put("phoneNumber", tvPhone.getText().toString());
         checkoutMap.put("address", tvAddress.getText().toString());
         checkoutMap.put("payment", paymentOption);
         checkoutMap.put("total", totalCart);
+        checkoutMap.put("idUser", firebaseAuth.getCurrentUser().getUid());
 
         checkoutMap.put("id", idCheckoutMap);
         checkoutMap.put("idCheckoutItem", idCheckoutItemMap);
@@ -222,6 +276,7 @@ public class Checkout extends AppCompatActivity implements DialogModal.ExampleDi
 
         List<String> array = new ArrayList<String>();
 
+
         for(int i = 0; i<items.size();i++) {
             String idItem = getAlphaNumericString(20);
             array.add(idItem);
@@ -229,15 +284,15 @@ public class Checkout extends AppCompatActivity implements DialogModal.ExampleDi
             checkoutItemMap.put("name", items.get(i).getName());
             checkoutItemMap.put("price", items.get(i).getPrice());
             checkoutItemMap.put("count", items.get(i).getCount());
-            checkoutItemMap.put("imageURL",items.get(i).getImageUrl());
+            checkoutItemMap.put("imageUrl",items.get(i).getImageUrl());
             checkoutItemMap.put("size", items.get(i).getSize());
             checkoutItemMap.put("color", items.get(i).getColor());
 
+
             firestore.collection("AddCheckoutItem").document(firebaseAuth.getCurrentUser().getUid())
-                    .collection(idCheckoutItemMap).document(idItem).set(checkoutItemMap).addOnSuccessListener(new OnSuccessListener<Void>() {
+                    .collection(idCheckoutMap).document(idItem).set(checkoutItemMap).addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void unused) {
-                            Toast.makeText(Checkout.this,"Add to cart successfully", Toast.LENGTH_SHORT).show();
                         }
                     });
 
@@ -250,7 +305,7 @@ public class Checkout extends AppCompatActivity implements DialogModal.ExampleDi
                 .collection("Users").document(idCheckoutMap).set(checkoutMap).addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void unused) {
-                        Toast.makeText(Checkout.this,"Add to cart successfully", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(Checkout.this,"Checkout is successfully", Toast.LENGTH_SHORT).show();
                     }
                 });
 
@@ -349,5 +404,12 @@ public class Checkout extends AppCompatActivity implements DialogModal.ExampleDi
         tvName.setText(username);
         tvPhone.setText(phoneNumber);
         tvAddress.setText(address);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+
     }
 }

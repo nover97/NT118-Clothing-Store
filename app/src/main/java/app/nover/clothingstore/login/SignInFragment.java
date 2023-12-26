@@ -19,18 +19,23 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseAuthInvalidUserException;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import app.nover.clothingstore.AdminActivity;
 import app.nover.clothingstore.CallbackLoginFragment;
 import app.nover.clothingstore.MainActivity;
 import app.nover.clothingstore.R;
+import app.nover.clothingstore.models.UserModel;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -56,7 +61,10 @@ public class SignInFragment extends Fragment {
     private String mParam1;
     private String mParam2;
     private FirebaseAuth mAuth;
+    String role = "";
 
+    private FirebaseFirestore firestore;
+    TextView tvForgotPassword;
     public SignInFragment() {
         // Required empty public constructor
     }
@@ -100,12 +108,14 @@ public class SignInFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_sign_in, container, false);
 
         mAuth = FirebaseAuth.getInstance();
+        firestore = FirebaseFirestore.getInstance();
 
         emailET = view.findViewById(R.id.email_signin);
         passwordET = view.findViewById(R.id.password_signin);
         showHidePwIV = view.findViewById(R.id.showHidePw_signin);
         signInBtn = view.findViewById(R.id.button_signin);
         signUpRedirectText = view.findViewById(R.id.signUpRedirectText);
+        tvForgotPassword = view.findViewById(R.id.tv_forgot_password);
 
         signInBtn.setOnClickListener(v -> {
 
@@ -117,6 +127,13 @@ public class SignInFragment extends Fragment {
             } else {
                 authorizeUser(email, password);
 
+            }
+        });
+
+        tvForgotPassword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getActivity(), ForgotPassword.class));
             }
         });
 
@@ -148,9 +165,25 @@ public class SignInFragment extends Fragment {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             Toast.makeText(getActivity(), "Logged in successfully", Toast.LENGTH_SHORT).show();
+                            task.addOnSuccessListener(new OnSuccessListener<AuthResult>() {
+                                @Override
+                                public void onSuccess(AuthResult authResult) {
+                                    firestore.collection("Users").document(authResult.getUser().getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                        @Override
+                                        public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                            role = documentSnapshot.toObject(UserModel.class).getRole();
+                                            if(role.equals("admin")) {
+                                                Intent intent = new Intent(getActivity(), AdminActivity.class);
+                                                startActivity(intent);
+                                            } else {
+                                                Intent intent = new Intent(getActivity(), MainActivity.class);
+                                                startActivity(intent);
+                                            }
+                                        }
+                                    });
+                                }
+                            });
 
-                            Intent intent = new Intent(getActivity(), MainActivity.class);
-                            startActivity(intent);
 
                         } else {
                             try {

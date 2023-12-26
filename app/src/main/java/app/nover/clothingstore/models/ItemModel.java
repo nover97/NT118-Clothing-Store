@@ -11,6 +11,8 @@ public class ItemModel {
     String description;
     List<String> arraySize;
     List<String> arrayColor;
+    String projectId;
+    String category;
 
     public List<String> getArrayColor() {
         return arrayColor;
@@ -45,6 +47,22 @@ public class ItemModel {
         this.name = name;
         Price = price;
         this.originalPrice = originalPrice;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
+    public String getProjectId() {
+        return projectId;
+    }
+
+    public void setProjectId(String projectId) {
+        this.projectId = projectId;
     }
 
     public String getImageUrl() {

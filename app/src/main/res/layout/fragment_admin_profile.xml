@@ -1,0 +1,307 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/fl_profile"
+    tools:context=".AdminProfileFragment"
+    android:orientation="horizontal">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <LinearLayout
+            android:background="@color/pink"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:orientation="horizontal"
+            android:paddingBottom="10dp"
+            android:paddingLeft="10dp"
+            >
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_gravity="bottom">
+                <RelativeLayout
+                    android:id="@+id/rl_layout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    >
+                    <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
+                        android:id="@+id/im_avatar"
+                        app:civ_border_width="0dp"
+                        android:layout_gravity="bottom"
+                        android:layout_width="80dp"
+                        android:layout_height="80dp"
+                        android:src="@drawable/baseline_supervised_user_circle_24"/>
+
+
+                </RelativeLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:orientation="vertical"
+                    android:paddingLeft="10dp"
+                    android:weightSum="2"
+                    >
+
+                    <TextView
+                        android:gravity="bottom"
+                        android:text="Loading..."
+                        android:id="@+id/tv_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="20sp"
+                        android:textStyle="bold"
+                        android:paddingBottom="5dp"
+                        android:layout_weight="1"/>
+                    <TextView
+                        android:gravity="top"
+
+                        android:id="@+id/tv_email"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Loading..."
+                        android:textSize="15sp"
+                        android:layout_weight="1"/>
+
+                </LinearLayout>
+            </LinearLayout>
+
+        </LinearLayout>
+        <LinearLayout
+            android:paddingVertical="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="3">
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="100dp"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:gravity="center"
+                >
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        android:id="@+id/pending_icon_button"
+                        android:layout_width="100dp"
+                        android:layout_height="70dp"
+                        android:src="@drawable/confirm" />
+
+                    <TextView
+                        android:id="@+id/tv_noti_pending"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_alignTop="@id/pending_icon_button"
+                        android:layout_alignEnd="@id/pending_icon_button"
+                        android:layout_alignRight="@id/pending_icon_button"
+                        android:layout_marginTop="1dp"
+                        android:layout_marginEnd="5dp"
+                        android:layout_marginRight="5dp"
+                        android:background="@drawable/bage_circle"
+                        android:gravity="center"
+                        android:paddingLeft="8dp"
+                        android:paddingRight="8dp"
+                        android:text=""
+                        android:visibility="gone"
+                        android:textColor="#FFF"
+                        android:textSize="12sp" />
+                </RelativeLayout>
+
+                <TextView
+                    android:textSize="20dp"
+                    android:paddingTop="10dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Pending"
+                    android:textColor="@color/black"
+                    android:gravity="bottom"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="100dp"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:gravity="center"
+                >
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        android:id="@+id/delivery_icon_bage"
+                        android:layout_width="100dp"
+                        android:layout_height="70dp"
+                        android:src="@drawable/delivery" />
+
+                    <TextView
+                        android:id="@+id/tv_noti_delivery"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_alignTop="@id/delivery_icon_bage"
+                        android:layout_alignEnd="@id/delivery_icon_bage"
+                        android:layout_alignRight="@id/delivery_icon_bage"
+                        android:layout_marginTop="1dp"
+                        android:layout_marginEnd="5dp"
+                        android:layout_marginRight="5dp"
+                        android:background="@drawable/bage_circle"
+                        android:gravity="center"
+                        android:paddingLeft="8dp"
+                        android:paddingRight="8dp"
+                        android:text=""
+                        android:visibility="gone"
+                        android:textColor="#FFF"
+                        android:textSize="12sp" />
+                </RelativeLayout>
+                <TextView
+                    android:textSize="20dp"
+                    android:paddingTop="10dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Delivery"                    android:textColor="@color/black"
+
+                    android:gravity="bottom"/>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="100dp"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:gravity="center"
+                >
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        android:id="@+id/confirm_icon_button"
+                        android:layout_width="100dp"
+                        android:layout_height="70dp"
+                        android:src="@drawable/check" />
+
+                    <TextView
+                        android:id="@+id/tv_noti_confirm"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_alignTop="@id/confirm_icon_button"
+                        android:layout_alignEnd="@id/confirm_icon_button"
+                        android:layout_alignRight="@id/confirm_icon_button"
+                        android:layout_marginTop="1dp"
+                        android:layout_marginEnd="5dp"
+                        android:layout_marginRight="5dp"
+                        android:background="@drawable/bage_circle"
+                        android:gravity="center"
+                        android:text=""
+                        android:visibility="gone"
+                        android:paddingLeft="8dp"
+                        android:paddingRight="8dp"
+                        android:textColor="#FFF"
+                        android:textSize="12sp" />
+                </RelativeLayout>
+                <TextView
+                    android:textSize="20dp"
+                    android:paddingTop="10dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Confirm"
+                    android:textColor="@color/black"
+
+                    android:gravity="bottom"/>
+            </LinearLayout>
+
+        </LinearLayout>
+        <ScrollView
+            android:layout_marginTop="30dp"
+            android:paddingHorizontal="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="350dp">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                >
+                <TextView
+                    android:id="@+id/tv_add_product"
+                    android:background="@drawable/text_line"
+                    android:textSize="20sp"
+                    android:paddingVertical="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Add new product"
+                    android:paddingLeft="10dp"
+                    />
+                <TextView
+                    android:visibility="gone"
+                    android:id="@+id/tv_edit_product"
+                    android:textSize="20sp"
+                    android:paddingVertical="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"                    android:background="@drawable/text_line"
+                    android:text="Edit product"
+                    android:paddingLeft="10dp"
+                    />
+
+                <TextView
+                    android:id="@+id/tv_chart"
+                    android:paddingLeft="10dp"
+                    android:textSize="20sp"
+                    android:background="@drawable/text_line"
+                    android:paddingVertical="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Business chart
+"/>
+
+                <TextView
+                    android:paddingLeft="10dp"
+                    android:id="@+id/tv_success"                    android:background="@drawable/text_line"
+
+                    android:textSize="20sp"
+                    android:paddingVertical="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="History orders successfully"/>
+
+                <TextView
+                    android:paddingLeft="10dp"
+                    android:id="@+id/tv_failure"
+                    android:background="@drawable/text_line"
+                    android:textSize="20sp"
+                    android:paddingVertical="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="History orders failure"/>
+
+
+
+
+            </LinearLayout>
+        </ScrollView>
+
+        <Button
+            android:id="@+id/logout_btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="30dp"
+            android:text="Logout"
+            android:textSize="20sp"
+            android:backgroundTint="@color/black"
+            android:textColor="@color/pink"
+            />
+    </LinearLayout>
+
+
+</LinearLayout>
