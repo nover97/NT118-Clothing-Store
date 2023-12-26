@@ -58,7 +58,7 @@ public class CheckoutActivity extends AppCompatActivity implements DialogModal.E
     List<ItemCart> items;
     FirebaseFirestore firestore;
     FirebaseAuth firebaseAuth;
-    TextView tvTotal, tvEdit, tvName, tvPhone, tvAddress, tvHome;
+    TextView tvTotal, tvEdit, tvName, tvPhone, tvAddress, tvHome, tvChoose;
     LinearLayout emptyLayout;
     ImageView imageBack;
     Spinner spinnerPayment;
@@ -85,6 +85,13 @@ public class CheckoutActivity extends AppCompatActivity implements DialogModal.E
 
         imageBack.setOnClickListener(view -> {
             this.finish();
+        });
+
+        tvChoose.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(CheckoutActivity.this, ChoosenAddress.class));
+            }
         });
 
         tvHome.setOnClickListener(new View.OnClickListener() {
@@ -178,27 +185,53 @@ public class CheckoutActivity extends AppCompatActivity implements DialogModal.E
     }
 
     private void setInfoUser() {
-        firestore.collection("Users").document(firebaseAuth.getCurrentUser().getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-            @Override
-            public void onSuccess(DocumentSnapshot documentSnapshot) {
-                if (documentSnapshot.exists()) {
-                    String name = documentSnapshot.getString("fullName");
-                    String phoneNumber = documentSnapshot.getString("phoneNumber");
-                    String address = documentSnapshot.getString("address");
+        Intent intent = getIntent();
+        String idAddress = intent.getStringExtra("id");
+        if (idAddress.isEmpty()) {
+            firestore.collection("Users").document(firebaseAuth.getCurrentUser().getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                @Override
+                public void onSuccess(DocumentSnapshot documentSnapshot) {
+                    if (documentSnapshot.exists()) {
+                        String name = documentSnapshot.getString("fullName");
+                        String phoneNumber = documentSnapshot.getString("phoneNumber");
+                        String address = documentSnapshot.getString("address");
 
-                    applyTexts(name, phoneNumber, address);
-                } else {
-                    Toast.makeText(CheckoutActivity.this, "Record not found.", Toast.LENGTH_SHORT).show();
+                        applyTexts(name, phoneNumber, address);
+                    } else {
+                        Toast.makeText(CheckoutActivity.this, "Record not found.", Toast.LENGTH_SHORT).show();
+                    }
+
                 }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Toast.makeText(CheckoutActivity.this, "Failed to fetch data.", Toast.LENGTH_SHORT).show();
 
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Toast.makeText(CheckoutActivity.this, "Failed to fetch data.", Toast.LENGTH_SHORT).show();
+                }
+            });
+        } else {
+            firestore.collection("AddAddress").document(firebaseAuth.getCurrentUser().getUid()).collection("Users").document(idAddress).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                @Override
+                public void onSuccess(DocumentSnapshot documentSnapshot) {
+                    if (documentSnapshot.exists()) {
+                        String name = documentSnapshot.getString("fullName");
+                        String phoneNumber = documentSnapshot.getString("phoneNumber");
+                        String address = documentSnapshot.getString("addressUser");
 
-            }
-        });
+                        applyTexts(name, phoneNumber, address);
+                    } else {
+                        Toast.makeText(CheckoutActivity.this, "Record not found.", Toast.LENGTH_SHORT).show();
+                    }
+
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Toast.makeText(CheckoutActivity.this, "Failed to fetch data.", Toast.LENGTH_SHORT).show();
+
+                }
+            });
+        }
     }
 
     public void handleOnClickCheckout() {
@@ -273,7 +306,7 @@ public class CheckoutActivity extends AppCompatActivity implements DialogModal.E
                 .collection("Users").document(idCheckoutMap).set(checkoutMap).addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void unused) {
-                        Toast.makeText(CheckoutActivity.this, "CheckoutActivity is successful", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(CheckoutActivity.this, "Checkout is successful", Toast.LENGTH_SHORT).show();
                     }
                 });
 
@@ -381,6 +414,7 @@ public class CheckoutActivity extends AppCompatActivity implements DialogModal.E
         tvHome = findViewById(R.id.go_to_home);
         imageBack = findViewById(R.id.iv_back);
         btnCheckout = findViewById(R.id.btn_confirm);
+        tvChoose = findViewById(R.id.tv_choose);
     }
 
     public void applyTexts(String username, String phoneNumber, String address) {
