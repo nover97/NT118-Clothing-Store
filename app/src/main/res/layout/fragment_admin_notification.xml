@@ -4,21 +4,44 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <TextView
+    <LinearLayout
+        app:layout_constraintBottom_toTopOf="@id/recyclerview"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Notification"
+        android:orientation="horizontal"
         android:background="@color/pink"
+        android:paddingVertical="10dp"
         android:gravity="center"
-        android:textSize="25dp">
-    </TextView>
+        android:weightSum="3">
+        <ImageView
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:paddingVertical="10dp"
+            />
+        <TextView
+            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:gravity="center"
+            android:textSize="30sp"
+            android:textStyle="bold"
+            android:text="Notification"/>
+        <ImageView
+            android:paddingVertical="10dp"
+            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Cart"/>
+    </LinearLayout>
 
     <androidx.appcompat.widget.LinearLayoutCompat
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="75dp"
             android:layout_height="wrap_content"
             android:text="Title"
             android:textSize="20dp"
@@ -30,7 +53,7 @@
             android:id="@+id/ettitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="nhap title"
+            android:hint="Enter title"
             android:layout_margin="13dp">
 
         </EditText>
@@ -42,7 +65,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="75dp"
             android:layout_height="wrap_content"
             android:text="Content"
             android:textSize="20dp"
@@ -54,7 +77,7 @@
             android:id="@+id/etcontent"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="nhap content"
+            android:hint="Enter content"
             android:layout_margin="13dp">
 
         </EditText>

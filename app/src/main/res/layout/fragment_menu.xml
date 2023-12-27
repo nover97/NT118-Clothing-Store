@@ -8,29 +8,51 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
-        <TextView
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Category"
-            android:gravity="center"
+            android:orientation="horizontal"
             android:background="@color/pink"
-            android:textSize="30dp"
-            android:textStyle="bold">
-        </TextView>
+            android:paddingVertical="10dp"
+            android:gravity="center"
+            android:weightSum="3">
+        <ImageView
+            android:id="@+id/iv_back"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:paddingVertical="10dp"
+            />
+        <TextView
+            android:id="@+id/header_title"
+            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:gravity="center"
+            android:textSize="30sp"
+            android:textStyle="bold"
+            android:text="Category"/>
+        <ImageView
+            android:paddingVertical="10dp"
+            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Cart"/>
+        </LinearLayout>
         <androidx.appcompat.widget.LinearLayoutCompat
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
+            android:id="@+id/btn_category_vay"
             android:layout_marginTop="12dp">
             <ImageButton
-                android:id="@+id/btn_category_vay"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/vay2"
                 android:clickable="true"
                 android:layout_margin="12dp"
                 >
-
             </ImageButton>
             <TextView
                 android:layout_width="match_parent"
@@ -46,9 +68,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
+            android:id="@+id/btn_category_polo"
+
             android:layout_marginTop="12dp">
             <ImageButton
-                android:id="@+id/btn_category_polo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/polo"
@@ -70,9 +93,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
+            android:id="@+id/btn_category_jean"
+
             android:layout_marginTop="12dp">
             <ImageButton
-                android:id="@+id/btn_category_jean"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/jeans"
@@ -94,9 +118,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
+            android:id="@+id/btn_category_tshirt"
+
             android:layout_marginTop="12dp">
             <ImageButton
-                android:id="@+id/btn_category_tshirt"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/tshirt13"
@@ -107,7 +132,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Danh mục áo thun mang đến sự đa dạng và phong cách cho mọi người. Với thiết kế tay ngắn và chất liệu thoáng mát"
+                android:text="Danh mục áo thun mang đến sự đa dạng và phong cách cho mọi người."
                 android:textSize="20dp"
                 android:gravity="top|start"
                 android:paddingStart="8dp"
@@ -118,9 +143,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
+            android:id="@+id/btn_category_quan"
             android:layout_marginTop="12dp">
             <ImageButton
-                android:id="@+id/btn_category_quan"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/pants"
@@ -137,23 +162,46 @@
                 android:text="Quần - Phong phú kiểu dáng, màu sắc. Đa dụng, thoải mái, thời trang."
                 android:textSize="20dp" />
         </androidx.appcompat.widget.LinearLayoutCompat>
-            <TextView
-                android:layout_width="match_parent"
+        <LinearLayout
+            android:layout_marginTop="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:background="@color/pink"
+            android:paddingVertical="10dp"
+            android:gravity="center"
+            android:weightSum="3">
+            <ImageView
+                android:layout_weight="1"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="Khác"
+                android:paddingVertical="10dp"
+                />
+            <TextView
+                android:layout_weight="1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
                 android:gravity="center"
-                android:background="@color/pink"
-                android:textSize="30dp"
-                android:textStyle="bold">
-            </TextView>
+                android:textSize="30sp"
+                android:textStyle="bold"
+                android:text="Other"/>
+            <ImageView
+                android:paddingVertical="10dp"
+                android:layout_weight="1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Cart"/>
+        </LinearLayout>
 
         <androidx.appcompat.widget.LinearLayoutCompat
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
+            android:id="@+id/btn_chat"
+
             android:layout_marginTop="12dp">
             <ImageButton
-                android:id="@+id/btn_chat"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/chat"
@@ -175,9 +223,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
+            android:id="@+id/btn_aboutus"
+
             android:layout_marginTop="12dp">
             <ImageButton
-                android:id="@+id/btn_aboutus"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/question"
