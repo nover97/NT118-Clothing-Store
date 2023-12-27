@@ -97,7 +97,5 @@ public class ItemModel {
         this.originalPrice = originalPrice;
     }
 
-    public String getCategory() {return category;}
 
-    public void setCategory(String category) {this.category = category;}
 }

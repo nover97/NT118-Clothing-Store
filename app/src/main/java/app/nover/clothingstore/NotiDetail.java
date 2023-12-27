@@ -3,6 +3,7 @@ package app.nover.clothingstore;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -30,7 +31,7 @@ public class NotiDetail extends AppCompatActivity {
             }
         }
 
-        ImageButton backButton = findViewById(R.id.backbutton);
+        ImageView backButton = findViewById(R.id.iv_back);
 
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override

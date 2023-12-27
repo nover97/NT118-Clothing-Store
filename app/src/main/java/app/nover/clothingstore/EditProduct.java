@@ -28,6 +28,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
@@ -40,6 +41,7 @@ import java.util.List;
 import java.util.UUID;
 
 import app.nover.clothingstore.models.ItemModel;
+import app.nover.clothingstore.models.UserModel;
 
 public class EditProduct extends AppCompatActivity {
 
@@ -55,6 +57,7 @@ public class EditProduct extends AppCompatActivity {
     Uri imageUri;
     StorageReference storageReference;
     FirebaseStorage firebaseStorage;
+    FirebaseAuth firebaseAuth;
     ActivityResultLauncher<Intent> resultLauncher;
 
     @Override
@@ -80,10 +83,11 @@ public class EditProduct extends AppCompatActivity {
         btnClear = findViewById(R.id.btn_clear);
         btnDelete = findViewById(R.id.btn_delete);
         discountArray = new String[]{"0", "10", "20", "30", "40", "50"};
-        categoryArray = new String[]{"T-Shirt", "Polo", "Dress", "Trousers", "Jean"};
+        categoryArray = new String[]{"T-Shirt", "Polo", "Quần", "Váy", "Jean"};
 
         registerResult();
 
+        firebaseAuth = FirebaseAuth.getInstance();
         firestore = FirebaseFirestore.getInstance();
         firebaseStorage = FirebaseStorage.getInstance();
         storageReference = firebaseStorage.getReference();
@@ -94,7 +98,17 @@ public class EditProduct extends AppCompatActivity {
         imBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(EditProduct.this, MainActivity.class));
+                firestore.collection("Users").document(firebaseAuth.getCurrentUser().getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        if (documentSnapshot.toObject(UserModel.class).getRole().equals("admin")) {
+                            startActivity(new Intent(EditProduct.this, AdminActivity.class));
+                        } else {
+                            startActivity(new Intent(EditProduct.this, MainActivity.class));
+
+                        }
+                    }
+                });
             }
         });
 
@@ -222,10 +236,11 @@ public class EditProduct extends AppCompatActivity {
                     }
                     int i = 0;
                     for(String category : categoryArray) {
-                        i++;
                         if(category.equals(item.getCategory())) {
                             spinnerCategory.setSelection(i);
                         }
+                        i++;
+
                     }
                 }
             }
@@ -270,8 +285,7 @@ public class EditProduct extends AppCompatActivity {
                                                 @Override
                                                 public void onSuccess(Void unused) {
                                                     handleClearInput();
-                                                    Log.e("check", id);
-
+                                                    startActivity(new Intent(EditProduct.this, AdminActivity.class));
                                                 }
                                             });
 //
@@ -291,6 +305,7 @@ public class EditProduct extends AppCompatActivity {
                 public void onSuccess(Void unused) {
                     handleClearInput();
                     Log.e("check", id);
+                    startActivity(new Intent(EditProduct.this, AdminActivity.class));
                 }
             });
         }

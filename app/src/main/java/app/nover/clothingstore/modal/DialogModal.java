@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -45,7 +46,20 @@ public class DialogModal extends AppCompatDialogFragment {
                         String username = editTextUsername.getText().toString();
                         String phoneNumber = editTextPhoneNumber.getText().toString();
                         String address = editTextAddress.getText().toString();
-                        listener.applyTexts(username, phoneNumber, address);
+                        if(username.isEmpty()) {
+                            Toast.makeText(getContext(),"Input require", Toast.LENGTH_SHORT).show();
+                        }
+                        if(phoneNumber.isEmpty()) {
+                            Toast.makeText(getContext(),"Input require", Toast.LENGTH_SHORT).show();
+
+                        }
+                        if(address.isEmpty()) {
+                            Toast.makeText(getContext(),"Input require", Toast.LENGTH_SHORT).show();
+
+                        }
+                        if(!username.isEmpty() && !phoneNumber.isEmpty() && !address.isEmpty()) {
+                            listener.applyTexts(username, phoneNumber, address);
+                        }
                     }
                 });
 
@@ -71,5 +85,7 @@ public class DialogModal extends AppCompatDialogFragment {
     public interface ExampleDialogListener {
         void applyTexts(String username, String phoneNumber, String address);
     }
+
+
 }
 
