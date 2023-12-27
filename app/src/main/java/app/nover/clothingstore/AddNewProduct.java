@@ -80,7 +80,7 @@ public class AddNewProduct extends AppCompatActivity {
         btnAdd = findViewById(R.id.btn_save);
         btnClear = findViewById(R.id.btn_clear);
         discountArray = new String[]{"0", "10", "20", "30", "40", "50"};
-        categoryArray = new String[]{"T-Shirt", "Polo", "Dress", "Trousers", "Jean"};
+        categoryArray = new String[]{"T-Shirt", "Polo", "Váy", "Quần", "Jean"};
 
         firestore = FirebaseFirestore.getInstance();
         firebaseStorage = FirebaseStorage.getInstance();
@@ -224,6 +224,7 @@ public class AddNewProduct extends AppCompatActivity {
                                                 public void onSuccess(Void unused) {
                                                     handleClearInput();
                                                     Log.e("check", id);
+                                                    Toast.makeText(AddNewProduct.this, "Add product successfully", Toast.LENGTH_SHORT).show();
 
                                                 }
                                             });
@@ -244,6 +245,7 @@ public class AddNewProduct extends AppCompatActivity {
                 public void onSuccess(Void unused) {
                     handleClearInput();
                     Log.e("check", id);
+                    Toast.makeText(AddNewProduct.this, "Add product successfully", Toast.LENGTH_SHORT).show();
 
                 }
             });

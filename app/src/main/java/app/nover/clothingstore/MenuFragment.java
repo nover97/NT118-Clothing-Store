@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 
+import androidx.appcompat.widget.LinearLayoutCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -21,13 +22,13 @@ public class MenuFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_menu, container, false);
 
-        ImageButton btnCategoryVay = view.findViewById(R.id.btn_category_vay);
-        ImageButton btnCategoryPolo = view.findViewById(R.id.btn_category_polo);
-        ImageButton btnCategoryJean = view.findViewById(R.id.btn_category_jean);
-        ImageButton btnCategoryTShirt = view.findViewById(R.id.btn_category_tshirt);
-        ImageButton btnCategoryQuan = view.findViewById(R.id.btn_category_quan);
-        ImageButton btnChat = view.findViewById(R.id.btn_chat);
-        ImageButton btnAboutUs = view.findViewById(R.id.btn_aboutus);
+        LinearLayoutCompat btnCategoryVay = view.findViewById(R.id.btn_category_vay);
+        LinearLayoutCompat btnCategoryPolo = view.findViewById(R.id.btn_category_polo);
+        LinearLayoutCompat btnCategoryJean = view.findViewById(R.id.btn_category_jean);
+        LinearLayoutCompat btnCategoryTShirt = view.findViewById(R.id.btn_category_tshirt);
+        LinearLayoutCompat btnCategoryQuan = view.findViewById(R.id.btn_category_quan);
+        LinearLayoutCompat btnChat = view.findViewById(R.id.btn_chat);
+        LinearLayoutCompat btnAboutUs = view.findViewById(R.id.btn_aboutus);
         btnCategoryVay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

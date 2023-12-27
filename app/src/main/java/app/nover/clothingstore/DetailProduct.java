@@ -81,6 +81,7 @@ public class DetailProduct extends AppCompatActivity {
                 if (documentSnapshot.toObject(UserModel.class).getRole().equals("admin")) {
                     btnEdit.setVisibility(View.VISIBLE);
                     btnAddCart.setVisibility(View.GONE);
+                    Log.e("admin", "admin");
                 } else {
                     btnAddCart.setVisibility(View.VISIBLE);
                     btnEdit.setVisibility(View.GONE);
@@ -101,7 +102,17 @@ public class DetailProduct extends AppCompatActivity {
         Glide.with(imageView).load(imageURLIntent).into(imageView);
 
         imageBack.setOnClickListener(view -> {
-            this.finish();
+            firestore.collection("Users").document(firebaseAuth.getCurrentUser().getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                @Override
+                public void onSuccess(DocumentSnapshot documentSnapshot) {
+                    if (documentSnapshot.toObject(UserModel.class).getRole().equals("admin")) {
+                        startActivity(new Intent(DetailProduct.this, AdminActivity.class));
+                    } else {
+                        startActivity(new Intent(DetailProduct.this, MainActivity.class));
+
+                    }
+                }
+            });
         });
 
         //Color spinner
