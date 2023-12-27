@@ -10,8 +10,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:orientation="horizontal"
-        tools:ignore="MissingConstraints">
+        android:orientation="horizontal"        
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteX="16dp">
 
         <CheckBox
             android:id="@+id/cb_item_cart"

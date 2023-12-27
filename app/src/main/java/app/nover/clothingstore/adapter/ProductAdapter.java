@@ -125,6 +125,11 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
         Integer no1 = Integer.parseInt(no);
         return String.format(Locale.US, "%,d", no1).replace(',', '.');
     }
+    
+    public void searchDataList(ArrayList<ItemModel> searchList){
+        items = searchList;
+        notifyDataSetChanged();
+    }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         ImageView imageView;
