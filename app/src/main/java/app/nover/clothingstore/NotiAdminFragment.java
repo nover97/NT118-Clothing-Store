@@ -1,6 +1,5 @@
 package app.nover.clothingstore;
 
-import android.app.AlertDialog;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -13,27 +12,18 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
+import androidx.fragment.app.FragmentTransaction;
 
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import app.nover.clothingstore.adapter.NotiAdapter;
 import app.nover.clothingstore.models.Noti;
-
 
 public class NotiAdminFragment extends Fragment {
 
-    private RecyclerView recyclerView;
-    private ArrayList<Noti> notiArrayList;
-    private NotiAdapter notiAdapter;
     private FirebaseFirestore db;
 
     public NotiAdminFragment() {
@@ -53,78 +43,23 @@ public class NotiAdminFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_admin_notification, container, false);
 
-        // Get the button view from the layout
+        // Get the button views from the layout
         Button btnAddNotification = view.findViewById(R.id.btnthemtb);
+        Button btnDeleteNotification = view.findViewById(R.id.btnxoatb);
 
-        // Set click listener for the button
+        // Set click listener for the "Thêm thông báo" button
         btnAddNotification.setOnClickListener(v -> addNotificationToFirestore());
 
-        return view;
-    }
-
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-
-        recyclerView = view.findViewById(R.id.recyclerview);
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
-
-        db = FirebaseFirestore.getInstance();
-        notiArrayList = new ArrayList<>();
-        notiAdapter = new NotiAdapter(requireContext(), notiArrayList);
-
-        recyclerView.setAdapter(notiAdapter);
-
-        // Add snapshot listener to the "Notification" collection
-        db.collection("Notification")
-                .addSnapshotListener((value, error) -> {
-                    if (error != null) {
-                        Log.e("Firestore error", error.getMessage());
-                        return;
-                    }
-
-                    notiArrayList.clear(); // Clear the existing list
-
-                    for (DocumentSnapshot document : value.getDocuments()) {
-                        String documentId = document.getId();
-                        Noti noti = document.toObject(Noti.class);
-                        noti.setDocumentId(documentId);
-                        notiArrayList.add(noti);
-                    }
-
-                    notiAdapter.sortDataByTime();
-                    notiAdapter.notifyDataSetChanged();
-                });
-
-        notiAdapter.setOnItemClickListener(new NotiAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(Noti noti) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
-                builder.setTitle("Xác nhận xóa")
-                        .setMessage("Bạn muốn xóa tài liệu?")
-                        .setPositiveButton("Có", (dialog, which) -> {
-                            String documentId = noti.getDocumentId();
-                            if (documentId != null) {
-                                DocumentReference docRef = db.collection("Notification").document(documentId);
-                                docRef.delete()
-                                        .addOnSuccessListener(aVoid -> {
-                                            Log.d("Firestore", "Đã xóa tài liệu thành công: " + documentId);
-                                            // Xóa thông báo khỏi danh sách hiển thị
-                                            notiArrayList.remove(noti);
-                                            notiAdapter.notifyDataSetChanged();
-                                        })
-                                        .addOnFailureListener(e -> {
-                                            Log.e("Firestore", "Lỗi khi xóa tài liệu: " + e.getMessage());
-                                        });
-                            }
-                        })
-                        .setNegativeButton("Không", (dialog, which) -> {
-                            // Do nothing, close the dialog
-                        })
-                        .show();
-            }
+        // Set click listener for the "Xóa thông báo" button
+        btnDeleteNotification.setOnClickListener(v -> {
+            // Replace the current fragment with the "DeleteNoti" fragment
+            FragmentTransaction transaction = requireFragmentManager().beginTransaction();
+            transaction.replace(R.id.flFragment, new DeleteNotiFragment());
+            transaction.addToBackStack(null);
+            transaction.commit();
         });
+
+        return view;
     }
 
     private void addNotificationToFirestore() {
@@ -156,10 +91,12 @@ public class NotiAdminFragment extends Fragment {
                     // Reset the EditText content to empty
                     etContent.setText("");
                     etTitle.setText("");
+                    Toast.makeText(requireContext(), "Thông báo đã được thêm thành công", Toast.LENGTH_SHORT).show();
                 })
                 .addOnFailureListener(e -> {
                     // Handle the failure if adding notification fails
                     Log.e("Firestore error", "Lỗi: " + e.getMessage());
+                    Toast.makeText(requireContext(), "Lỗi khi thêm thông báo", Toast.LENGTH_SHORT).show();
                 });
     }
 }
